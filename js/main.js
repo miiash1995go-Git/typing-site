@@ -1,6 +1,6 @@
 /**
- * EduTyping Next - Professional Logic v8.1
- * 同期バグ ＆ 最後の一文字バグ 修正版
+ * EduTyping Next - Professional Logic v8.2
+ * 【修正済】最後の一文字バグ ＆ 漢字同期バグ 対策版
  */
 
 const ROMAJI_TABLE = {
@@ -46,6 +46,7 @@ class TypingApp {
         this.currentRomajiStr = "";
         this.typedFullRomaji = "";
         this.guideRemainRomaji = "";
+        this.currentQuestion = null;
 
         this.startTime = 0;
         this.lastInputTime = 0;
@@ -102,23 +103,24 @@ class TypingApp {
 
     nextQuestion() {
         const now = performance.now();
+        // セッション全体終了判定
         if (this.cumTypedCount >= this.targetLimit || (now - this.startTime) >= this.maxTimeLimit) {
             this.endGame();
             return;
         }
 
         const questions = this.data.categories[this.currentCategory];
-        const nextQ = questions[Math.floor(Math.random() * questions.length)];
+        this.currentQuestion = questions[Math.floor(Math.random() * questions.length)];
         
-        // データの同期をとる
-        this.currentQuestion = nextQ; 
-        document.getElementById('display-kanji').innerText = nextQ.kanji;
-        document.getElementById('display-kana').innerText = nextQ.kana;
-        
-        this.kanaList = this.splitKana(nextQ.kana);
+        // ローマ字判定エンジンのリセット
+        this.kanaList = this.splitKana(this.currentQuestion.kana);
         this.typedFullRomaji = "";
         this.currentRomajiStr = "";
         
+        // 漢字・かなの表示更新
+        document.getElementById('display-kanji').innerText = this.currentQuestion.kanji;
+        document.getElementById('display-kana').innerText = this.currentQuestion.kana;
+
         this.prepareNextChar();
     }
 
@@ -133,13 +135,17 @@ class TypingApp {
     }
 
     prepareNextChar() {
+        // 全ての「かな」を打ち終えた場合
         if (this.kanaList.length === 0) {
-            this.nextQuestion();
+            this.refreshDisplay(); // 最後の一文字をグレーにする表示を確定
+            // わずかな遅延をおいて次の問題へ（視覚的な同期を確保）
+            setTimeout(() => this.nextQuestion(), 30);
             return;
         }
 
         let char = this.kanaList.shift();
         
+        // 「ん」の判定
         if (char === 'ん' && this.kanaList.length > 0) {
             let nextKana = this.kanaList[0];
             let nextFirsts = ROMAJI_TABLE[nextKana] ? ROMAJI_TABLE[nextKana].map(opt => opt[0]) : [];
@@ -149,6 +155,7 @@ class TypingApp {
                 this.pendingRomajiOptions = ['nn', 'xn'];
             }
         } 
+        // 「っ」の判定
         else if (char === 'っ' && this.kanaList.length > 0) {
             let nextKana = this.kanaList[0];
             let nextFirst = ROMAJI_TABLE[nextKana] ? ROMAJI_TABLE[nextKana][0][0] : "";
@@ -172,10 +179,10 @@ class TypingApp {
         this.guideRemainRomaji = currentRemain + futureRemain;
 
         const area = document.getElementById('display-romaji');
-        const nextKeyGuide = this.guideRemainRomaji[0] || "";
-        area.innerHTML = `<span class="typed">${this.typedFullRomaji}</span><span class="current">${nextKeyGuide}</span><span>${this.guideRemainRomaji.substring(1)}</span>`;
+        const nextChar = this.guideRemainRomaji[0] || "";
         
-        this.highlightKey(nextKeyGuide);
+        area.innerHTML = `<span class="typed">${this.typedFullRomaji}</span><span class="current">${nextChar}</span><span>${this.guideRemainRomaji.substring(1)}</span>`;
+        this.highlightKey(nextChar);
     }
 
     handleKeyDown(e) {
@@ -193,6 +200,7 @@ class TypingApp {
             this.pendingRomajiOptions = matches;
             this.playSound(600, 0.05);
 
+            // この「かな」の入力が完了したか
             if (this.pendingRomajiOptions.includes(this.currentRomajiStr)) {
                 this.prepareNextChar();
             } else {
