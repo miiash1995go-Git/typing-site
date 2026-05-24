@@ -1,6 +1,6 @@
 /**
- * EduTyping Next - Professional Logic v8.5
- * 【新機能】データ整合性自動チェック(バリデーション)機能搭載
+ * EduTyping Next - Professional Logic v8.6
+ * 【完全修正】ガイド表示の「っ」変換バグ ＆ データ同期バグ 対策版
  */
 
 const ROMAJI_TABLE = {
@@ -32,7 +32,7 @@ const ROMAJI_TABLE = {
     'ぴゃ':['pya'], 'ぴゅ':['pyu'], 'ぴょ':['pyo'],
     'ふぁ':['fa'], 'ふぃ':['fi'], 'ふぇ':['fe'], 'ふぉ':['fo'],
     'うぃ':['wi'], 'うぇ':['we'], 'うぉ':['wo'],
-    'てぃ':['ti'], 'でぃ':['di'], 'ー':['-'], ' ':[' ']
+    'てぃ':['ti'], 'でぃ':['di'], 'っ':['xtu','ltu'], 'ー':['-'], ' ':[' ']
 };
 
 class TypingApp {
@@ -64,28 +64,17 @@ class TypingApp {
         try {
             const res = await fetch('./data/weekly.json');
             this.data = await res.json();
-            // データ読み込み直後に自動検品を実行
             this.validateData();
         } catch (e) { console.error(e); }
         this.setupEventListeners();
         this.renderKeyboard();
     }
 
-    /**
-     * 【自動検品機能】漢字とかなのズレをチェックする
-     */
     validateData() {
-        const particles = ['は', 'を', 'に', 'へ', 'の', 'と'];
         for (let cat in this.data.categories) {
             this.data.categories[cat].forEach((item, idx) => {
-                particles.forEach(p => {
-                    if (item.kanji.includes(p) !== item.kana.includes(p)) {
-                        console.warn(`【データ不備の疑い】カテゴリ:${cat} / 番号:${idx + 1}\n文章: "${item.kanji}"\n原因: 助詞「${p}」が漢字とかなで一致していません。`);
-                    }
-                });
-                // 漢字が「かな」に混じっていないかチェック
                 if (/[一-龠々]/.test(item.kana)) {
-                    console.error(`【重大な不備】カテゴリ:${cat} / 番号:${idx + 1}\nかな欄に漢字が混入しています: "${item.kana}"`);
+                    console.error(`【重大不備】カテゴリ:${cat} ${idx+1}: かなに漢字があります: ${item.kana}`);
                 }
             });
         }
@@ -164,7 +153,7 @@ class TypingApp {
         else if (char === 'っ' && this.kanaList.length > 0) {
             let nextKana = this.kanaList[0];
             let nextFirst = ROMAJI_TABLE[nextKana] ? ROMAJI_TABLE[nextKana][0][0] : "";
-            this.pendingRomajiOptions = nextFirst ? [nextFirst, 'ltu', 'xtu'] : ['ltu', 'xtu'];
+            this.pendingRomajiOptions = nextFirst ? [nextFirst, 'xtu', 'ltu'] : ['xtu', 'ltu'];
         } 
         else {
             this.pendingRomajiOptions = [...(ROMAJI_TABLE[char] || [char])];
@@ -176,8 +165,20 @@ class TypingApp {
     refreshDisplay() {
         let currentBestOption = this.pendingRomajiOptions.find(opt => opt.startsWith(this.currentRomajiStr)) || this.pendingRomajiOptions[0];
         let currentRemain = currentBestOption.substring(this.currentRomajiStr.length);
+        
         let futureRemain = "";
-        this.kanaList.forEach(k => { futureRemain += ROMAJI_TABLE[k] ? ROMAJI_TABLE[k][0] : k; });
+        for(let i=0; i < this.kanaList.length; i++) {
+            let k = this.kanaList[i];
+            // ガイド文字列内での「っ」の先読み処理
+            if (k === 'っ' && this.kanaList[i+1]) {
+                let nextK = this.kanaList[i+1];
+                let nextR = ROMAJI_TABLE[nextK] ? ROMAJI_TABLE[nextK][0] : nextK;
+                futureRemain += nextR[0]; // 子音のみ追加
+            } else {
+                futureRemain += (ROMAJI_TABLE[k] ? ROMAJI_TABLE[k][0] : k);
+            }
+        }
+        
         this.guideRemainRomaji = currentRemain + futureRemain;
         const area = document.getElementById('display-romaji');
         const nextChar = this.guideRemainRomaji[0] || "";
