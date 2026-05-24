@@ -4,7 +4,6 @@
     --success: #2ecc71;
     --error: #e74c3c;
     --bg: #f8f9fa;
-    --key-bg: #ffffff;
 }
 
 body {
@@ -15,10 +14,7 @@ body {
 
 #app { width: 100%; max-width: 1000px; padding: 20px; }
 
-header {
-    display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px;
-}
-
+header { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px; }
 .logo { font-size: 2rem; font-weight: bold; }
 .logo span { color: var(--accent); }
 
@@ -28,14 +24,12 @@ header {
 }
 
 .screen { transition: opacity 0.3s; }
-.hidden { display: none; opacity: 0; }
+.hidden { display: none !important; }
 
 .card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
 
 .btn-group { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
-.btn-category {
-    padding: 10px 20px; border: 2px solid #ddd; background: white; border-radius: 25px; cursor: pointer;
-}
+.btn-category { padding: 10px 20px; border: 2px solid #ddd; background: white; border-radius: 25px; cursor: pointer; }
 .btn-category.active { background: var(--accent); color: white; border-color: var(--accent); }
 
 .btn-main {
@@ -43,41 +37,33 @@ header {
     font-size: 1.2rem; border-radius: 30px; cursor: pointer; margin-top: 20px;
 }
 
-/* タイピングエリア */
 .stats { display: flex; justify-content: center; gap: 40px; margin-bottom: 20px; font-family: 'Roboto Mono', monospace; font-weight: bold; }
 
 .typing-display {
     background: white; padding: 40px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    margin-bottom: 30px; text-align: center;
+    margin-bottom: 30px; text-align: center; min-height: 200px;
 }
 
-#display-kanji { font-size: 1.8rem; margin-bottom: 10px; }
+#display-kanji { font-size: 1.8rem; margin-bottom: 10px; font-weight: bold; }
 #display-kana { color: #888; font-size: 1.1rem; margin-bottom: 15px; }
-#display-romaji { font-family: 'Roboto Mono', monospace; font-size: 2.2rem; letter-spacing: 0.1em; }
+#display-romaji { font-family: 'Roboto Mono', monospace; font-size: 2.5rem; letter-spacing: 0.1em; color: #333; }
 
-.typed { color: #ccc; }
-.current { color: var(--accent); border-bottom: 3px solid var(--accent); }
+.typed { color: #d1d5db; }
+.current { color: var(--accent); border-bottom: 4px solid var(--accent); background-color: #ebf8ff; }
 
-/* キーボードガイド */
-#keyboard {
-    display: grid; grid-template-columns: repeat(30, 1fr); gap: 4px;
-    max-width: 800px; margin: 0 auto;
-}
+#keyboard { display: grid; grid-template-columns: repeat(30, 1fr); gap: 4px; max-width: 800px; margin: 0 auto; }
 .key {
-    grid-column: span 2; height: 45px; background: var(--key-bg);
-    border: 1px solid #ccc; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.9rem; font-weight: bold;
+    grid-column: span 2; height: 45px; background: white; border: 1px solid #ccc; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: bold;
 }
-.key.highlight { background: var(--accent); color: white; transform: translateY(-2px); border-color: var(--accent); }
+.key.highlight { background: var(--accent); color: white; transform: translateY(-2px); box-shadow: 0 4px 0 #2980b9; }
 
-/* 結果画面 */
-.result-container { display: flex; gap: 30px; align-items: flex-start; }
-.result-main { flex: 2; background: white; padding: 30px; border-radius: 15px; }
+.result-container { display: flex; gap: 30px; }
+.result-main { flex: 2; background: white; padding: 30px; border-radius: 15px; text-align: center; }
 .result-ad { flex: 1; }
-.ad-video-placeholder { width: 100%; height: 400px; background: #444; color: white; display: flex; align-items: center; justify-content: center; }
+.ad-video-placeholder { width: 100%; height: 100%; background: #333; color: #777; display: flex; align-items: center; justify-content: center; border-radius: 15px; }
 
 .rank-display { margin: 20px 0; }
-#result-rank { font-size: 5rem; font-weight: bold; color: var(--accent); display: block; }
+#result-rank { font-size: 6rem; font-weight: bold; color: var(--accent); }
 .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 1.2rem; }
-.key-box { display: inline-block; padding: 5px 10px; border: 2px solid var(--error); border-radius: 5px; margin: 5px; }
+.key-box { display: inline-block; padding: 5px 12px; border: 2px solid var(--error); border-radius: 5px; margin: 5px; font-weight: bold; }
