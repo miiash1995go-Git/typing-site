@@ -1,36 +1,20 @@
 {
-    "weekId": "2024-W10",
-    "topic": "実務ITリテラシー基礎",
-    "items": [
-        {
-            "id": 1,
-            "kanji": "Windowsを起動します。",
-            "kana": "うぃんどうずをきどうします。",
-            "romaji": "uindouzuwokidousimasu"
-        },
-        {
-            "id": 2,
-            "kanji": "Excelで表を作成します。",
-            "kana": "えくせるでひょうをさくせいします。",
-            "romaji": "ekuserudehyouwosakuseisimasu"
-        },
-        {
-            "id": 3,
-            "kanji": "Wordの文書を保存する。",
-            "kana": "わーどのぶんしょをほぞんする。",
-            "romaji": "wa-donobunsyowohozonsuru"
-        },
-        {
-            "id": 4,
-            "kanji": "ショートカットキーを活用する。",
-            "kana": "しょーとかっときーをかつようする。",
-            "romaji": "syo-tokattoki-wokatsuyousuru"
-        },
-        {
-            "id": 5,
-            "kanji": "メールを送信しました。",
-            "kana": "めーるをそうしんしました。",
-            "romaji": "me-ruwosousinsimasu"
-        }
+  "topic": "実務・職業訓練・IT基礎",
+  "categories": {
+    "business": [
+      { "kanji": "お世話になっております", "kana": "おせわになっております" },
+      { "kanji": "何卒よろしくお願い申し上げます", "kana": "なにとぞよろしくおねがいもうしあげます" },
+      { "kanji": "承知いたしました。至急確認します", "kana": "しょうちいたしましたしきゅうかくにんします" }
+    ],
+    "excel": [
+      { "kanji": "セル内で改行するにはAltとEnterを押します", "kana": "せるないでかいぎょうするにはあるととえんたーをおします" },
+      { "kanji": "絶対参照にはドルマークを使用します", "kana": "ぜったいさんしょうにはどるまーくをしようします" },
+      { "kanji": "数式は必ずイコールから入力します", "kana": "すうしきはかならずいこーるからにゅうりょくします" }
+    ],
+    "it_literacy": [
+      { "kanji": "クラウドストレージでファイルを共有する", "kana": "くらうどすとれーじでふぁいるをきょうゆうする" },
+      { "kanji": "二段階認証でセキュリティを強化する", "kana": "にだんかいにんしょうでせきゅりてぃをきょうかする" },
+      { "kanji": "ブラウザのキャッシュをクリアする", "kana": "ぶらうざのきゃっしゅをくりあする" }
     ]
+  }
 }
