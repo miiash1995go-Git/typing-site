@@ -1,58 +1,60 @@
 /**
- * EduTyping Next - Professional Logic v3
- * イータイピング準拠判定エンジン + 350文字終了ロジック
+ * EduTyping Next - Professional Logic v6
+ * 動的経路探索 + 放置対策(2分) + 350文字終了ロジック
  */
 
-const ROMAJI_DICT = {
-    'あ': 'a', 'い': 'i', 'う': 'u', 'え': 'e', 'お': 'o',
-    'か': 'ka', 'き': 'ki', 'く': 'ku', 'け': 'ke', 'こ': 'ko',
-    'さ': 'sa', 'し': 'shi', 'す': 'su', 'せ': 'se', 'そ': 'so',
-    'た': 'ta', 'ち': 'chi', 'つ': 'tsu', 'て': 'te', 'と': 'to',
-    'な': 'na', 'に': 'ni', 'ぬ': 'nu', 'ね': 'ne', 'の': 'no',
-    'は': 'ha', 'ひ': 'hi', 'ふ': 'fu', 'へ': 'he', 'ほ': 'ho',
-    'ま': 'ma', 'み': 'mi', 'む': 'mu', 'め': 'me', 'も': 'mo',
-    'や': 'ya', 'ゆ': 'yu', 'よ': 'yo',
-    'ら': 'ra', 'り': 'ri', 'る': 'ru', 'れ': 're', 'ろ': 'ro',
-    'わ': 'wa', 'を': 'wo', 'ん': 'nn',
-    'が': 'ga', 'ぎ': 'gi', 'ぐ': 'gu', 'げ': 'ge', 'ご': 'go',
-    'ざ': 'za', 'じ': 'ji', 'ず': 'zu', 'ぜ': 'ze', 'ぞ': 'zo',
-    'だ': 'da', 'ぢ': 'di', 'づ': 'du', 'で': 'de', 'ど': 'do',
-    'ば': 'ba', 'び': 'bi', 'ぶ': 'bu', 'べ': 'be', 'ぼ': 'bo',
-    'ぱ': 'pa', 'ぴ': 'pi', 'ぷ': 'pu', 'ぺ': 'pe', 'ぽ': 'po',
-    'ー': '-', ' ': ' '
-};
-
-const YOON_DICT = {
-    'きゃ': 'kya', 'きゅ': 'kyu', 'きょ': 'kyo',
-    'しゃ': 'sha', 'しゅ': 'shu', 'しょ': 'sho',
-    'ちゃ': 'cha', 'ちゅ': 'chu', 'ちょ': 'cho',
-    'にゃ': 'nya', 'にゅ': 'nyu', 'にょ': 'nyo',
-    'ひゃ': 'hya', 'ひゅ': 'hyu', 'ひょ': 'hyo',
-    'みゃ': 'mya', 'みゅ': 'myu', 'みょ': 'myo',
-    'りゃ': 'rya', 'りゅ': 'ryu', 'りょ': 'ryo',
-    'ぎゃ': 'gya', 'ぎゅ': 'gyu', 'ぎょ': 'gyo',
-    'じゃ': 'ja', 'じゅ': 'ju', 'じょ': 'jo',
-    'びゃ': 'bya', 'びゅ': 'byu', 'びょ': 'byo',
-    'ぴゃ': 'pya', 'ぴゅ': 'pyu', 'ぴょ': 'pyo',
-    'ふぁ': 'fa', 'ふぃ': 'fi', 'ふぇ': 'fe', 'ふぉ': 'fo',
-    'うぃ': 'wi', 'うぇ': 'we', 'うぉ': 'wo', 'てぃ': 'ti', 'でぃ': 'di'
+const ROMAJI_TABLE = {
+    'あ':['a'], 'い':['i'], 'う':['u'], 'え':['e'], 'お':['o'],
+    'か':['ka'], 'き':['ki'], 'く':['ku'], 'け':['ke'], 'こ':['ko'],
+    'さ':['sa'], 'し':['shi','si'], 'す':['su'], 'せ':['se'], 'そ':['so'],
+    'た':['ta'], 'ち':['chi','ti'], 'つ':['tsu','tu'], 'て':['te'], 'と':['to'],
+    'な':['na'], 'に':['ni'], 'ぬ':['nu'], 'ね':['ne'], 'の':['no'],
+    'は':['ha'], 'ひ':['hi'], 'ふ':['fu','hu'], 'へ':['he'], 'ほ':['ho'],
+    'ま':['ma'], 'み':['mi'], 'む':['mu'], 'め':['me'], 'も':['mo'],
+    'や':['ya'], 'ゆ':['yu'], 'よ':['yo'],
+    'ら':['ra'], 'り':['ri'], 'る':['ru'], 'れ':['re'], 'ろ':['ro'],
+    'わ':['wa'], 'を':['wo'], 'ん':['nn','n','xn'],
+    'が':['ga'], 'ぎ':['gi'], 'ぐ':['gu'], 'げ':['ge'], 'ご':['go'],
+    'ざ':['za'], 'じ':['ji','zi'], 'ず':['zu'], 'ぜ':['ze'], 'ぞ':['zo'],
+    'だ':['da'], 'ぢ':['di'], 'づ':['du'], 'で':['de'], 'ど':['do'],
+    'ば':['ba'], 'び':['bi'], 'ぶ':['bu'], 'べ':['be'], 'ぼ':['bo'],
+    'ぱ':['pa'], 'ぴ':['pi'], 'ぷ':['pu'], 'ぺ':['pe'], 'ぽ':['po'],
+    'きゃ':['kya'], 'きゅ':['kyu'], 'きょ':['kyo'],
+    'しゃ':['sha','sya'], 'しゅ':['shu','syu'], 'しょ':['sho','syo'],
+    'ちゃ':['cha','tya'], 'ちゅ':['chu','tyu'], 'ちょ':['cho','tyo'],
+    'にゃ':['nya'], 'にゅ':['nyu'], 'にょ':['nyo'],
+    'ひゃ':['hya'], 'ひゅ':['hyu'], 'ひょ':['hyo'],
+    'みゃ':['mya'], 'みゅ':['myu'], 'みょ':['myo'],
+    'りゃ':['rya'], 'りゅ':['ryu'], 'りょ':['ryo'],
+    'ぎゃ':['gya'], 'ぎゅ':['gyu'], 'ぎょ':['gyo'],
+    'じゃ':['ja','ziya'], 'じゅ':['ju','ziyu'], 'じょ':['jo','ziyo'],
+    'びゃ':['bya'], 'びゅ':['byu'], 'びょ':['byo'],
+    'ぴゃ':['pya'], 'ぴゅ':['pyu'], 'ぴょ':['pyo'],
+    'ふぁ':['fa'], 'ふぃ':['fi'], 'ふぇ':['fe'], 'ふぉ':['fo'],
+    'うぃ':['wi'], 'うぇ':['we'], 'うぉ':['wo'],
+    'てぃ':['ti'], 'でぃ':['di'], 'ー':['-'], ' ':[' ']
 };
 
 class TypingApp {
     constructor() {
         this.data = null;
         this.currentCategory = 'business';
-        this.targetRomaji = "";
-        this.userInput = "";
         this.state = "START";
         
+        this.kanaList = [];     
+        this.pendingRomajiOptions = []; 
+        this.currentRomajiStr = "";     
+        this.typedRomaji = "";          
+        this.guideRomaji = "";          
+
         this.startTime = 0;
-        this.totalTimeMs = 0;
+        this.lastInputTime = 0; // 最後にキーを打った時間
         this.misses = 0;
         this.totalTyped = 0;
-        this.cumTypedCount = 0; // 累計タイプ数（終了判定用）
-        this.targetLimit = 350; // 350文字目安
-        this.maxTimeLimit = 240000; // 4分
+        this.cumTypedCount = 0;
+        this.targetLimit = 350;
+        this.maxTimeLimit = 240000;      // 4分
+        this.inactivityLimit = 120000;   // 120秒(2分)の放置で終了
         
         this.missMap = {};
         this.audioCtx = null;
@@ -82,118 +84,137 @@ class TypingApp {
         window.addEventListener('keydown', (e) => this.handleKeyDown(e));
     }
 
-    // ローマ字変換エンジンの改良
-    convertToRomaji(kana) {
-        let romaji = "";
-        for (let i = 0; i < kana.length; i++) {
-            let char = kana[i];
-            let next = kana[i + 1];
-
-            // 1. 促音（っ）
-            if (char === 'っ' && next) {
-                let yoonNext = YOON_DICT[kana.substring(i + 1, i + 3)];
-                let normalNext = ROMAJI_DICT[next];
-                if (yoonNext) {
-                    romaji += yoonNext[0] + yoonNext;
-                    i += 2; continue;
-                } else if (normalNext) {
-                    romaji += normalNext[0] + normalNext;
-                    i++; continue;
-                }
-            }
-            // 2. 拗音
-            let yoon = YOON_DICT[kana.substring(i, i + 2)];
-            if (yoon) {
-                romaji += yoon;
-                i++; continue;
-            }
-            // 3. 通常
-            romaji += ROMAJI_DICT[char] || char;
-        }
-        return romaji;
-    }
-
     startGame() {
         this.state = "PLAYING";
-        this.startTime = performance.now();
+        const now = performance.now();
+        this.startTime = now;
+        this.lastInputTime = now;
         this.misses = 0;
         this.totalTyped = 0;
         this.cumTypedCount = 0;
         this.missMap = {};
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('game-screen').classList.remove('hidden');
-
         this.nextQuestion();
-        this.updateTimer();
+        this.updateLoop();
     }
 
     nextQuestion() {
-        // 終了判定：350文字以上 or 4分経過
         const now = performance.now();
         if (this.cumTypedCount >= this.targetLimit || (now - this.startTime) >= this.maxTimeLimit) {
             this.endGame();
             return;
         }
-
         const questions = this.data.categories[this.currentCategory];
         this.currentQuestion = questions[Math.floor(Math.random() * questions.length)];
-        this.targetRomaji = this.convertToRomaji(this.currentQuestion.kana);
-        this.userInput = "";
-        this.updateDisplay();
+        
+        document.getElementById('display-kanji').innerText = this.currentQuestion.kanji;
+        document.getElementById('display-kana').innerText = this.currentQuestion.kana;
+        
+        this.kanaList = this.splitKana(this.currentQuestion.kana);
+        this.typedRomaji = "";
+        this.currentRomajiStr = "";
+        this.prepareNextChar();
+    }
+
+    splitKana(kana) {
+        let list = [];
+        for (let i = 0; i < kana.length; i++) {
+            let s2 = kana.substring(i, i+2);
+            if (ROMAJI_TABLE[s2]) { list.push(s2); i++; }
+            else { list.push(kana[i]); }
+        }
+        return list;
+    }
+
+    prepareNextChar() {
+        if (this.kanaList.length === 0) {
+            this.nextQuestion();
+            return;
+        }
+        let char = this.kanaList.shift();
+        
+        if (char === 'ん' && this.kanaList.length > 0) {
+            let nextKana = this.kanaList[0];
+            let nextFirstOptions = ROMAJI_TABLE[nextKana];
+            let firstLetters = nextFirstOptions.map(opt => opt[0]);
+            if (firstLetters.every(l => !['a','i','u','e','o','y','n'].includes(l))) {
+                this.pendingRomajiOptions = ['n', 'nn', 'xn'];
+            } else {
+                this.pendingRomajiOptions = ['nn', 'xn'];
+            }
+        } 
+        else if (char === 'っ' && this.kanaList.length > 0) {
+            let nextKana = this.kanaList[0];
+            let nextRomaji = ROMAJI_TABLE[nextKana][0];
+            this.pendingRomajiOptions = [nextRomaji[0], 'ltu', 'xtu'];
+        }
+        else {
+            this.pendingRomajiOptions = [...ROMAJI_TABLE[char]];
+        }
+        this.currentRomajiStr = "";
+        this.refreshGuide();
+    }
+
+    refreshGuide() {
+        let remainGuide = "";
+        this.kanaList.forEach(k => { remainGuide += ROMAJI_TABLE[k][0]; });
+        let currentOption = this.pendingRomajiOptions.find(opt => opt.startsWith(this.currentRomajiStr));
+        let currentRemain = currentOption.substring(this.currentRomajiStr.length);
+        this.guideRomaji = currentRemain + remainGuide;
+        this.updateDisplayUI();
     }
 
     handleKeyDown(e) {
-        if (this.state !== "PLAYING") return;
-        if (e.key === "Process" || e.key === "Shift") return;
-        if (e.key.length !== 1) return;
-
+        if (this.state !== "PLAYING" || e.key.length !== 1) return;
+        
+        // 入力があった時間を更新（放置対策）
+        this.lastInputTime = performance.now();
+        
         const key = e.key.toLowerCase();
-        const target = this.targetRomaji[this.userInput.length];
+        let matchOptions = this.pendingRomajiOptions.filter(opt => opt.startsWith(this.currentRomajiStr + key));
 
-        if (key === target) {
-            this.userInput += key;
+        if (matchOptions.length > 0) {
+            this.currentRomajiStr += key;
+            this.typedRomaji += key;
             this.totalTyped++;
             this.cumTypedCount++;
+            this.pendingRomajiOptions = matchOptions;
             this.playSound(600, 0.05);
-            if (this.userInput === this.targetRomaji) {
-                this.nextQuestion();
+            if (this.pendingRomajiOptions.some(opt => opt === this.currentRomajiStr)) {
+                this.prepareNextChar();
+            } else {
+                this.refreshGuide();
             }
         } else {
             this.misses++;
-            this.logMiss(target);
+            let expected = this.pendingRomajiOptions[0][this.currentRomajiStr.length];
+            this.logMiss(expected);
             this.playSound(200, 0.1);
             this.flashError();
         }
-        this.updateDisplay();
         this.updateStats();
-        this.highlightKey(this.targetRomaji[this.userInput.length]);
     }
 
-    updateTimer() {
+    updateDisplayUI() {
+        const area = document.getElementById('display-romaji');
+        area.innerHTML = `<span class="typed">${this.typedRomaji}</span><span class="current">${this.guideRomaji[0] || ""}</span><span>${this.guideRomaji.substring(1)}</span>`;
+        this.highlightKey(this.guideRomaji[0]);
+    }
+
+    updateLoop() {
         if (this.state !== "PLAYING") return;
+        
         const now = performance.now();
-        const diff = now - this.startTime;
-        document.getElementById('timer').innerText = this.formatTime(diff);
-        this.timerInterval = requestAnimationFrame(() => this.updateTimer());
-    }
+        
+        // 放置判定：最後の入力から2分経過
+        if (now - this.lastInputTime > this.inactivityLimit) {
+            this.endGame("inactivity");
+            return;
+        }
 
-    formatTime(ms) {
-        const m = Math.floor(ms / 60000);
-        const s = Math.floor((ms % 60000) / 1000);
-        const msPart = Math.floor((ms % 1000) / 10);
-        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}.${String(msPart).padStart(2, '0')}`;
-    }
-
-    updateDisplay() {
-        document.getElementById('display-kanji').innerText = this.currentQuestion.kanji;
-        document.getElementById('display-kana').innerText = this.currentQuestion.kana;
-        const typed = this.userInput;
-        const current = this.targetRomaji[this.userInput.length] || "";
-        const remain = this.targetRomaji.substring(this.userInput.length + 1);
-        document.getElementById('display-romaji').innerHTML = 
-            `<span class="typed">${typed}</span><span class="current">${current}</span><span>${remain}</span>`;
+        this.timerInterval = requestAnimationFrame(() => this.updateLoop());
     }
 
     updateStats() {
@@ -204,10 +225,10 @@ class TypingApp {
         document.getElementById('accuracy').innerText = acc;
     }
 
-    endGame() {
+    endGame(reason = "") {
         this.state = "RESULT";
         cancelAnimationFrame(this.timerInterval);
-        this.totalTimeMs = performance.now() - this.startTime;
+        const totalTimeMs = performance.now() - this.startTime;
 
         document.getElementById('game-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
@@ -216,8 +237,13 @@ class TypingApp {
         const acc = parseInt(document.getElementById('accuracy').innerText);
         const score = Math.floor(wpm * (acc/100)**2);
 
+        // 放置終了の場合、タイトルを少し変える
+        if(reason === "inactivity") {
+            document.getElementById('result-title').innerText = "練習終了 (放置中断)";
+        }
+
         document.getElementById('res-score').innerText = score;
-        document.getElementById('res-time').innerText = this.formatTimeResult(this.totalTimeMs);
+        document.getElementById('res-time').innerText = this.formatTimeResult(totalTimeMs);
         document.getElementById('res-wpm').innerText = wpm;
         document.getElementById('res-acc').innerText = acc;
         document.getElementById('res-miss').innerText = this.misses;
@@ -235,13 +261,12 @@ class TypingApp {
     }
 
     getRank(s) {
-        // SSS, SS, S, A+, A, A-, ..., E+, E, E-
         if(s >= 400) return "SSS"; if(s >= 370) return "SS"; if(s >= 340) return "S";
         if(s >= 310) return "A+"; if(s >= 280) return "A"; if(s >= 250) return "A-";
         if(s >= 220) return "B+"; if(s >= 190) return "B"; if(s >= 160) return "B-";
         if(s >= 130) return "C+"; if(s >= 100) return "C"; if(s >= 80) return "C-";
-        if(s >= 60) return "D+";  if(s >= 40) return "D";  if(s >= 20) return "D-";
-        if(s >= 15) return "E+";  if(s >= 10) return "E";  return "E-";
+        if(s >= 60) return "D+"; if(s >= 40) return "D"; if(s >= 20) return "D-";
+        if(s >= 15) return "E+"; if(s >= 10) return "E"; return "E-";
     }
 
     renderKeyboard() {

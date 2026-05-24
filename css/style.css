@@ -41,12 +41,12 @@ header { display: flex; flex-direction: column; align-items: center; gap: 15px; 
 
 .typing-display {
     background: white; padding: 40px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    margin-bottom: 30px; text-align: center; min-height: 200px;
+    margin-bottom: 30px; text-align: center; min-height: 220px;
 }
 
 #display-kanji { font-size: 1.8rem; margin-bottom: 10px; font-weight: bold; }
 #display-kana { color: #888; font-size: 1.1rem; margin-bottom: 15px; }
-#display-romaji { font-family: 'Roboto Mono', monospace; font-size: 2.5rem; letter-spacing: 0.1em; color: #333; }
+#display-romaji { font-family: 'Roboto Mono', monospace; font-size: 2.5rem; letter-spacing: 0.05em; color: #333; word-break: break-all; }
 
 .typed { color: #d1d5db; }
 .current { color: var(--accent); border-bottom: 4px solid var(--accent); background-color: #ebf8ff; }
@@ -58,12 +58,12 @@ header { display: flex; flex-direction: column; align-items: center; gap: 15px; 
 }
 .key.highlight { background: var(--accent); color: white; transform: translateY(-2px); box-shadow: 0 4px 0 #2980b9; }
 
-.result-container { display: flex; gap: 30px; }
+.result-container { display: flex; gap: 30px; width: 100%; }
 .result-main { flex: 2; background: white; padding: 30px; border-radius: 15px; text-align: center; }
 .result-ad { flex: 1; }
-.ad-video-placeholder { width: 100%; height: 100%; background: #333; color: #777; display: flex; align-items: center; justify-content: center; border-radius: 15px; }
+.ad-video-placeholder { width: 100%; min-height: 300px; height: 100%; background: #333; color: #777; display: flex; align-items: center; justify-content: center; border-radius: 15px; }
 
-.rank-display { margin: 20px 0; }
-#result-rank { font-size: 6rem; font-weight: bold; color: var(--accent); }
-.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 1.2rem; }
-.key-box { display: inline-block; padding: 5px 12px; border: 2px solid var(--error); border-radius: 5px; margin: 5px; font-weight: bold; }
+.rank-display { margin: 10px 0; }
+#result-rank { font-size: 6rem; font-weight: bold; color: var(--accent); line-height: 1; }
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 1.1rem; text-align: left; max-width: 260px; margin: 0 auto; }
+.key-box { display: inline-block; padding: 4px 10px; border: 2px solid var(--error); border-radius: 5px; margin: 3px; font-weight: bold; font-size: 0.9rem; }
