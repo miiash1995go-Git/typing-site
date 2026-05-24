@@ -24,12 +24,9 @@
                         <button class="btn-category" data-cat="excel">Excel/Word</button>
                         <button class="btn-category" data-cat="it_literacy">ITリテラシー</button>
                     </div>
-                    
-                    <!-- 設定エリア -->
                     <div class="settings-area">
                         <button id="sound-toggle" class="btn-toggle">タイプ音: ON</button>
                     </div>
-
                     <button id="start-btn" class="btn-main">練習開始</button>
                 </div>
             </section>
@@ -39,29 +36,21 @@
                     <div class="stat-box">WPM <span id="wpm">0</span></div>
                     <div class="stat-box">正確率 <span id="accuracy">100</span>%</div>
                 </div>
-
                 <div class="typing-display">
                     <div id="display-kanji">...</div>
                     <div id="display-kana">...</div>
                     <div id="display-romaji"></div>
                 </div>
-
                 <div id="keyboard"></div>
                 <p class="guide-text">途中で終了する場合は [Esc] キー</p>
             </section>
 
             <section id="result-screen" class="screen hidden">
                 <div class="result-container">
-                    
-                    <!-- 左側：ミス内訳 -->
                     <div class="result-side">
                         <h3>ミス入力の内訳</h3>
-                        <div id="miss-detail-list" class="scroll-list">
-                            <!-- JSで生成 -->
-                        </div>
+                        <div id="miss-detail-list" class="scroll-list"></div>
                     </div>
-
-                    <!-- 中央：メイン結果 -->
                     <div class="result-main">
                         <h2 id="result-title">練習結果</h2>
                         <div class="rank-display">
@@ -77,8 +66,6 @@
                         </div>
                         <button onclick="location.reload()" class="btn-main">もう一度挑戦</button>
                     </div>
-
-                    <!-- 右側：広告 -->
                     <div class="result-ad">
                         <div class="ad-video-placeholder">【広告：動画広告枠】</div>
                     </div>

@@ -39,15 +39,13 @@ class TypingApp {
         this.data = null;
         this.currentCategory = 'business';
         this.state = "START";
-        this.soundEnabled = true; // 音設定
-        
+        this.soundEnabled = true;
         this.kanaList = [];
         this.pendingRomajiOptions = [];
         this.currentRomajiStr = "";
         this.typedFullRomaji = "";
         this.guideRemainRomaji = "";
         this.currentQuestion = null;
-
         this.startTime = 0;
         this.lastInputTime = 0;
         this.misses = 0;
@@ -56,11 +54,9 @@ class TypingApp {
         this.targetLimit = 350;
         this.maxTimeLimit = 240000;
         this.inactivityLimit = 120000;
-        
         this.missMap = {};
         this.audioCtx = null;
         this.timerInterval = null;
-
         this.init();
     }
 
@@ -92,15 +88,12 @@ class TypingApp {
                 this.currentCategory = btn.dataset.cat;
             });
         });
-
-        // 音声切替ボタン
         const soundBtn = document.getElementById('sound-toggle');
         soundBtn.addEventListener('click', () => {
             this.soundEnabled = !this.soundEnabled;
             soundBtn.innerText = `タイプ音: ${this.soundEnabled ? 'ON' : 'OFF'}`;
             soundBtn.classList.toggle('off', !this.soundEnabled);
         });
-
         document.getElementById('start-btn').addEventListener('click', () => this.startGame());
         window.addEventListener('keydown', (e) => this.handleKeyDown(e));
     }
@@ -127,17 +120,13 @@ class TypingApp {
             this.endGame();
             return;
         }
-
         const questions = this.data.categories[this.currentCategory];
         this.currentQuestion = questions[Math.floor(Math.random() * questions.length)];
-        
         this.kanaList = this.splitKana(this.currentQuestion.kana);
         this.typedFullRomaji = "";
         this.currentRomajiStr = "";
-        
         document.getElementById('display-kanji').innerText = this.currentQuestion.kanji;
         document.getElementById('display-kana').innerText = this.currentQuestion.kana;
-
         this.prepareNextChar();
     }
 
@@ -157,9 +146,7 @@ class TypingApp {
             setTimeout(() => this.nextQuestion(), 50);
             return;
         }
-
         let char = this.kanaList.shift();
-        
         if (char === 'ん' && this.kanaList.length > 0) {
             let nextKana = this.kanaList[0];
             let nextFirsts = ROMAJI_TABLE[nextKana] ? ROMAJI_TABLE[nextKana].map(opt => opt[0]) : [];
@@ -168,16 +155,13 @@ class TypingApp {
             } else {
                 this.pendingRomajiOptions = ['nn', 'xn'];
             }
-        } 
-        else if (char === 'っ' && this.kanaList.length > 0) {
+        } else if (char === 'っ' && this.kanaList.length > 0) {
             let nextKana = this.kanaList[0];
             let nextFirst = ROMAJI_TABLE[nextKana] ? ROMAJI_TABLE[nextKana][0][0] : "";
             this.pendingRomajiOptions = nextFirst ? [nextFirst, 'xtu', 'ltu'] : ['xtu', 'ltu'];
-        } 
-        else {
+        } else {
             this.pendingRomajiOptions = [...(ROMAJI_TABLE[char] || [char])];
         }
-
         this.currentRomajiStr = "";
         this.refreshDisplay();
     }
@@ -185,7 +169,6 @@ class TypingApp {
     refreshDisplay() {
         let currentBestOption = this.pendingRomajiOptions.find(opt => opt.startsWith(this.currentRomajiStr)) || this.pendingRomajiOptions[0];
         let currentRemain = currentBestOption.substring(this.currentRomajiStr.length);
-        
         let futureRemain = "";
         for(let i=0; i < this.kanaList.length; i++) {
             let k = this.kanaList[i];
@@ -197,7 +180,6 @@ class TypingApp {
                 futureRemain += (ROMAJI_TABLE[k] ? ROMAJI_TABLE[k][0] : k);
             }
         }
-        
         this.guideRemainRomaji = currentRemain + futureRemain;
         const area = document.getElementById('display-romaji');
         const nextChar = this.guideRemainRomaji[0] || "";
@@ -207,19 +189,11 @@ class TypingApp {
 
     handleKeyDown(e) {
         if (this.state !== "PLAYING") return;
-
-        // Escキー中断機能
-        if (e.key === "Escape") {
-            this.endGame("abort");
-            return;
-        }
-
+        if (e.key === "Escape") { this.endGame("abort"); return; }
         if (e.key.length !== 1) return;
         this.lastInputTime = performance.now();
         const key = e.key.toLowerCase();
-
         let matches = this.pendingRomajiOptions.filter(opt => opt.startsWith(this.currentRomajiStr + key));
-
         if (matches.length > 0) {
             this.currentRomajiStr += key;
             this.typedFullRomaji += key;
@@ -227,7 +201,6 @@ class TypingApp {
             this.cumTypedCount++;
             this.pendingRomajiOptions = matches;
             if(this.soundEnabled) this.playSound(600, 0.05);
-
             if (this.pendingRomajiOptions.includes(this.currentRomajiStr)) {
                 this.prepareNextChar();
             } else {
@@ -265,28 +238,21 @@ class TypingApp {
         this.state = "RESULT";
         cancelAnimationFrame(this.timerInterval);
         const totalTimeMs = performance.now() - this.startTime;
-
         document.getElementById('game-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
-
         if(reason === "inactivity") document.getElementById('result-title').innerText = "練習終了 (無操作中断)";
         if(reason === "abort") document.getElementById('result-title').innerText = "練習終了 (途中中断)";
-
         const cpm = parseInt(document.getElementById('wpm').innerText);
         const acc = parseInt(document.getElementById('accuracy').innerText);
         const score = Math.floor(cpm * (acc/100)**3);
-
         document.getElementById('res-score').innerText = score;
         document.getElementById('res-time').innerText = this.formatTimeResult(totalTimeMs);
         document.getElementById('res-wpm').innerText = cpm;
         document.getElementById('res-acc').innerText = acc;
         document.getElementById('res-miss').innerText = this.misses;
         document.getElementById('result-rank').innerText = this.getRank(score);
-
-        // ミス内訳の表示生成
         const missContainer = document.getElementById('miss-detail-list');
         const sortedMisses = Object.entries(this.missMap).sort((a,b) => b[1] - a[1]);
-        
         if (sortedMisses.length === 0) {
             missContainer.innerHTML = "<p>ミスなし！完璧です。</p>";
         } else {
