@@ -1,6 +1,6 @@
 /**
- * EduTyping Next - Professional Logic v9.2
- * 修正：段ズレキーボード ＆ スペースキー挙動 ＆ Esc中断無効化
+ * EduTyping Next - Professional Logic v9.3
+ * 修正：ガイド表示バグ（ちぇ等）＆ 超軽量演出
  */
 
 const ROMAJI_TABLE = {
@@ -27,7 +27,7 @@ const ROMAJI_TABLE = {
     'みゃ':['mya'], 'みゅ':['myu'], 'みょ':['myo'],
     'りゃ':['rya'], 'りゅ':['ryu'], 'りょ':['ryo'],
     'ぎゃ':['gya'], 'ぎゅ':['gyu'], 'ぎょ':['gyo'],
-    'じゃ':['ja','ziya'], 'じゅ':['ju','ziyu'], 'じょ':['jo','ziyo'],
+    'じゃ':['ja','ji'], 'じゅ':['ju'], 'じょ':['jo'],
     'びゃ':['bya'], 'びゅ':['byu'], 'びょ':['byo'],
     'ぴゃ':['pya'], 'ぴゅ':['pyu'], 'ぴょ':['pyo'],
     'ふぁ':['fa'], 'ふぃ':['fi'], 'ふぇ':['fe'], 'ふぉ':['fo'],
@@ -68,12 +68,8 @@ class TypingApp {
             e.target.innerText = `タイプ音: ${this.soundEnabled ? 'ON' : 'OFF'}`;
         });
         document.getElementById('start-btn').addEventListener('click', () => this.prepareReady());
-        
         window.addEventListener('keydown', (e) => {
-            // スペースキーでのスクロールを防止
-            if (e.key === " " && (this.state === "READY" || this.state === "PLAYING")) {
-                e.preventDefault();
-            }
+            if (e.key === " " && (this.state === "READY" || this.state === "PLAYING")) e.preventDefault();
             this.handleKeyDown(e);
         });
     }
@@ -82,8 +78,7 @@ class TypingApp {
         this.state = "READY";
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('game-screen').classList.remove('hidden');
-        const area = document.getElementById('typing-container');
-        area.innerHTML = '<div class="ready-text">スペースキーを押して開始</div>';
+        document.getElementById('typing-container').innerHTML = '<div class="ready-text">スペースキーを押して開始</div>';
         this.highlightKey(' ');
     }
 
@@ -104,14 +99,11 @@ class TypingApp {
     }
 
     startGame() {
-        const area = document.getElementById('typing-container');
-        area.innerHTML = '<div id="display-kanji"></div><div id="display-kana"></div><div id="display-romaji"></div>';
+        document.getElementById('typing-container').innerHTML = '<div id="display-kanji"></div><div id="display-kana"></div><div id="display-romaji"></div>';
         this.state = "PLAYING";
         this.startTime = performance.now();
         this.lastInputTime = this.startTime;
-        this.misses = 0;
-        this.totalTypedCount = 0;
-        this.cumTypedCount = 0;
+        this.misses = 0; this.totalTypedCount = 0; this.cumTypedCount = 0;
         this.missMap = {};
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.nextQuestion();
@@ -123,8 +115,7 @@ class TypingApp {
         const questions = this.data.categories[this.currentCategory];
         const nextQ = questions[Math.floor(Math.random() * questions.length)];
         this.kanaList = this.splitKana(nextQ.kana);
-        this.typedFullRomaji = "";
-        this.currentRomajiStr = "";
+        this.typedFullRomaji = ""; this.currentRomajiStr = "";
         document.getElementById('display-kanji').innerText = nextQ.kanji;
         document.getElementById('display-kana').innerText = nextQ.kana;
         this.prepareNextChar();
@@ -148,11 +139,13 @@ class TypingApp {
         }
         let char = this.kanaList.shift();
         if (char === 'ん' && this.kanaList.length > 0) {
-            let nextFirsts = ROMAJI_TABLE[this.kanaList[0]] ? ROMAJI_TABLE[this.kanaList[0]].map(opt => opt[0]) : [];
-            this.pendingRomajiOptions = (nextFirsts.every(f => !['a','i','u','e','o','y','n'].includes(f))) ? ['n','nn','xn'] : ['nn','xn'];
+            let nextK = this.kanaList[0];
+            let nextF = ROMAJI_TABLE[nextK] ? ROMAJI_TABLE[nextK].map(o => o[0]) : [];
+            this.pendingRomajiOptions = (nextF.every(f => !['a','i','u','e','o','y','n'].includes(f))) ? ['n','nn','xn'] : ['nn','xn'];
         } else if (char === 'っ' && this.kanaList.length > 0) {
-            let nextFirst = ROMAJI_TABLE[this.kanaList[0]] ? ROMAJI_TABLE[this.kanaList[0]][0][0] : "";
-            this.pendingRomajiOptions = nextFirst ? [nextFirst, 'xtu', 'ltu'] : ['xtu','ltu'];
+            let nextK = this.kanaList[0];
+            let nextF = ROMAJI_TABLE[nextK] ? ROMAJI_TABLE[nextK][0][0] : "";
+            this.pendingRomajiOptions = nextF ? [nextF, 'xtu', 'ltu'] : ['xtu','ltu'];
         } else {
             this.pendingRomajiOptions = [...(ROMAJI_TABLE[char] || [char])];
         }
@@ -161,31 +154,33 @@ class TypingApp {
 
     refreshDisplay() {
         if (this.state !== "PLAYING") return;
-        let currentBest = this.pendingRomajiOptions.find(opt => opt.startsWith(this.currentRomajiStr)) || this.pendingRomajiOptions[0];
+        let best = this.pendingRomajiOptions.find(o => o.startsWith(this.currentRomajiStr)) || this.pendingRomajiOptions[0];
         let future = "";
-        this.kanaList.forEach((k, idx) => {
-            if (k === 'っ' && this.kanaList[idx+1]) {
-                let nr = ROMAJI_TABLE[this.kanaList[idx+1]] ? ROMAJI_TABLE[this.kanaList[idx+1]][0] : this.kanaList[idx+1];
+        for(let i=0; i < this.kanaList.length; i++) {
+            let k = this.kanaList[i];
+            if (k === 'っ' && this.kanaList[i+1]) {
+                let nk = this.kanaList[i+1];
+                let nr = ROMAJI_TABLE[nk] ? ROMAJI_TABLE[nk][0] : nk;
                 future += nr[0];
-            } else { future += (ROMAJI_TABLE[k] ? ROMAJI_TABLE[k][0] : k); }
-        });
-        this.guideRemainRomaji = currentBest.substring(this.currentRomajiStr.length) + future;
-        const nextChar = this.guideRemainRomaji[0] || "";
-        document.getElementById('display-romaji').innerHTML = `<span class="typed">${this.typedFullRomaji}</span><span class="current">${nextChar}</span><span>${this.guideRemainRomaji.substring(1)}</span>`;
-        this.highlightKey(nextChar);
+            } else {
+                // ここでガイド生成時のバグ（ちぇ等）を修正
+                future += (ROMAJI_TABLE[k] ? ROMAJI_TABLE[k][0] : k);
+            }
+        }
+        this.guideRemainRomaji = best.substring(this.currentRomajiStr.length) + future;
+        const next = this.guideRemainRomaji[0] || "";
+        document.getElementById('display-romaji').innerHTML = `<span class="typed">${this.typedFullRomaji}</span><span class="current">${next}</span><span>${this.guideRemainRomaji.substring(1)}</span>`;
+        this.highlightKey(next);
     }
 
     handleKeyDown(e) {
-        if (this.state === "READY" && e.key === " ") {
-            this.startCountdown(); return;
-        }
-        if (this.state !== "PLAYING") return;
+        if (this.state === "READY" && e.key === " ") { this.startCountdown(); return; }
+        if (this.state !== "PLAYING" || e.key.length !== 1) return;
         if (e.key === "Escape") { this.endGame("abort"); return; }
-        if (e.key.length !== 1) return;
         
         this.lastInputTime = performance.now();
         const key = e.key.toLowerCase();
-        let matches = this.pendingRomajiOptions.filter(opt => opt.startsWith(this.currentRomajiStr + key));
+        let matches = this.pendingRomajiOptions.filter(o => o.startsWith(this.currentRomajiStr + key));
 
         if (matches.length > 0) {
             this.currentRomajiStr += key; this.typedFullRomaji += key;
@@ -206,7 +201,7 @@ class TypingApp {
     triggerDamage() {
         const el = document.getElementById('typing-container');
         el.classList.add('damage-effect');
-        setTimeout(() => el.classList.remove('damage-effect'), 200);
+        setTimeout(() => el.classList.remove('damage-effect'), 100);
     }
 
     highlightKey(char) {
@@ -239,37 +234,27 @@ class TypingApp {
 
     endGame(reason = "") {
         this.state = "RESULT";
-        const totalMs = performance.now() - this.startTime;
         document.getElementById('game-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
-        
+        const resTitle = document.getElementById('result-title');
         const resScore = document.getElementById('res-score');
         const resRank = document.getElementById('result-rank');
-        const resTitle = document.getElementById('result-title');
 
         if(reason === "abort") {
-            resTitle.innerText = "練習中止";
-            resScore.innerText = "---";
-            resRank.innerText = "評価不可";
-            resRank.style.color = "#95a5a6";
+            resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可";
         } else {
             resTitle.innerText = "練習結果";
             const cpm = parseInt(document.getElementById('wpm').innerText);
             const acc = parseInt(document.getElementById('accuracy').innerText);
             const score = Math.floor(cpm * (acc/100)**3);
-            resScore.innerText = score;
-            resRank.innerText = this.getRank(score);
-            resRank.style.color = "var(--accent)";
+            resScore.innerText = score; resRank.innerText = this.getRank(score);
         }
-
-        document.getElementById('res-time').innerText = this.formatTime(totalMs);
+        document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
         document.getElementById('res-wpm').innerText = document.getElementById('wpm').innerText;
         document.getElementById('res-acc').innerText = document.getElementById('accuracy').innerText;
         document.getElementById('res-miss').innerText = this.misses;
-
-        const missList = document.getElementById('miss-detail-list');
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
-        missList.innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span>${v}回</span></div>`).join('') : "ミスなし！";
+        document.getElementById('miss-detail-list').innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span>${v}回</span></div>`).join('') : "ミスなし！";
     }
 
     formatTime(ms) {
@@ -286,26 +271,16 @@ class TypingApp {
     }
 
     renderKeyboard() {
-        const layout = [
-            ["1","2","3","4","5","6","7","8","9","0","-","^"],
-            ["Q","W","E","R","T","Y","U","I","O","P","@"],
-            ["A","S","D","F","G","H","J","K","L",";",":","]"],
-            ["Shift","Z","X","C","V","B","N","M",",",".","/","Shift"],
-            ["Space"]
-        ];
+        const layout = [["1","2","3","4","5","6","7","8","9","0","-","^"],["Q","W","E","R","T","Y","U","I","O","P","@"],["A","S","D","F","G","H","J","K","L",";",":","]"],["Shift","Z","X","C","V","B","N","M",",",".","/","Shift"],["Space"]];
         const container = document.getElementById('keyboard-container');
-        container.innerHTML = "";
         layout.forEach((row, i) => {
-            const rowEl = document.createElement('div');
-            rowEl.className = `keyboard-row row-${i}`;
+            const rowEl = document.createElement('div'); rowEl.className = `keyboard-row row-${i}`;
             row.forEach(key => {
-                const keyEl = document.createElement('div');
-                keyEl.className = 'key';
-                if(key === "Space") keyEl.classList.add('space');
-                if(key === "Shift") keyEl.classList.add('wide-shift');
-                keyEl.innerText = key;
-                keyEl.id = `k-${key === "Space" ? "space" : key.toLowerCase()}`;
-                rowEl.appendChild(keyEl);
+                const kEl = document.createElement('div'); kEl.className = 'key';
+                if(key === "Space") kEl.classList.add('space');
+                if(key === "Shift") kEl.classList.add('wide-shift');
+                kEl.innerText = key; kEl.id = `k-${key === "Space" ? "space" : key.toLowerCase()}`;
+                rowEl.appendChild(kEl);
             });
             container.appendChild(rowEl);
         });
@@ -313,8 +288,7 @@ class TypingApp {
 
     playSound(f, d) {
         if (!this.audioCtx) return;
-        const osc = this.audioCtx.createOscillator();
-        const gain = this.audioCtx.createGain();
+        const osc = this.audioCtx.createOscillator(); const gain = this.audioCtx.createGain();
         osc.connect(gain); gain.connect(this.audioCtx.destination);
         osc.frequency.value = f; gain.gain.setValueAtTime(0.05, this.audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + d);
