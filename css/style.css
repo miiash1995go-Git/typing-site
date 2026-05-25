@@ -3,6 +3,8 @@
     --accent: #3498db;
     --error: #e74c3c;
     --bg: #f8f9fa;
+    --key-border: #dcdde1;
+    --key-shadow: #b2bec3;
 }
 
 body {
@@ -11,100 +13,81 @@ body {
     display: flex; justify-content: center; overflow-x: hidden;
 }
 
-#app { width: 100%; max-width: 1100px; padding: 20px; }
+#app { width: 100%; max-width: 1150px; padding: 20px; }
 
-header { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px; }
+header { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px; }
 .logo { font-size: 2rem; font-weight: bold; }
 .logo span { color: var(--accent); }
 
-.ad-placeholder {
-    width: 728px; height: 90px; background: #ddd; 
-    display: flex; align-items: center; justify-content: center; font-size: 0.8rem;
-}
+.ad-placeholder { width: 728px; height: 90px; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
 
 .screen { transition: opacity 0.3s; }
 .hidden { display: none !important; }
 
-.card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
+.card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
 
-/* 設定ボタン */
+/* 設定・ボタン */
 .settings-area { margin-bottom: 20px; }
-.btn-toggle {
-    background: #ecf0f1; border: 1px solid #bdc3c7; padding: 8px 16px;
-    border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: bold;
-}
-.btn-toggle.off { color: #95a5a6; text-decoration: line-through; }
-
-.btn-group { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
-.btn-category { padding: 10px 20px; border: 2px solid #ddd; background: white; border-radius: 25px; cursor: pointer; font-weight: bold; }
+.btn-toggle { background: #ecf0f1; border: 1px solid #bdc3c7; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+.btn-group { display: flex; justify-content: center; gap: 8px; margin: 20px 0; flex-wrap: wrap; }
+.btn-category { padding: 10px 18px; border: 2px solid #ddd; background: white; border-radius: 25px; cursor: pointer; font-weight: bold; }
 .btn-category.active { background: var(--accent); color: white; border-color: var(--accent); }
+.btn-main { background: var(--primary); color: white; border: none; padding: 15px 50px; font-size: 1.2rem; border-radius: 30px; cursor: pointer; margin-top: 10px; font-weight: bold; }
 
-.btn-main {
-    background: var(--primary); color: white; border: none; padding: 15px 50px;
-    font-size: 1.2rem; border-radius: 30px; cursor: pointer; margin-top: 20px; font-weight: bold;
-}
-
-.stats { display: flex; justify-content: center; gap: 40px; margin-bottom: 20px; font-family: 'Roboto Mono', monospace; font-weight: bold; }
-
+/* タイピング表示とダメージエフェクト */
+.stats { display: flex; justify-content: center; gap: 40px; margin-bottom: 15px; font-family: 'Roboto Mono', monospace; font-weight: bold; }
 .typing-display {
-    background: white; padding: 40px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    margin-bottom: 30px; text-align: center; min-height: 220px;
+    background: white; padding: 35px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin-bottom: 25px; text-align: center; min-height: 200px;
+    border: 3px solid transparent; transition: border 0.1s;
 }
 
-#display-kanji { font-size: 1.8rem; margin-bottom: 10px; font-weight: bold; }
-#display-kana { color: #888; font-size: 1.1rem; margin-bottom: 15px; }
-#display-romaji { font-family: 'Roboto Mono', monospace; font-size: 2.5rem; letter-spacing: 0.05em; color: #333; word-break: break-all; }
+/* ダメージ時のアニメーション */
+.damage-effect {
+    animation: shake 0.15s ease-in-out 2;
+    border-color: #fab1a0 !important;
+    background-color: #fff5f5 !important;
+}
 
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+}
+
+#display-kanji { font-size: 1.8rem; margin-bottom: 8px; font-weight: bold; }
+#display-kana { color: #888; font-size: 1.1rem; margin-bottom: 15px; }
+#display-romaji { font-family: 'Roboto Mono', monospace; font-size: 2.4rem; letter-spacing: 0.05em; color: #333; word-break: break-all; }
 .typed { color: #d1d5db; }
 .current { color: var(--accent); border-bottom: 4px solid var(--accent); background-color: #ebf8ff; }
 
-#keyboard { display: grid; grid-template-columns: repeat(30, 1fr); gap: 4px; max-width: 800px; margin: 0 auto; }
+/* 独自キーボードレイアウト */
+#keyboard-container {
+    max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; gap: 6px;
+    padding: 20px; background: #f1f2f6; border-radius: 12px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+}
+.keyboard-row { display: flex; justify-content: center; gap: 5px; width: 100%; }
 .key {
-    grid-column: span 2; height: 45px; background: white; border: 1px solid #ccc; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: bold;
+    width: 50px; height: 50px; background: white; border-radius: 6px;
+    border: 1px solid var(--key-border); border-bottom-width: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; font-weight: bold; color: #57606f; transition: all 0.05s;
 }
-.key.highlight { background: var(--accent); color: white; transform: translateY(-2px); box-shadow: 0 4px 0 #2980b9; }
+.key.wide-15 { width: 80px; }
+.key.wide-2 { width: 110px; }
+.key.space { width: 300px; background: #f9ca24; border-color: #f0932b; color: white; }
+.key.highlight { background: var(--accent); color: white; border-color: #2980b9; transform: translateY(2px); border-bottom-width: 1px; }
 
-.guide-text { text-align: center; color: #95a5a6; font-size: 0.8rem; margin-top: 15px; }
-
-/* 結果画面レイアウト */
-.result-container { display: flex; gap: 20px; width: 100%; align-items: flex-start; }
-
-.result-side {
-    flex: 1; background: white; padding: 20px; border-radius: 15px; 
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 450px; display: flex; flex-direction: column;
-}
-.result-side h3 { font-size: 1rem; margin-top: 0; border-bottom: 2px solid var(--bg); padding-bottom: 10px; }
-
-.scroll-list {
-    flex: 1; overflow-y: auto; padding-right: 5px;
-}
-.miss-item {
-    display: flex; justify-content: space-between; padding: 8px 0;
-    border-bottom: 1px solid #f1f1f1; font-family: 'Roboto Mono', monospace;
-}
-.miss-key { font-weight: bold; color: var(--error); }
-
-.scroll-list::-webkit-scrollbar { width: 6px; }
-.scroll-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
-.scroll-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
-
+/* 結果画面 */
+.result-container { display: flex; gap: 20px; align-items: flex-start; }
+.result-side { flex: 1; background: white; padding: 20px; border-radius: 15px; height: 450px; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+.scroll-list { flex: 1; overflow-y: auto; padding-right: 5px; }
+.miss-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f1f1; font-family: 'Roboto Mono', monospace; }
+.miss-key { font-weight: bold; color: var(--error); font-size: 1.1rem; }
 .result-main { flex: 2; background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 40px; font-size: 1.1rem; text-align: left; max-width: 360px; margin: 0 auto; }
+.res-item { white-space: nowrap; }
+#result-rank { font-size: 6rem; font-weight: bold; color: var(--accent); line-height: 1; margin: 10px 0; }
 .result-ad { flex: 1; min-height: 450px; background: #333; color: #777; display: flex; align-items: center; justify-content: center; border-radius: 15px; }
-
-.rank-display { margin: 10px 0; }
-#result-rank { font-size: 6rem; font-weight: bold; color: var(--accent); line-height: 1; }
-
-/* 修正箇所：グリッド幅と改行禁止設定 */
-.result-grid { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 10px 30px; /* 横の隙間を広げる */
-    font-size: 1.1rem; 
-    text-align: left; 
-    max-width: 340px; /* 260pxから拡大して1行分のスペースを確保 */
-    margin: 0 auto; 
-}
-.res-item {
-    white-space: nowrap; /* 常に1行で表示 */
-}
+.guide-text { text-align: center; color: #95a5a6; font-size: 0.85rem; margin-top: 20px; }

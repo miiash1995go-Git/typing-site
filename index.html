@@ -15,14 +15,17 @@
         </header>
 
         <main>
+            <!-- スタート画面 -->
             <section id="start-screen" class="screen">
                 <div class="card">
                     <h1>実務特化型タイピング練習</h1>
-                    <p>ビジネスや実務で使う文章を練習しましょう</p>
+                    <p>職業訓練・MOS対策に最適なカリキュラム</p>
                     <div id="category-selector" class="btn-group">
-                        <button class="btn-category active" data-cat="business">ビジネスメール</button>
-                        <button class="btn-category" data-cat="excel">Excel/Word</button>
-                        <button class="btn-category" data-cat="it_literacy">ITリテラシー</button>
+                        <button class="btn-category active" data-cat="it_terms">IT用語</button>
+                        <button class="btn-category" data-cat="word">Word (MOS)</button>
+                        <button class="btn-category" data-cat="excel">Excel (MOS)</button>
+                        <button class="btn-category" data-cat="business">ビジネス用語</button>
+                        <button class="btn-category" data-cat="daily">日常会話</button>
                     </div>
                     <div class="settings-area">
                         <button id="sound-toggle" class="btn-toggle">タイプ音: ON</button>
@@ -31,20 +34,26 @@
                 </div>
             </section>
 
+            <!-- ゲーム画面 -->
             <section id="game-screen" class="screen hidden">
                 <div class="stats">
                     <div class="stat-box">WPM <span id="wpm">0</span></div>
                     <div class="stat-box">正確率 <span id="accuracy">100</span>%</div>
                 </div>
-                <div class="typing-display">
+
+                <div id="typing-container" class="typing-display">
                     <div id="display-kanji">...</div>
                     <div id="display-kana">...</div>
                     <div id="display-romaji"></div>
                 </div>
-                <div id="keyboard"></div>
-                <p class="guide-text">途中で終了する場合は [Esc] キー</p>
+
+                <!-- 独自設計キーボード -->
+                <div id="keyboard-container"></div>
+                
+                <p class="guide-text">中断して結果を見るには [Esc] キー</p>
             </section>
 
+            <!-- 結果画面 -->
             <section id="result-screen" class="screen hidden">
                 <div class="result-container">
                     <div class="result-side">
@@ -67,7 +76,7 @@
                         <button onclick="location.reload()" class="btn-main">もう一度挑戦</button>
                     </div>
                     <div class="result-ad">
-                        <div class="ad-video-placeholder">【広告：動画広告枠】</div>
+                        <div class="ad-video-placeholder">【広告スペース】</div>
                     </div>
                 </div>
             </section>
