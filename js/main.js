@@ -1,6 +1,5 @@
 /**
- * EduTyping Next - Professional Logic v9.6
- * 修正：正確率「%%」の根絶 ＆ Esc中断の復旧 ＆ キーボード下段調整
+ * EduTyping Next - Professional Logic v9.7
  */
 
 const ROMAJI_TABLE = {
@@ -176,7 +175,6 @@ class TypingApp {
     }
 
     handleKeyDown(e) {
-        // Esc判定を最優先に復旧
         if (e.key === "Escape") {
             if (this.state === "PLAYING" || this.state === "READY" || this.state === "COUNTDOWN") {
                 this.endGame("abort"); return;
@@ -237,7 +235,7 @@ class TypingApp {
         const cpm = Math.floor(this.totalTypedCount / (sec / 60)) || 0;
         const acc = this.totalTypedCount > 0 ? Math.floor(((this.totalTypedCount - this.misses) / this.totalTypedCount) * 100) : 100;
         document.getElementById('wpm').innerText = cpm;
-        document.getElementById('accuracy').innerText = acc; // 修正：数値をそのまま出力
+        document.getElementById('accuracy').innerText = acc; // ％％にならないよう数値のみ
     }
 
     endGame(reason = "") {
@@ -248,12 +246,11 @@ class TypingApp {
         const resScore = document.getElementById('res-score');
         const resRank = document.getElementById('result-rank');
         const resAcc = document.getElementById('res-acc');
+        resRank.classList.remove('sparkle');
 
         if(reason === "abort") {
-            resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可"; resAcc.innerText = "---";
-            document.getElementById('res-time').innerText = "---";
-            document.getElementById('res-wpm').innerText = "---";
-            document.getElementById('res-miss').innerText = "---";
+            resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可"; resRank.style.color = "#95a5a6"; resAcc.innerText = "---";
+            document.getElementById('res-time').innerText = "---"; document.getElementById('res-wpm').innerText = "---"; document.getElementById('res-miss').innerText = "---";
         } else {
             resTitle.innerText = "練習結果";
             const sec = (performance.now() - this.startTime) / 1000;
@@ -262,15 +259,14 @@ class TypingApp {
             const score = Math.floor(cpm * (accNum/100)**3);
             const rank = this.getRank(score);
 
-            resScore.innerText = score; resRank.innerText = rank;
+            resScore.innerText = score; resRank.innerText = rank; resRank.style.color = "var(--accent)";
             document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
-            document.getElementById('res-wpm').innerText = cpm;
-            resAcc.innerText = accNum; // 修正：HTML側の%と合わせるため数値のみ
+            document.getElementById('res-wpm').innerText = cpm; resAcc.innerText = accNum;
             document.getElementById('res-miss').innerText = this.misses;
             if (["SSS", "SS", "S", "A+", "A", "A-"].includes(rank)) resRank.classList.add('sparkle');
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
-        document.getElementById('miss-detail-list').innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span>${v}回</span></div>`).join('') : "ミスなし！";
+        document.getElementById('miss-detail-list').innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span class="miss-count">${v}回</span></div>`).join('') : "ミスなし！";
     }
 
     formatTime(ms) {
