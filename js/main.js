@@ -1,6 +1,6 @@
 /**
- * EduTyping Next - Professional Logic v9.3
- * 修正：ガイド文字列の「拗音（ちぇ等）」先読み対応
+ * EduTyping Next - Professional Logic v9.4
+ * 修正：Esc中断の優先順位上げ ＆ キーボード段ズレ対応 ＆ ガイド表示の最適化
  */
 
 const ROMAJI_TABLE = {
@@ -39,7 +39,7 @@ class TypingApp {
     constructor() {
         this.data = null;
         this.currentCategory = 'it_terms';
-        this.state = "START";
+        this.state = "START"; 
         this.soundEnabled = true;
         this.targetLimit = 320;
         this.inactivityLimit = 120000;
@@ -68,7 +68,9 @@ class TypingApp {
             e.target.innerText = `タイプ音: ${this.soundEnabled ? 'ON' : 'OFF'}`;
         });
         document.getElementById('start-btn').addEventListener('click', () => this.prepareReady());
+        
         window.addEventListener('keydown', (e) => {
+            // スペースキーのデフォルト挙動(スクロール)を防止
             if (e.key === " " && (this.state === "READY" || this.state === "PLAYING")) e.preventDefault();
             this.handleKeyDown(e);
         });
@@ -155,8 +157,6 @@ class TypingApp {
     refreshDisplay() {
         if (this.state !== "PLAYING") return;
         let best = this.pendingRomajiOptions.find(o => o.startsWith(this.currentRomajiStr)) || this.pendingRomajiOptions[0];
-        
-        // 残りのかなリストからも「拗音」や「促音」を正しく解析してガイドを作る
         let future = "";
         let tempKana = [...this.kanaList];
         while(tempKana.length > 0) {
@@ -165,11 +165,8 @@ class TypingApp {
                 let nk = tempKana[0];
                 let nr = ROMAJI_TABLE[nk] ? ROMAJI_TABLE[nk][0] : nk;
                 future += nr[0];
-            } else {
-                future += (ROMAJI_TABLE[k] ? ROMAJI_TABLE[k][0] : k);
-            }
+            } else { future += (ROMAJI_TABLE[k] ? ROMAJI_TABLE[k][0] : k); }
         }
-
         this.guideRemainRomaji = best.substring(this.currentRomajiStr.length) + future;
         const next = this.guideRemainRomaji[0] || "";
         document.getElementById('display-romaji').innerHTML = `<span class="typed">${this.typedFullRomaji}</span><span class="current">${next}</span><span>${this.guideRemainRomaji.substring(1)}</span>`;
@@ -177,9 +174,22 @@ class TypingApp {
     }
 
     handleKeyDown(e) {
-        if (this.state === "READY" && e.key === " ") { this.startCountdown(); return; }
+        // 1. Escキー判定（最優先：どの状態でも中断可能にする）
+        if (e.key === "Escape") {
+            if (this.state === "PLAYING" || this.state === "READY" || this.state === "COUNTDOWN") {
+                this.endGame("abort");
+                return;
+            }
+        }
+
+        // 2. スペース待機状態の判定
+        if (this.state === "READY" && e.key === " ") {
+            this.startCountdown();
+            return;
+        }
+
+        // 3. プレイ中の判定
         if (this.state !== "PLAYING" || e.key.length !== 1) return;
-        if (e.key === "Escape") { this.endGame("abort"); return; }
         
         this.lastInputTime = performance.now();
         const key = e.key.toLowerCase();
@@ -223,7 +233,7 @@ class TypingApp {
 
     updateLoop() {
         if (this.state !== "PLAYING") return;
-        if (performance.now() - this.lastInputTime > this.inactivityLimit) { this.endGame("inactivity"); return; }
+        if (performance.now() - this.lastInputTime > this.inactivityLimit) { this.endGame("abort"); return; }
         requestAnimationFrame(() => this.updateLoop());
     }
 
@@ -244,13 +254,18 @@ class TypingApp {
         const resRank = document.getElementById('result-rank');
 
         if(reason === "abort") {
-            resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可";
+            resTitle.innerText = "練習中止";
+            resScore.innerText = "---";
+            resRank.innerText = "評価不可";
+            resRank.style.color = "#95a5a6";
         } else {
             resTitle.innerText = "練習結果";
             const cpm = parseInt(document.getElementById('wpm').innerText);
             const acc = parseInt(document.getElementById('accuracy').innerText);
             const score = Math.floor(cpm * (acc/100)**3);
-            resScore.innerText = score; resRank.innerText = this.getRank(score);
+            resScore.innerText = score; 
+            resRank.innerText = this.getRank(score);
+            resRank.style.color = "var(--accent)";
         }
         document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
         document.getElementById('res-wpm').innerText = document.getElementById('wpm').innerText;
@@ -276,6 +291,7 @@ class TypingApp {
     renderKeyboard() {
         const layout = [["1","2","3","4","5","6","7","8","9","0","-","^"],["Q","W","E","R","T","Y","U","I","O","P","@"],["A","S","D","F","G","H","J","K","L",";",":","]"],["Shift","Z","X","C","V","B","N","M",",",".","/","Shift"],["Space"]];
         const container = document.getElementById('keyboard-container');
+        container.innerHTML = "";
         layout.forEach((row, i) => {
             const rowEl = document.createElement('div'); rowEl.className = `keyboard-row row-${i}`;
             row.forEach(key => {
