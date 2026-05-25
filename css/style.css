@@ -4,25 +4,12 @@
     --error: #ff4757;
     --bg: #f8f9fa;
     --key-border: #dcdde1;
+    --gold: #f1c40f;
 }
 
-/* 画面崩れ防止：スクロールを禁止し、1画面に固定 */
-body {
-    margin: 0; padding: 0;
-    font-family: 'Noto Sans JP', sans-serif;
-    background-color: var(--bg); color: var(--primary);
-    height: 100vh; width: 100vw;
-    display: flex; flex-direction: column;
-    overflow: hidden;
-}
-
+body { margin: 0; padding: 0; font-family: 'Noto Sans JP', sans-serif; background-color: var(--bg); color: var(--primary); height: 100vh; width: 100vw; display: flex; flex-direction: column; overflow: hidden; }
 .hidden { display: none !important; }
-
-#app {
-    width: 100%; max-width: 1000px;
-    margin: 0 auto; padding: 10px;
-    display: flex; flex-direction: column; height: 100%;
-}
+#app { width: 100%; max-width: 1000px; margin: 0 auto; padding: 10px; display: flex; flex-direction: column; height: 100%; }
 
 header { flex-shrink: 0; text-align: center; margin-bottom: 5px; }
 .logo { font-size: 1.5rem; font-weight: bold; margin: 0; }
@@ -30,23 +17,15 @@ header { flex-shrink: 0; text-align: center; margin-bottom: 5px; }
 .ad-placeholder { width: 468px; height: 60px; background: #ddd; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; border-radius: 5px; }
 
 main { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
-
 .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; }
 
-/* ボタン・カテゴリ選択 */
 .btn-group { display: flex; justify-content: center; gap: 5px; margin: 8px 0; flex-wrap: wrap; }
 .btn-category { padding: 6px 12px; border: 2px solid #ddd; background: white; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
 .btn-category.active { background: var(--accent); color: white; border-color: var(--accent); }
 .btn-main { background: var(--primary); color: white; border: none; padding: 10px 40px; font-size: 1.1rem; border-radius: 25px; cursor: pointer; font-weight: bold; }
-.btn-toggle { background: #ecf0f1; border: 1px solid #bdc3c7; padding: 4px 12px; border-radius: 20px; cursor: pointer; font-size: 0.7rem; font-weight: bold; }
 
-/* プレイ画面のパーツ */
 .stats { display: flex; justify-content: center; gap: 40px; margin-bottom: 10px; font-family: 'Roboto Mono', monospace; font-weight: bold; font-size: 1rem; }
-.typing-display {
-    background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    margin-bottom: 15px; text-align: center; min-height: 150px;
-    border: 2px solid transparent; display: flex; flex-direction: column; justify-content: center;
-}
+.typing-display { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; text-align: center; min-height: 150px; border: 2px solid transparent; display: flex; flex-direction: column; justify-content: center; }
 .damage-effect { animation: shake 0.05s linear 1; border-color: var(--error) !important; }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(1px); } }
 
@@ -56,37 +35,39 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: center; 
 .typed { color: #d1d5db; }
 .current { color: var(--accent); border-bottom: 3px solid var(--accent); }
 
-/* キーボード：実機の「段ズレ（Staggered）」をpx単位で厳密再現 */
-#keyboard-container {
-    max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 4px;
-    padding: 12px; background: #f1f2f6; border-radius: 10px;
-}
+#keyboard-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 4px; padding: 10px; background: #f1f2f6; border-radius: 10px; }
 .keyboard-row { display: flex; justify-content: flex-start; gap: 4px; width: 100%; }
-
-/* 重要：各段の物理的なオフセット */
-.row-0 { margin-left: 0px; }
-.row-1 { margin-left: 20px; } /* Qの段：半キーほど右へ */
-.row-2 { margin-left: 38px; } /* Aの段：さらに右へ */
-.row-3 { margin-left: 0px; }  /* Zの段：Shift(70px)があるためmarginなしで丁度良い位置になる */
-
-.key {
-    width: 44px; height: 44px; background: white; border-radius: 5px;
-    border: 1px solid var(--key-border); border-bottom-width: 3px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.8rem; font-weight: bold; color: #57606f;
-}
-.key.wide-shift { width: 70px; }
-.key.space { width: 280px; margin-left: 120px; background: #f9ca24; border-color: #f0932b; color: white; }
+.row-1 { margin-left: 20px; } .row-2 { margin-left: 38px; }
+.key { width: 44px; height: 44px; background: white; border-radius: 5px; border: 1px solid var(--key-border); border-bottom-width: 3px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; color: #57606f; }
+.key.wide-shift { width: 70px; } .key.space { width: 280px; margin-left: 120px; background: #f9ca24; border-color: #f0932b; color: white; }
 .key.highlight { background: var(--accent); color: white; border-color: #2980b9; transform: translateY(1px); border-bottom-width: 1px; }
 
-/* 結果画面 */
-.result-container { display: flex; gap: 15px; height: 100%; min-height: 0; padding-bottom: 10px; }
+/* 結果画面レイアウト */
+.result-container { display: flex; gap: 15px; height: 100%; min-height: 0; padding-bottom: 10px; align-items: stretch; }
 .result-side { flex: 1; background: white; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-.scroll-list { flex: 1; overflow-y: auto; }
-.miss-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f1f1; font-family: 'Roboto Mono', monospace; }
-.result-main { flex: 2; background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 30px; max-width: 360px; margin: 0 auto; text-align: left; }
-.res-item { white-space: nowrap; font-size: 0.95rem; }
-#result-rank { font-size: 4.5rem; font-weight: bold; color: var(--accent); margin: 5px 0; line-height: 1; }
+.result-main { flex: 2; background: white; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); overflow-y: auto; }
 .result-ad { flex: 1; background: #333; border-radius: 12px; color: #777; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+
+/* ランク表示とキラキラ演出 */
+#result-rank { font-size: 5.5rem; font-weight: bold; color: var(--accent); margin: 10px 0; line-height: 1; display: inline-block; position: relative; }
+
+/* キラキラクラス */
+.sparkle {
+    color: var(--gold) !important;
+    text-shadow: 0 0 15px rgba(241, 196, 15, 0.7), 0 0 30px rgba(241, 196, 15, 0.4);
+    animation: glow 1.5s ease-in-out infinite alternate;
+}
+@keyframes glow {
+    from { text-shadow: 0 0 10px rgba(241, 196, 15, 0.5); transform: scale(1); }
+    to { text-shadow: 0 0 25px rgba(241, 196, 15, 0.9), 0 0 40px rgba(241, 196, 15, 0.6); transform: scale(1.05); }
+}
+
+/* 内訳グリッド：間隔を広げる */
+.result-grid { 
+    display: grid; grid-template-columns: 1fr 1fr; 
+    gap: 15px 40px; /* 縦の間隔を15pxに拡大 */
+    max-width: 400px; margin: 20px auto; text-align: left; 
+}
+.res-item { white-space: nowrap; font-size: 1.1rem; border-bottom: 1px solid #f1f1f1; padding-bottom: 5px; }
+
 .guide-text { text-align: center; color: #95a5a6; font-size: 0.7rem; margin-top: 10px; }

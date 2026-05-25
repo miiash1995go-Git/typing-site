@@ -1,6 +1,6 @@
 /**
- * EduTyping Next - Professional Logic v9.4
- * 修正：Esc中断の優先順位上げ ＆ キーボード段ズレ対応 ＆ ガイド表示の最適化
+ * EduTyping Next - Professional Logic v9.5
+ * 修正：中断時のNaN回避 ＆ A-以上のキラキラ演出 ＆ レイアウト適正化
  */
 
 const ROMAJI_TABLE = {
@@ -43,6 +43,10 @@ class TypingApp {
         this.soundEnabled = true;
         this.targetLimit = 320;
         this.inactivityLimit = 120000;
+        this.startTime = null; // nullで初期化
+        this.misses = 0;
+        this.totalTypedCount = 0;
+        this.missMap = {};
         this.init();
     }
 
@@ -68,9 +72,7 @@ class TypingApp {
             e.target.innerText = `タイプ音: ${this.soundEnabled ? 'ON' : 'OFF'}`;
         });
         document.getElementById('start-btn').addEventListener('click', () => this.prepareReady());
-        
         window.addEventListener('keydown', (e) => {
-            // スペースキーのデフォルト挙動(スクロール)を防止
             if (e.key === " " && (this.state === "READY" || this.state === "PLAYING")) e.preventDefault();
             this.handleKeyDown(e);
         });
@@ -174,27 +176,16 @@ class TypingApp {
     }
 
     handleKeyDown(e) {
-        // 1. Escキー判定（最優先：どの状態でも中断可能にする）
         if (e.key === "Escape") {
             if (this.state === "PLAYING" || this.state === "READY" || this.state === "COUNTDOWN") {
-                this.endGame("abort");
-                return;
+                this.endGame("abort"); return;
             }
         }
-
-        // 2. スペース待機状態の判定
-        if (this.state === "READY" && e.key === " ") {
-            this.startCountdown();
-            return;
-        }
-
-        // 3. プレイ中の判定
+        if (this.state === "READY" && e.key === " ") { this.startCountdown(); return; }
         if (this.state !== "PLAYING" || e.key.length !== 1) return;
-        
         this.lastInputTime = performance.now();
         const key = e.key.toLowerCase();
         let matches = this.pendingRomajiOptions.filter(o => o.startsWith(this.currentRomajiStr + key));
-
         if (matches.length > 0) {
             this.currentRomajiStr += key; this.typedFullRomaji += key;
             this.totalTypedCount++; this.cumTypedCount++;
@@ -238,6 +229,7 @@ class TypingApp {
     }
 
     updateStats() {
+        if (!this.startTime) return;
         const sec = (performance.now() - this.startTime) / 1000;
         const cpm = sec > 0 ? Math.floor(this.totalTypedCount / (sec / 60)) : 0;
         const acc = this.totalTypedCount > 0 ? Math.floor(((this.totalTypedCount - this.misses) / this.totalTypedCount) * 100) : 100;
@@ -252,30 +244,51 @@ class TypingApp {
         const resTitle = document.getElementById('result-title');
         const resScore = document.getElementById('res-score');
         const resRank = document.getElementById('result-rank');
+        const resTime = document.getElementById('res-time');
+        const resWpm = document.getElementById('res-wpm');
+        const resAcc = document.getElementById('res-acc');
+        const resMiss = document.getElementById('res-miss');
+
+        // キラキラ演出のリセット
+        resRank.classList.remove('sparkle');
 
         if(reason === "abort") {
             resTitle.innerText = "練習中止";
             resScore.innerText = "---";
             resRank.innerText = "評価不可";
             resRank.style.color = "#95a5a6";
+            resTime.innerText = "---";
+            resWpm.innerText = "---";
+            resAcc.innerText = "---";
+            resMiss.innerText = "---";
         } else {
             resTitle.innerText = "練習結果";
-            const cpm = parseInt(document.getElementById('wpm').innerText);
-            const acc = parseInt(document.getElementById('accuracy').innerText);
+            const sec = (performance.now() - this.startTime) / 1000;
+            const cpm = Math.floor(this.totalTypedCount / (sec / 60)) || 0;
+            const acc = this.totalTypedCount > 0 ? Math.floor(((this.totalTypedCount - this.misses) / this.totalTypedCount) * 100) : 100;
             const score = Math.floor(cpm * (acc/100)**3);
-            resScore.innerText = score; 
-            resRank.innerText = this.getRank(score);
+            const rank = this.getRank(score);
+
+            resScore.innerText = score;
+            resRank.innerText = rank;
             resRank.style.color = "var(--accent)";
+            resTime.innerText = this.formatTime(performance.now() - this.startTime);
+            resWpm.innerText = cpm;
+            resAcc.innerText = acc + "%";
+            resMiss.innerText = this.misses;
+
+            // A- 以上ならキラキラさせる
+            const highRanks = ["SSS", "SS", "S", "A+", "A", "A-"];
+            if (highRanks.includes(rank)) {
+                resRank.classList.add('sparkle');
+            }
         }
-        document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
-        document.getElementById('res-wpm').innerText = document.getElementById('wpm').innerText;
-        document.getElementById('res-acc').innerText = document.getElementById('accuracy').innerText;
-        document.getElementById('res-miss').innerText = this.misses;
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
         document.getElementById('miss-detail-list').innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span>${v}回</span></div>`).join('') : "ミスなし！";
     }
 
     formatTime(ms) {
+        if (isNaN(ms) || ms < 0) return "---";
         const m = Math.floor(ms/60000); const s = Math.floor((ms%60000)/1000); const p = Math.floor((ms%1000)/10);
         return `${m}分${s}秒${p}`;
     }
