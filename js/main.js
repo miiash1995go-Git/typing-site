@@ -1,6 +1,6 @@
 /**
  * EduTyping Next - Professional Logic v9.2
- * 修正：スペースキーのスクロール防止 ＆ 段ズレキーボード ＆ 中断採点不可
+ * 修正：段ズレキーボード ＆ スペースキー挙動 ＆ Esc中断無効化
  */
 
 const ROMAJI_TABLE = {
@@ -41,21 +41,8 @@ class TypingApp {
         this.currentCategory = 'it_terms';
         this.state = "START"; 
         this.soundEnabled = true;
-        this.kanaList = [];
-        this.pendingRomajiOptions = [];
-        this.currentRomajiStr = "";
-        this.typedFullRomaji = "";
-        this.guideRemainRomaji = "";
-        this.startTime = 0;
-        this.lastInputTime = 0;
-        this.misses = 0;
-        this.totalTypedCount = 0;
-        this.cumTypedCount = 0;
         this.targetLimit = 320;
-        this.maxTimeLimit = 240000;
         this.inactivityLimit = 120000;
-        this.missMap = {};
-        this.audioCtx = null;
         this.init();
     }
 
@@ -82,10 +69,10 @@ class TypingApp {
         });
         document.getElementById('start-btn').addEventListener('click', () => this.prepareReady());
         
-        // 修正：スクロール防止とキー入力処理
         window.addEventListener('keydown', (e) => {
+            // スペースキーでのスクロールを防止
             if (e.key === " " && (this.state === "READY" || this.state === "PLAYING")) {
-                e.preventDefault(); // スペースキーでのスクロールを防止
+                e.preventDefault();
             }
             this.handleKeyDown(e);
         });
@@ -120,9 +107,11 @@ class TypingApp {
         const area = document.getElementById('typing-container');
         area.innerHTML = '<div id="display-kanji"></div><div id="display-kana"></div><div id="display-romaji"></div>';
         this.state = "PLAYING";
-        const now = performance.now();
-        this.startTime = now; this.lastInputTime = now;
-        this.misses = 0; this.totalTypedCount = 0; this.cumTypedCount = 0;
+        this.startTime = performance.now();
+        this.lastInputTime = this.startTime;
+        this.misses = 0;
+        this.totalTypedCount = 0;
+        this.cumTypedCount = 0;
         this.missMap = {};
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.nextQuestion();
@@ -130,13 +119,12 @@ class TypingApp {
     }
 
     nextQuestion() {
-        if (this.cumTypedCount >= this.targetLimit || (performance.now() - this.startTime) >= this.maxTimeLimit) {
-            this.endGame(); return;
-        }
+        if (this.cumTypedCount >= this.targetLimit) { this.endGame(); return; }
         const questions = this.data.categories[this.currentCategory];
         const nextQ = questions[Math.floor(Math.random() * questions.length)];
         this.kanaList = this.splitKana(nextQ.kana);
-        this.typedFullRomaji = ""; this.currentRomajiStr = "";
+        this.typedFullRomaji = "";
+        this.currentRomajiStr = "";
         document.getElementById('display-kanji').innerText = nextQ.kanji;
         document.getElementById('display-kana').innerText = nextQ.kana;
         this.prepareNextChar();
@@ -154,7 +142,8 @@ class TypingApp {
 
     prepareNextChar() {
         if (this.kanaList.length === 0) {
-            this.refreshDisplay(); setTimeout(() => this.nextQuestion(), 50);
+            this.refreshDisplay(); 
+            setTimeout(() => this.nextQuestion(), 50);
             return;
         }
         let char = this.kanaList.shift();
@@ -193,6 +182,7 @@ class TypingApp {
         if (this.state !== "PLAYING") return;
         if (e.key === "Escape") { this.endGame("abort"); return; }
         if (e.key.length !== 1) return;
+        
         this.lastInputTime = performance.now();
         const key = e.key.toLowerCase();
         let matches = this.pendingRomajiOptions.filter(opt => opt.startsWith(this.currentRomajiStr + key));
@@ -260,7 +250,7 @@ class TypingApp {
         if(reason === "abort") {
             resTitle.innerText = "練習中止";
             resScore.innerText = "---";
-            resRank.innerText = "不可";
+            resRank.innerText = "評価不可";
             resRank.style.color = "#95a5a6";
         } else {
             resTitle.innerText = "練習結果";
@@ -292,8 +282,7 @@ class TypingApp {
         if(s >= 300) return "A+"; if(s >= 260) return "A"; if(s >= 220) return "A-";
         if(s >= 190) return "B+"; if(s >= 160) return "B"; if(s >= 130) return "B-";
         if(s >= 100) return "C+"; if(s >= 80) return "C"; if(s >= 60) return "C-";
-        if(s >= 40) return "D+"; if(s >= 30) return "D"; if(s >= 20) return "D-";
-        return "E";
+        return "D";
     }
 
     renderKeyboard() {
@@ -308,7 +297,7 @@ class TypingApp {
         container.innerHTML = "";
         layout.forEach((row, i) => {
             const rowEl = document.createElement('div');
-            rowEl.className = `keyboard-row row-${i}`; // row-0, row-1... のクラスを付与
+            rowEl.className = `keyboard-row row-${i}`;
             row.forEach(key => {
                 const keyEl = document.createElement('div');
                 keyEl.className = 'key';
