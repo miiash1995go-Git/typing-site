@@ -1,6 +1,5 @@
 /**
- * EduTyping Next - Professional Logic v9.5
- * 修正：中断時のNaN回避 ＆ A-以上のキラキラ演出 ＆ レイアウト適正化
+ * EduTyping Next - Professional Logic v9.6
  */
 
 const ROMAJI_TABLE = {
@@ -39,14 +38,16 @@ class TypingApp {
     constructor() {
         this.data = null;
         this.currentCategory = 'it_terms';
-        this.state = "START"; 
+        this.state = "START";
         this.soundEnabled = true;
         this.targetLimit = 320;
         this.inactivityLimit = 120000;
-        this.startTime = null; // nullで初期化
+        this.startTime = null;
         this.misses = 0;
         this.totalTypedCount = 0;
+        this.cumTypedCount = 0;
         this.missMap = {};
+        this.audioCtx = null;
         this.init();
     }
 
@@ -90,10 +91,11 @@ class TypingApp {
         this.state = "COUNTDOWN";
         let count = 3;
         const area = document.getElementById('typing-container');
+        
         const timer = setInterval(() => {
             if (count > 0) {
                 area.innerHTML = `<div class="countdown-overlay">${count}</div>`;
-                if(this.soundEnabled) this.playSound(800, 0.1);
+                if(this.soundEnabled) this.playSound(800, 0.08);
                 count--;
             } else {
                 clearInterval(timer);
@@ -183,9 +185,11 @@ class TypingApp {
         }
         if (this.state === "READY" && e.key === " ") { this.startCountdown(); return; }
         if (this.state !== "PLAYING" || e.key.length !== 1) return;
+        
         this.lastInputTime = performance.now();
         const key = e.key.toLowerCase();
         let matches = this.pendingRomajiOptions.filter(o => o.startsWith(this.currentRomajiStr + key));
+
         if (matches.length > 0) {
             this.currentRomajiStr += key; this.typedFullRomaji += key;
             this.totalTypedCount++; this.cumTypedCount++;
@@ -231,60 +235,48 @@ class TypingApp {
     updateStats() {
         if (!this.startTime) return;
         const sec = (performance.now() - this.startTime) / 1000;
-        const cpm = sec > 0 ? Math.floor(this.totalTypedCount / (sec / 60)) : 0;
+        const cpm = Math.floor(this.totalTypedCount / (sec / 60)) || 0;
         const acc = this.totalTypedCount > 0 ? Math.floor(((this.totalTypedCount - this.misses) / this.totalTypedCount) * 100) : 100;
         document.getElementById('wpm').innerText = cpm;
-        document.getElementById('accuracy').innerText = acc;
+        document.getElementById('accuracy').innerText = acc + "%";
     }
 
     endGame(reason = "") {
         this.state = "RESULT";
         document.getElementById('game-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
-        const resTitle = document.getElementById('result-title');
-        const resScore = document.getElementById('res-score');
         const resRank = document.getElementById('result-rank');
-        const resTime = document.getElementById('res-time');
-        const resWpm = document.getElementById('res-wpm');
-        const resAcc = document.getElementById('res-acc');
-        const resMiss = document.getElementById('res-miss');
-
-        // キラキラ演出のリセット
         resRank.classList.remove('sparkle');
 
         if(reason === "abort") {
-            resTitle.innerText = "練習中止";
-            resScore.innerText = "---";
+            document.getElementById('result-title').innerText = "練習中止";
+            document.getElementById('res-score').innerText = "---";
             resRank.innerText = "評価不可";
             resRank.style.color = "#95a5a6";
-            resTime.innerText = "---";
-            resWpm.innerText = "---";
-            resAcc.innerText = "---";
-            resMiss.innerText = "---";
+            document.getElementById('res-time').innerText = "---";
+            document.getElementById('res-wpm').innerText = "---";
+            document.getElementById('res-acc').innerText = "---";
+            document.getElementById('res-miss').innerText = "---";
         } else {
-            resTitle.innerText = "練習結果";
+            document.getElementById('result-title').innerText = "練習結果";
             const sec = (performance.now() - this.startTime) / 1000;
             const cpm = Math.floor(this.totalTypedCount / (sec / 60)) || 0;
-            const acc = this.totalTypedCount > 0 ? Math.floor(((this.totalTypedCount - this.misses) / this.totalTypedCount) * 100) : 100;
-            const score = Math.floor(cpm * (acc/100)**3);
+            const accNum = this.totalTypedCount > 0 ? Math.floor(((this.totalTypedCount - this.misses) / this.totalTypedCount) * 100) : 100;
+            const score = Math.floor(cpm * (accNum/100)**3);
             const rank = this.getRank(score);
 
-            resScore.innerText = score;
+            document.getElementById('res-score').innerText = score;
             resRank.innerText = rank;
             resRank.style.color = "var(--accent)";
-            resTime.innerText = this.formatTime(performance.now() - this.startTime);
-            resWpm.innerText = cpm;
-            resAcc.innerText = acc + "%";
-            resMiss.innerText = this.misses;
+            document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
+            document.getElementById('res-wpm').innerText = cpm;
+            document.getElementById('res-acc').innerText = accNum + "%";
+            document.getElementById('res-miss').innerText = this.misses;
 
-            // A- 以上ならキラキラさせる
-            const highRanks = ["SSS", "SS", "S", "A+", "A", "A-"];
-            if (highRanks.includes(rank)) {
-                resRank.classList.add('sparkle');
-            }
+            if (["SSS", "SS", "S", "A+", "A", "A-"].includes(rank)) resRank.classList.add('sparkle');
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
-        document.getElementById('miss-detail-list').innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span>${v}回</span></div>`).join('') : "ミスなし！";
+        document.getElementById('miss-detail-list').innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span class="miss-count">${v}回</span></div>`).join('') : "ミスなし！";
     }
 
     formatTime(ms) {
