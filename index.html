@@ -13,7 +13,7 @@
         <header>
             <nav class="nav-menu">
                 <a href="index.html">ホーム</a>
-                <a href="about.html">このサイトについて・使い方</a>
+                <a href="about.html">使い方・当サイトについて</a>
                 <a href="contact.html">お問い合わせ</a>
                 <a href="privacy.html">プライバシーポリシー</a>
             </nav>
@@ -26,7 +26,7 @@
             <section id="start-screen" class="screen">
                 <div class="card">
                     <h1>練習カテゴリを選択</h1>
-                    <p>実務や資格試験（MOS）に役立つフレーズを厳選しています</p>
+                    <p>実務や資格試験（MOS）に役立つフレーズを練習しましょう</p>
                     <div id="category-selector" class="btn-group">
                         <button class="btn-category active" data-cat="it_terms">IT用語</button>
                         <button class="btn-category" data-cat="word">Word (MOS)</button>
@@ -40,44 +40,45 @@
                     <button id="start-btn" class="btn-main">練習開始</button>
                 </div>
 
-                <!-- SEO説明文（AdSense対策） -->
+                <!-- SEO説明エリア -->
                 <section class="site-info-section">
-                    <h2>実務スキルを指先で覚える</h2>
+                    <h2>実務スキルを指先で習得</h2>
                     <div class="info-grid">
                         <div class="info-item">
                             <h3>ITリテラシーの向上</h3>
-                            <p>現代のビジネスに不可欠なIT用語をタイピングしながら自然に習得できます。</p>
+                            <p>現代のビジネスに不可欠なIT用語を練習しながら自然に習得できます。</p>
                         </div>
                         <div class="info-item">
-                            <h3>MOS試験対策のサポート</h3>
+                            <h3>MOS試験対策</h3>
                             <p>WordやExcelの操作手順を練習文に採用。初心者の資格取得を応援します。</p>
                         </div>
                         <div class="info-item">
-                            <h3>職業訓練校準拠の設計</h3>
+                            <h3>職業訓練校準拠</h3>
                             <p>物理キーボードの配列を再現したガイドで、正しいホームポジションを養います。</p>
                         </div>
                     </div>
                 </section>
             </section>
 
-            <!-- 2. ゲーム画面 -->
+            <!-- 2. ゲーム画面：プレッシャーをなくすため上部の打鍵速度を削除 -->
             <section id="game-screen" class="screen hidden">
-                <div class="stats">
-                    <div class="stat-box">打鍵速度(CPM): <span id="wpm">0</span></div>
-                    <div class="stat-box">正確率: <span id="accuracy">100</span>%</div>
-                </div>
+                <!-- プレイ中は何も表示しない（集中エリア） -->
                 <div id="typing-container" class="typing-display"></div>
                 <div id="keyboard-container"></div>
-                <p class="guide-text">途中で終了して結果を見るには [Esc] キー</p>
+                <p class="guide-text">中断して終了するには [Esc] キー</p>
             </section>
 
-            <!-- 3. 結果画面 -->
+            <!-- 3. 結果画面：総タイプ数を追加 ＆ 3カラム維持 -->
             <section id="result-screen" class="screen hidden">
                 <div class="result-container">
+                    
+                    <!-- 左：ミス内訳 -->
                     <div class="result-side">
                         <h3>ミス内訳</h3>
                         <div id="miss-detail-list" class="scroll-list"></div>
                     </div>
+
+                    <!-- 中：メイン結果 -->
                     <div class="result-main">
                         <h2 id="result-title">練習結果</h2>
                         <div class="rank-display">
@@ -90,10 +91,18 @@
                             <div class="res-item">打鍵速度: <span id="res-wpm">0</span></div>
                             <div class="res-item">正確率: <span id="res-acc">0</span>%</div>
                             <div class="res-item">ミス数: <span id="res-miss">0</span></div>
+                            <div class="res-item">総タイプ数: <span id="res-total">0</span></div>
                         </div>
                         <button onclick="location.reload()" class="btn-main">もう一度挑戦</button>
                     </div>
-                    <div class="result-ad">【広告】</div>
+
+                    <!-- 右：広告スペース -->
+                    <div class="result-ad-box">
+                        <div class="ad-video-placeholder">
+                            <span>広告スペース<br>(動画等)</span>
+                        </div>
+                    </div>
+
                 </div>
             </section>
         </main>

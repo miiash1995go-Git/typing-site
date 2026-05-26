@@ -1,6 +1,6 @@
 /**
  * ぱそトレ！ Logic v9.8
- * 修正：E-までの18段階評価ランクシステム完全実装
+ * 修正：プレイ中の統計非表示 ＆ 総タイプ数カウント ＆ 評価不可のバグ回避
  */
 
 const ROMAJI_TABLE = {
@@ -45,9 +45,9 @@ class TypingApp {
         this.inactivityLimit = 120000;
         this.startTime = null;
         this.misses = 0;
-        this.totalTypedCount = 0;
+        this.totalTypedCount = 0; // 正解タイプ数
+        this.totalMissedCount = 0; // ミスタイプ数
         this.missMap = {};
-        this.audioCtx = null;
         this.init();
     }
 
@@ -117,7 +117,7 @@ class TypingApp {
         this.state = "PLAYING";
         this.startTime = performance.now();
         this.lastInputTime = this.startTime;
-        this.misses = 0; this.totalTypedCount = 0; this.cumTypedCount = 0;
+        this.misses = 0; this.totalTypedCount = 0; this.totalMissedCount = 0;
         this.missMap = {};
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.nextQuestion();
@@ -125,7 +125,7 @@ class TypingApp {
     }
 
     nextQuestion() {
-        if (this.cumTypedCount >= this.targetLimit) { this.endGame(); return; }
+        if (this.totalTypedCount >= this.targetLimit) { this.endGame(); return; }
         const questions = this.data.categories[this.currentCategory];
         const nextQ = questions[Math.floor(Math.random() * questions.length)];
         this.kanaList = this.splitKana(nextQ.kana);
@@ -200,18 +200,18 @@ class TypingApp {
 
         if (matches.length > 0) {
             this.currentRomajiStr += key; this.typedFullRomaji += key;
-            this.totalTypedCount++; this.cumTypedCount++;
+            this.totalTypedCount++;
             this.pendingRomajiOptions = matches;
             if(this.soundEnabled) this.playSound(600, 0.05);
             if (this.pendingRomajiOptions.includes(this.currentRomajiStr)) this.prepareNextChar();
             else this.refreshDisplay();
         } else {
             this.misses++;
+            this.totalMissedCount++;
             this.logMiss(this.guideRemainRomaji[0]);
             if(this.soundEnabled) this.playSound(200, 0.1);
             this.triggerDamage();
         }
-        this.updateStats();
     }
 
     triggerDamage() {
@@ -240,40 +240,44 @@ class TypingApp {
         requestAnimationFrame(() => this.updateLoop());
     }
 
-    updateStats() {
-        if (!this.startTime) return;
-        const sec = (performance.now() - this.startTime) / 1000;
-        const cpm = Math.floor(this.totalTypedCount / (sec / 60)) || 0;
-        const acc = this.totalTypedCount > 0 ? Math.floor(((this.totalTypedCount - this.misses) / this.totalTypedCount) * 100) : 100;
-        document.getElementById('wpm').innerText = cpm;
-        document.getElementById('accuracy').innerText = acc;
-    }
-
     endGame(reason = "") {
         this.state = "RESULT";
         document.getElementById('game-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
-        const resTitle = document.getElementById('result-title');
+        
         const resScore = document.getElementById('res-score');
         const resRank = document.getElementById('result-rank');
         const resAcc = document.getElementById('res-acc');
+        const resTotal = document.getElementById('res-total');
         resRank.classList.remove('sparkle');
 
         if(reason === "abort") {
-            resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可"; resRank.style.color = "#95a5a6"; resAcc.innerText = "---";
-            document.getElementById('res-time').innerText = "---"; document.getElementById('res-wpm').innerText = "---"; document.getElementById('res-miss').innerText = "---";
+            document.getElementById('result-title').innerText = "練習中止";
+            resScore.innerText = "---";
+            resRank.innerText = "評価不可";
+            resRank.style.color = "#95a5a6";
+            document.getElementById('res-time').innerText = "---";
+            document.getElementById('res-wpm').innerText = "---";
+            resAcc.innerText = "---";
+            document.getElementById('res-miss').innerText = "---";
+            resTotal.innerText = "---";
         } else {
-            resTitle.innerText = "練習結果";
+            document.getElementById('result-title').innerText = "練習結果";
             const sec = (performance.now() - this.startTime) / 1000;
             const cpm = Math.floor(this.totalTypedCount / (sec / 60)) || 0;
-            const accNum = this.totalTypedCount > 0 ? Math.floor(((this.totalTypedCount - this.misses) / this.totalTypedCount) * 100) : 100;
+            const accNum = this.totalTypedCount > 0 ? Math.floor(((this.totalTypedCount - this.totalMissedCount) / this.totalTypedCount) * 100) : 100;
             const score = Math.floor(cpm * (accNum/100)**3);
             const rank = this.getRank(score);
 
-            resScore.innerText = score; resRank.innerText = rank; resRank.style.color = "var(--accent)";
+            resScore.innerText = score;
+            resRank.innerText = rank;
+            resRank.style.color = "var(--accent)";
             document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
-            document.getElementById('res-wpm').innerText = cpm; resAcc.innerText = accNum;
-            document.getElementById('res-miss').innerText = this.misses;
+            document.getElementById('res-wpm').innerText = cpm;
+            resAcc.innerText = (accNum < 0 ? 0 : accNum);
+            document.getElementById('res-miss').innerText = this.totalMissedCount;
+            resTotal.innerText = this.totalTypedCount + this.totalMissedCount;
+
             if (["SSS", "SS", "S", "A+", "A", "A-"].includes(rank)) resRank.classList.add('sparkle');
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
@@ -286,28 +290,14 @@ class TypingApp {
         return `${m}分${s}秒${p}`;
     }
 
-    /**
-     * 18段階ランク判定（E-まで完全実装）
-     */
     getRank(s) {
-        if(s >= 400) return "SSS";
-        if(s >= 370) return "SS";
-        if(s >= 340) return "S";
-        if(s >= 300) return "A+";
-        if(s >= 270) return "A";
-        if(s >= 240) return "A-";
-        if(s >= 210) return "B+";
-        if(s >= 180) return "B";
-        if(s >= 150) return "B-";
-        if(s >= 120) return "C+";
-        if(s >= 100) return "C";
-        if(s >= 80) return "C-";
-        if(s >= 65) return "D+";
-        if(s >= 50) return "D";
-        if(s >= 35) return "D-";
-        if(s >= 20) return "E+";
-        if(s >= 10) return "E";
-        return "E-"; // 10点未満
+        if(s >= 400) return "SSS"; if(s >= 370) return "SS"; if(s >= 340) return "S";
+        if(s >= 300) return "A+"; if(s >= 270) return "A"; if(s >= 240) return "A-";
+        if(s >= 210) return "B+"; if(s >= 180) return "B"; if(s >= 150) return "B-";
+        if(s >= 120) return "C+"; if(s >= 100) return "C"; if(s >= 80) return "C-";
+        if(s >= 65) return "D+"; if(s >= 50) return "D"; if(s >= 35) return "D-";
+        if(s >= 20) return "E+"; if(s >= 10) return "E";
+        return "E-";
     }
 
     renderKeyboard() {
