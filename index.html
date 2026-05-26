@@ -18,7 +18,6 @@
                 <a href="privacy.html">プライバシーポリシー</a>
             </nav>
             <div class="logo">ぱそトレ！ <span>～パソコンスキル訓練タイピング～</span></div>
-            <!-- 広告エリアの独立性を高める -->
             <div class="ad-container-top">
                 <div class="ad-placeholder">【広告スペース】</div>
             </div>
@@ -38,7 +37,6 @@
                         <button class="btn-category" data-cat="daily">日常会話</button>
                     </div>
                     <div class="settings-area">
-                        <!-- 初期値をOFFに変更 -->
                         <button id="sound-toggle" class="btn-toggle">タイプ音: OFF</button>
                     </div>
                     <button id="start-btn" class="btn-main">練習開始</button>
@@ -49,7 +47,7 @@
                     <div class="info-grid">
                         <div class="info-item">
                             <h3>ITリテラシーの向上</h3>
-                            <p>現代のビジネスに不可欠なIT用語をタイピングしながら自然に習得できます。</p>
+                            <p>現代のビジネスに不可欠なIT用語を練習しながら自然に習得できます。</p>
                         </div>
                         <div class="info-item">
                             <h3>MOS試験対策</h3>
@@ -65,8 +63,9 @@
 
             <!-- 2. ゲーム画面 -->
             <section id="game-screen" class="screen hidden">
-                <div class="stats"></div>
-                <div id="typing-container" class="typing-display"></div>
+                <div id="typing-container" class="typing-display">
+                    <!-- JSで動的に display-kanji, display-kana, display-romaji が生成されます -->
+                </div>
                 <div id="keyboard-container"></div>
                 <p class="guide-text">中断して終了するには [Esc] キー</p>
             </section>
