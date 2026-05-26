@@ -1,5 +1,6 @@
 /**
- * EduTyping Next - Professional Logic v9.7
+ * ぱそトレ！ Logic v9.8
+ * 修正：E-までの18段階評価ランクシステム完全実装
  */
 
 const ROMAJI_TABLE = {
@@ -46,6 +47,7 @@ class TypingApp {
         this.misses = 0;
         this.totalTypedCount = 0;
         this.missMap = {};
+        this.audioCtx = null;
         this.init();
     }
 
@@ -53,9 +55,18 @@ class TypingApp {
         try {
             const res = await fetch('./data/weekly.json');
             this.data = await res.json();
+            this.validateData();
         } catch (e) { console.error(e); }
         this.setupEventListeners();
         this.renderKeyboard();
+    }
+
+    validateData() {
+        for (let cat in this.data.categories) {
+            this.data.categories[cat].forEach((item, idx) => {
+                if (/[一-龠々]/.test(item.kana)) console.error(`重大不備: ${cat} ${idx+1}: かなに漢字混入`);
+            });
+        }
     }
 
     setupEventListeners() {
@@ -235,7 +246,7 @@ class TypingApp {
         const cpm = Math.floor(this.totalTypedCount / (sec / 60)) || 0;
         const acc = this.totalTypedCount > 0 ? Math.floor(((this.totalTypedCount - this.misses) / this.totalTypedCount) * 100) : 100;
         document.getElementById('wpm').innerText = cpm;
-        document.getElementById('accuracy').innerText = acc; // ％％にならないよう数値のみ
+        document.getElementById('accuracy').innerText = acc;
     }
 
     endGame(reason = "") {
@@ -275,12 +286,28 @@ class TypingApp {
         return `${m}分${s}秒${p}`;
     }
 
+    /**
+     * 18段階ランク判定（E-まで完全実装）
+     */
     getRank(s) {
-        if(s >= 400) return "SSS"; if(s >= 370) return "SS"; if(s >= 340) return "S";
-        if(s >= 300) return "A+"; if(s >= 260) return "A"; if(s >= 220) return "A-";
-        if(s >= 190) return "B+"; if(s >= 160) return "B"; if(s >= 130) return "B-";
-        if(s >= 100) return "C+"; if(s >= 80) return "C"; if(s >= 60) return "C-";
-        return "D";
+        if(s >= 400) return "SSS";
+        if(s >= 370) return "SS";
+        if(s >= 340) return "S";
+        if(s >= 300) return "A+";
+        if(s >= 270) return "A";
+        if(s >= 240) return "A-";
+        if(s >= 210) return "B+";
+        if(s >= 180) return "B";
+        if(s >= 150) return "B-";
+        if(s >= 120) return "C+";
+        if(s >= 100) return "C";
+        if(s >= 80) return "C-";
+        if(s >= 65) return "D+";
+        if(s >= 50) return "D";
+        if(s >= 35) return "D-";
+        if(s >= 20) return "E+";
+        if(s >= 10) return "E";
+        return "E-"; // 10点未満
     }
 
     renderKeyboard() {
