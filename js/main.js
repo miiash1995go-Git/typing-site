@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v9.9
- * 修正：用語をWPMへ統一 ＆ 正確率表示バグ修正 ＆ 総タイプ数カウント
+ * ぱそトレ！ Logic v9.9.1
+ * 修正：音の初期値をOFFに変更
  */
 
 const ROMAJI_TABLE = {
@@ -40,13 +40,13 @@ class TypingApp {
         this.data = null;
         this.currentCategory = 'it_terms';
         this.state = "START"; 
-        this.soundEnabled = true;
+        this.soundEnabled = false; // 修正：初期値をOFFに変更
         this.targetLimit = 320;
         this.inactivityLimit = 120000;
         this.startTime = null;
         this.misses = 0;
-        this.totalTypedCount = 0; // 正解タイプ
-        this.totalMissedCount = 0; // ミスタイプ
+        this.totalTypedCount = 0;
+        this.totalMissedCount = 0;
         this.missMap = {};
         this.init();
     }
@@ -55,9 +55,18 @@ class TypingApp {
         try {
             const res = await fetch('./data/weekly.json');
             this.data = await res.json();
+            this.validateData();
         } catch (e) { console.error(e); }
         this.setupEventListeners();
         this.renderKeyboard();
+    }
+
+    validateData() {
+        for (let cat in this.data.categories) {
+            this.data.categories[cat].forEach((item, idx) => {
+                if (/[一-龠々]/.test(item.kana)) console.error(`重大不備: ${cat} ${idx+1}: かなに漢字混入`);
+            });
+        }
     }
 
     setupEventListeners() {
@@ -191,7 +200,7 @@ class TypingApp {
 
         if (matches.length > 0) {
             this.currentRomajiStr += key; this.typedFullRomaji += key;
-            this.totalTypedCount++;
+            this.totalTypedCount++; this.cumTypedCount++;
             this.pendingRomajiOptions = matches;
             if(this.soundEnabled) this.playSound(600, 0.05);
             if (this.pendingRomajiOptions.includes(this.currentRomajiStr)) this.prepareNextChar();
@@ -229,6 +238,15 @@ class TypingApp {
         if (this.state !== "PLAYING") return;
         if (performance.now() - this.lastInputTime > this.inactivityLimit) { this.endGame("abort"); return; }
         requestAnimationFrame(() => this.updateLoop());
+    }
+
+    updateStats() {
+        if (!this.startTime) return;
+        const sec = (performance.now() - this.startTime) / 1000;
+        const cpm = Math.floor(this.totalTypedCount / (sec / 60)) || 0;
+        const accNum = this.totalTypedCount > 0 ? Math.floor(((this.totalTypedCount - this.totalMissedCount) / this.totalTypedCount) * 100) : 100;
+        document.getElementById('wpm').innerText = cpm;
+        document.getElementById('accuracy').innerText = (accNum < 0 ? 0 : accNum);
     }
 
     endGame(reason = "") {
