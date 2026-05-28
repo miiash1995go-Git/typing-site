@@ -225,6 +225,7 @@ class TypingApp {
             if(this.soundEnabled) this.playSound(200, 0.1);
             this.triggerDamage();
         }
+        this.updateStats();
     }
 
     triggerDamage() {
@@ -302,7 +303,7 @@ class TypingApp {
     getRank(s) {
         if(s >= 350) return "SSS"; if(s >= 325) return "SS"; if(s >= 300) return "S";
         if(s >= 275) return "A+"; if(s >= 250) return "A"; if(s >= 225) return "A-";
-        if(s >= 200) return "B+"; if(s >= 175) return "B"; if(s >= 150) return "B-";
+        if(s >= 210) return "B+"; if(s >= 180) return "B"; if(s >= 150) return "B-";
         if(s >= 125) return "C+"; if(s >= 100) return "C"; if(s >= 80) return "C-";
         if(s >= 65) return "D+"; if(s >= 50) return "D"; if(s >= 35) return "D-";
         if(s >= 20) return "E+"; if(s >= 10) return "E";
