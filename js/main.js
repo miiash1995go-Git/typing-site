@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v10.7
- * 修正：カウントダウンの中央配置 ＆ スクロール位置の左シフト対応
+ * ぱそトレ！ Logic v10.8
+ * 修正：正確率「%%」バグ修正 ＆ スクロール位置の更なる左寄せ対応
  */
 
 const ROMAJI_TABLE = {
@@ -45,6 +45,7 @@ class TypingApp {
         this.targetLimit = 320;
         this.inactivityLimit = 120000;
         this.startTime = null;
+        this.misses = 0;
         this.totalTypedCount = 0; 
         this.totalMissedCount = 0; 
         this.missMap = {};
@@ -253,6 +254,15 @@ class TypingApp {
         requestAnimationFrame(() => this.updateLoop());
     }
 
+    updateStats() {
+        if (!this.startTime) return;
+        const sec = (performance.now() - this.startTime) / 1000;
+        const cpm = Math.floor(this.totalTypedCount / (sec / 60)) || 0;
+        const accNum = Math.floor(((this.totalTypedCount - this.totalMissedCount) / this.totalTypedCount) * 100);
+        document.getElementById('wpm').innerText = cpm;
+        document.getElementById('accuracy').innerText = accNum; // 数値のみ流し込む
+    }
+
     endGame(reason = "") {
         this.state = "RESULT";
         document.getElementById('game-screen').classList.add('hidden');
@@ -260,10 +270,11 @@ class TypingApp {
         const resTitle = document.getElementById('result-title');
         const resScore = document.getElementById('res-score');
         const resRank = document.getElementById('result-rank');
+        const resAcc = document.getElementById('res-acc');
 
         if(reason === "abort") {
-            resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可"; resRank.style.color = "#95a5a6";
-            document.getElementById('res-time').innerText = "---"; document.getElementById('res-wpm').innerText = "---"; document.getElementById('res-acc').innerText = "---"; document.getElementById('res-miss').innerText = "---"; document.getElementById('res-total').innerText = "---";
+            resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可"; resRank.style.color = "#95a5a6"; resAcc.innerText = "---";
+            document.getElementById('res-time').innerText = "---"; document.getElementById('res-wpm').innerText = "---"; document.getElementById('res-miss').innerText = "---"; document.getElementById('res-total').innerText = "---";
         } else {
             resTitle.innerText = "練習結果";
             const sec = (performance.now() - this.startTime) / 1000;
@@ -274,7 +285,7 @@ class TypingApp {
             resScore.innerText = score; resRank.innerText = rank; resRank.style.color = "var(--accent)";
             document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
             document.getElementById('res-wpm').innerText = cpm;
-            document.getElementById('res-acc').innerText = (accNum < 0 ? 0 : accNum) + "%";
+            resAcc.innerText = (accNum < 0 ? 0 : accNum);
             document.getElementById('res-miss').innerText = this.totalMissedCount;
             document.getElementById('res-total').innerText = this.totalTypedCount + this.totalMissedCount;
             if (["SSS", "SS", "S", "A+", "A", "A-"].includes(rank)) resRank.classList.add('sparkle');
