@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v10.0
- * 【完全修正】「っ」の多文字対応 ＆ 「ちぇ」等のガイド表示バグ修正
+ * ぱそトレ！ Logic v10.1
+ * 実装：自動スクロール表示 ＆ 大文字ガイド ＆ 拗音/促音バグ完全修正
  */
 
 const ROMAJI_TABLE = {
@@ -32,8 +32,7 @@ const ROMAJI_TABLE = {
     'ぴゃ':['pya'], 'ぴゅ':['pyu'], 'ぴょ':['pyo'],
     'ふぁ':['fa'], 'ふぃ':['fi'], 'ふぇ':['fe'], 'ふぉ':['fo'],
     'うぃ':['wi'], 'うぇ':['we'], 'うぉ':['wo'],
-    'てぃ':['ti'], 'でぃ':['di'], 
-    'ちぇ':['che','tye'], 'しぇ':['she','sye'], 'じぇ':['je','zie'],
+    'てぃ':['ti'], 'でぃ':['di'], 'ちぇ':['che','tye'],
     'っ':['xtu','ltu'], 'ー':['-'], '-':['-'], ' ':[' ']
 };
 
@@ -57,18 +56,9 @@ class TypingApp {
         try {
             const res = await fetch('./data/weekly.json');
             this.data = await res.json();
-            this.validateData();
         } catch (e) { console.error(e); }
         this.setupEventListeners();
         this.renderKeyboard();
-    }
-
-    validateData() {
-        for (let cat in this.data.categories) {
-            this.data.categories[cat].forEach((item, idx) => {
-                if (/[一-龠々]/.test(item.kana)) console.error(`重大不備: ${cat} ${idx+1}: かなに漢字混入`);
-            });
-        }
     }
 
     setupEventListeners() {
@@ -115,7 +105,7 @@ class TypingApp {
     }
 
     startGame() {
-        document.getElementById('typing-container').innerHTML = '<div id="display-kanji"></div><div id="display-kana"></div><div id="display-romaji"></div>';
+        document.getElementById('typing-container').innerHTML = '<div id="display-kanji"></div><div id="display-kana"></div><div class="romaji-scroll-window"><div id="display-romaji" class="romaji-content"></div></div>';
         this.state = "PLAYING";
         this.startTime = performance.now();
         this.lastInputTime = this.startTime;
@@ -137,7 +127,6 @@ class TypingApp {
         this.prepareNextChar();
     }
 
-    // 「ちぇ」などの結合を優先した分割
     splitKana(kana) {
         let list = [];
         for (let i = 0; i < kana.length; i++) {
@@ -155,20 +144,17 @@ class TypingApp {
             return;
         }
         let char = this.kanaList.shift();
-        
         if (char === 'ん' && this.kanaList.length > 0) {
             let nextK = this.kanaList[0];
             let nextF = ROMAJI_TABLE[nextK] ? ROMAJI_TABLE[nextK].map(o => o[0]) : [];
             this.pendingRomajiOptions = (nextF.every(f => !['a','i','u','e','o','y','n'].includes(f))) ? ['n','nn','xn'] : ['nn','xn'];
         } 
         else if (char === 'っ' && this.kanaList.length > 0) {
-            // 【重要修正】次の文字の全候補の頭文字を「っ」の候補にする
-            let nextK = this.kanaList[0];
-            let nextRomajis = ROMAJI_TABLE[nextK] || [nextK];
+            let nextRomajis = ROMAJI_TABLE[this.kanaList[0]] || [this.kanaList[0]];
             let firstLetters = nextRomajis.map(r => r[0]);
-            // 重複削除して xtu, ltu を追加
             this.pendingRomajiOptions = [...new Set([...firstLetters, 'xtu', 'ltu'])];
-        } else {
+        } 
+        else {
             this.pendingRomajiOptions = [...(ROMAJI_TABLE[char] || [char])];
         }
         this.currentRomajiStr = ""; this.refreshDisplay();
@@ -176,6 +162,7 @@ class TypingApp {
 
     refreshDisplay() {
         if (this.state !== "PLAYING") return;
+        const el = document.getElementById('display-romaji');
         let best = this.pendingRomajiOptions.find(o => o.startsWith(this.currentRomajiStr)) || this.pendingRomajiOptions[0];
         
         let future = "";
@@ -186,13 +173,22 @@ class TypingApp {
                 let nk = tempKana[0];
                 let nr = ROMAJI_TABLE[nk] ? ROMAJI_TABLE[nk][0] : nk;
                 future += nr[0];
-            } else {
-                future += (ROMAJI_TABLE[k] ? ROMAJI_TABLE[k][0] : k);
-            }
+            } else { future += (ROMAJI_TABLE[k] ? ROMAJI_TABLE[k][0] : k); }
         }
+        
         this.guideRemainRomaji = best.substring(this.currentRomajiStr.length) + future;
         const next = this.guideRemainRomaji[0] || "";
-        document.getElementById('display-romaji').innerHTML = `<span class="typed">${this.typedFullRomaji}</span><span class="current">${next}</span><span>${this.guideRemainRomaji.substring(1)}</span>`;
+        
+        // 大文字で表示
+        el.innerHTML = `<span class="typed">${this.typedFullRomaji.toUpperCase()}</span><span class="current">${next.toUpperCase()}</span><span>${this.guideRemainRomaji.substring(1).toUpperCase()}</span>`;
+        
+        // --- 自動スクロールロジック ---
+        // 現在の文字位置（span.current）が常に中央、あるいは一定位置に来るようずらす
+        const typedSpan = el.querySelector('.typed');
+        const offset = typedSpan.offsetWidth;
+        // 入力した分だけ左にスライドさせる（文字サイズが大きいので大胆にずらす）
+        el.style.transform = `translateX(calc(50% - ${offset}px - 2rem))`;
+        
         this.highlightKey(next);
     }
 
@@ -217,7 +213,6 @@ class TypingApp {
             if (this.pendingRomajiOptions.includes(this.currentRomajiStr)) this.prepareNextChar();
             else this.refreshDisplay();
         } else {
-            this.misses++;
             this.totalMissedCount++;
             this.logMiss(this.guideRemainRomaji[0]);
             if(this.soundEnabled) this.playSound(200, 0.1);
@@ -258,15 +253,14 @@ class TypingApp {
         const resTitle = document.getElementById('result-title');
         const resScore = document.getElementById('res-score');
         const resRank = document.getElementById('result-rank');
+        const resAcc = document.getElementById('res-acc');
+        const resTotal = document.getElementById('res-total');
+        const resWpm = document.getElementById('res-wpm');
+        resRank.classList.remove('sparkle');
 
         if(reason === "abort") {
-            resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可";
-            resRank.style.color = "#95a5a6";
-            document.getElementById('res-time').innerText = "---";
-            document.getElementById('res-wpm').innerText = "---";
-            document.getElementById('res-acc').innerText = "---";
-            document.getElementById('res-miss').innerText = "---";
-            document.getElementById('res-total').innerText = "---";
+            resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可"; resRank.style.color = "#95a5a6"; resAcc.innerText = "---";
+            document.getElementById('res-time').innerText = "---"; resWpm.innerText = "---"; resTotal.innerText = "---";
         } else {
             resTitle.innerText = "練習結果";
             const sec = (performance.now() - this.startTime) / 1000;
@@ -277,10 +271,9 @@ class TypingApp {
 
             resScore.innerText = score; resRank.innerText = rank; resRank.style.color = "var(--accent)";
             document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
-            document.getElementById('res-wpm').innerText = cpm;
-            document.getElementById('res-acc').innerText = (accNum < 0 ? 0 : accNum);
-            document.getElementById('res-miss').innerText = this.totalMissedCount;
-            document.getElementById('res-total').innerText = this.totalTypedCount + this.totalMissedCount;
+            resWpm.innerText = cpm;
+            resAcc.innerText = (accNum < 0 ? 0 : accNum);
+            resTotal.innerText = this.totalTypedCount + this.totalMissedCount;
             if (["SSS", "SS", "S", "A+", "A", "A-"].includes(rank)) resRank.classList.add('sparkle');
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
