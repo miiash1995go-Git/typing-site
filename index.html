@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="scrollable-page">
+<body class="portal-body">
     <div id="app">
         <header>
             <nav class="nav-menu">
@@ -21,6 +21,9 @@
                 <a href="contact.html">お問い合わせ</a>
             </nav>
             <div class="logo">ぱそトレ！ <span>by miitype</span></div>
+            <div class="ad-container-top">
+                <div class="ad-placeholder">【広告スペース】</div>
+            </div>
         </header>
 
         <main class="portal-main">
@@ -36,7 +39,7 @@
             <!-- 1. このサイトについて -->
             <section class="section-container">
                 <h2 class="section-title">このサイトについて</h2>
-                <div class="card about-card">
+                <div class="card">
                     <h3>初心者でも安心して学べるPC・仕事スキル学習サイト</h3>
                     <p>当サイトは、PC操作に不慣れな方や、これから事務職・フリーランスを目指す方のための「オンライン訓練校」です。タイピングという基礎の基礎から、最新のAI活用術、そして実務への応用まで、一つひとつステップを踏んで学べる構造になっています。</p>
                     <h3 style="margin-top:20px;">職業訓練講師が実務目線で解説</h3>
@@ -51,7 +54,7 @@
                     <a href="play.html" class="category-card">
                         <div class="cat-icon">⌨️</div>
                         <h3>タイピング</h3>
-                        <p>実務IT用語やWord/Excel用語を打ちながら習得。MOS試験対策にも最適です。</p>
+                        <p>実務IT用語やWord/Excel用語を打ちながら習得。MOS試験対策にも直結します。</p>
                         <span class="cat-link">→ 練習メニューへ</span>
                     </a>
                     <a href="ai-tools.html" class="category-card">
@@ -76,24 +79,24 @@
             </section>
 
             <!-- 3. AI活用カテゴリ：主要ツール紹介 -->
-            <section class="section-container bg-white-card">
-                <h2 class="section-title">主要AIツール一覧</h2>
-                <p style="text-align: center; margin-bottom: 30px;">AIは人間の代わりではなく、あなたの能力を拡張する「優秀な助手」です。</p>
-                <div class="tool-list">
-                    <ul>
-                        <li><strong>ChatGPT:</strong> 思考の整理、要約、添削に強い万能ツール。</li>
-                        <li><strong>Claude:</strong> 自然な日本語表現と、大量の資料読み込みに最適。</li>
-                        <li><strong>Gemini:</strong> 最新のGoogle検索結果を反映した調査に強い。</li>
-                        <li><strong>Copilot:</strong> Microsoft 365（Office）との連携で事務効率化。</li>
-                        <li><strong>Canva AI:</strong> プレゼン資料や画像をプロ級に自動作成。</li>
-                        <li><strong>NotebookLM:</strong> 自分専用の資料から回答を導き出すAI図書館。</li>
-                        <li><strong>Google AI Studio:</strong> プログラム生成や高度な実験に活用。</li>
-                        <li><strong>Manus:</strong> 複雑なWeb調査を代行する次世代AIエージェント。</li>
-                    </ul>
-                </div>
-                <div class="note-promotion">
-                    <p>💡 各ツールの「仕事での使い分け」は、noteの無料記事で詳しく解説しています。</p>
-                    <a href="https://note.com/miitype" class="btn-outline">noteでAI活用術を読む</a>
+            <section class="section-container">
+                <div class="card text-left">
+                    <h2 class="section-title">主要AIツール一覧</h2>
+                    <p style="text-align: center; margin-bottom: 30px;">AIは人間の代わりではなく、あなたの能力を拡張する「優秀な助手」です。</p>
+                    <div class="tool-list">
+                        <ul>
+                            <li><strong>ChatGPT:</strong> 思考の整理、要約、添削に強い万能ツール。</li>
+                            <li><strong>Claude:</strong> 自然な日本語表現と、大量の資料読み込みに最適。</li>
+                            <li><strong>Gemini:</strong> 最新のGoogle検索結果を反映した調査に強い。</li>
+                            <li><strong>Copilot:</strong> Microsoft 365（Office）との連携で事務効率化。</li>
+                            <li><strong>Canva AI:</strong> プレゼン資料や画像をプロ級に自動作成。</li>
+                            <li><strong>NotebookLM:</strong> 自分専用の資料から回答を導き出すAI図書館。</li>
+                        </ul>
+                    </div>
+                    <div class="note-promotion">
+                        <p>💡 各ツールの「仕事での使い分け」は、noteの無料記事で詳しく解説しています。</p>
+                        <a href="https://note.com/miitype" class="btn-outline">noteでAI活用術を読む</a>
+                    </div>
                 </div>
             </section>
 
@@ -110,7 +113,7 @@
 
             <!-- 5. 運営者プロフィール -->
             <section class="section-container">
-                <div class="operator-card">
+                <div class="card text-left">
                     <h2 style="text-align: left; border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-top: 0;">運営者プロフィール</h2>
                     <div class="operator-info">
                         <h3 style="margin-top:15px;">みい先生 <span>（現役職業訓練講師）</span></h3>
@@ -124,7 +127,7 @@
             <div class="footer-links">
                 <a href="privacy.html">プライバシーポリシー</a>
                 <a href="contact.html">お問い合わせ</a>
-            </div>
+            </nav>
             <p>&copy; 2024 ぱそトレ！by miitype - All Rights Reserved.</p>
         </footer>
     </div>
