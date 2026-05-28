@@ -1,6 +1,6 @@
 /**
  * ぱそトレ！ Logic v11.1
- * 修正：正確率「%%」バグ修正 ＆ カウントダウン中央 ＆ 準備画面センター
+ * 修正：移動距離計算の数学的適正化 ＆ 正確率「%%」バグ修正
  */
 
 const ROMAJI_TABLE = {
@@ -94,7 +94,6 @@ class TypingApp {
         this.state = "READY";
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('game-screen').classList.remove('hidden');
-        // ★準備画面：中央寄せ ＆ ガイド内包
         document.getElementById('typing-container').innerHTML = `
             <div class="ready-container">
                 <div class="ready-text">スペースキーを押して開始</div>
@@ -195,15 +194,19 @@ class TypingApp {
             let k = tempKana.shift();
             if (k === 'っ' && tempKana.length > 0) {
                 let nk = tempKana[0];
-                let nr = ROMAJI_TABLE[tempKana[0]] ? ROMAJI_TABLE[tempKana[0]][0] : tempKana[0];
+                let nr = ROMAJI_TABLE[nk] ? ROMAJI_TABLE[nk][0] : nk;
                 future += nr[0];
             } else { future += (ROMAJI_TABLE[k] ? ROMAJI_TABLE[k][0] : k); }
         }
         this.guideRemainRomaji = best.substring(this.currentRomajiStr.length) + future;
         const next = this.guideRemainRomaji[0] || "";
         el.innerHTML = `<span class="typed">${this.typedFullRomaji.toUpperCase()}</span><span class="current">${next.toUpperCase()}</span><span>${this.guideRemainRomaji.substring(1).toUpperCase()}</span>`;
-        const offset = el.querySelector('.typed').offsetWidth;
-        el.style.transform = `translateX(-${offset}px)`;
+        
+        // ★修正：スクロール移動の計算を「40 - offset」に固定
+        const typedSpan = el.querySelector('.typed');
+        const offset = typedSpan.offsetWidth;
+        el.style.transform = `translateX(${40 - offset}px)`;
+        
         this.highlightKey(next);
     }
 
@@ -211,9 +214,11 @@ class TypingApp {
         if (e.key === "Escape") { if (this.state !== "START") this.endGame("abort"); return; }
         if (this.state === "READY" && e.key === " ") { this.startCountdown(); return; }
         if (this.state !== "PLAYING" || e.key.length !== 1) return;
+        
         this.lastInputTime = performance.now();
         const key = e.key.toLowerCase();
         let matches = this.pendingRomajiOptions.filter(o => o.startsWith(this.currentRomajiStr + key));
+
         if (matches.length > 0) {
             this.currentRomajiStr += key; this.typedFullRomaji += key;
             this.totalTypedCount++;
@@ -227,6 +232,7 @@ class TypingApp {
             if(this.soundEnabled) this.playSound(200, 0.1);
             this.triggerDamage();
         }
+        this.updateStats();
     }
 
     triggerDamage() {
@@ -261,7 +267,7 @@ class TypingApp {
         const cpm = Math.floor(this.totalTypedCount / (sec / 60)) || 0;
         const accNum = Math.floor(((this.totalTypedCount - this.totalMissedCount) / this.totalTypedCount) * 100);
         document.getElementById('wpm').innerText = cpm;
-        document.getElementById('accuracy').innerText = (accNum < 0 ? 0 : accNum); // ％％バグの根絶
+        document.getElementById('accuracy').innerText = (accNum < 0 ? 0 : accNum);
     }
 
     endGame(reason = "") {
@@ -274,8 +280,13 @@ class TypingApp {
         const resAcc = document.getElementById('res-acc');
 
         if(reason === "abort") {
-            resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可"; resRank.style.color = "#95a5a6"; resAcc.innerText = "---";
-            document.getElementById('res-time').innerText = "---"; document.getElementById('res-wpm').innerText = "---"; document.getElementById('res-miss').innerText = "---"; document.getElementById('res-total').innerText = "---";
+            resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可";
+            resRank.style.color = "#95a5a6"; resRank.style.fontSize = "5rem";
+            document.getElementById('res-time').innerText = "---";
+            document.getElementById('res-wpm').innerText = "---";
+            resAcc.innerText = "---";
+            document.getElementById('res-miss').innerText = "---";
+            document.getElementById('res-total').innerText = "---";
         } else {
             resTitle.innerText = "練習結果";
             const sec = (performance.now() - this.startTime) / 1000;
@@ -283,10 +294,11 @@ class TypingApp {
             const accNum = Math.floor(((this.totalTypedCount - this.totalMissedCount) / this.totalTypedCount) * 100);
             const score = Math.floor(cpm * ((accNum < 0 ? 0 : accNum)/100)**3);
             const rank = this.getRank(score);
-            resScore.innerText = score; resRank.innerText = rank; resRank.style.color = "var(--accent)";
+
+            resScore.innerText = score; resRank.innerText = rank; resRank.style.color = "var(--accent)"; resRank.style.fontSize = "8rem";
             document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
             document.getElementById('res-wpm').innerText = cpm;
-            resAcc.innerText = (accNum < 0 ? 0 : accNum); // ％％バグ根絶
+            resAcc.innerText = (accNum < 0 ? 0 : accNum);
             document.getElementById('res-miss').innerText = this.totalMissedCount;
             document.getElementById('res-total').innerText = this.totalTypedCount + this.totalMissedCount;
             if (["SSS", "SS", "S", "A+", "A", "A-"].includes(rank)) resRank.classList.add('sparkle');
