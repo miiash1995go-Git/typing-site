@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v11.1
- * 修正：移動距離計算の数学的適正化 ＆ 正確率「%%」バグ修正
+ * ぱそトレ！ Logic v12.0
+ * 変更点：オートスケーリング、設定の永続化、ベストスコア、X(Twitter)シェア機能
  */
 
 const ROMAJI_TABLE = {
@@ -18,7 +18,7 @@ const ROMAJI_TABLE = {
     'ざ':['za'], 'じ':['ji','zi'], 'ず':['zu'], 'ぜ':['ze'], 'ぞ':['zo'],
     'だ':['da'], 'ぢ':['di'], 'づ':['du'], 'で':['de'], 'ど':['do'],
     'ば':['ba'], 'び':['bi'], 'ぶ':['bu'], 'べ':['be'], 'ぼ':['bo'],
-    'ぱ':['pa'], 'ぴ':['pi'], 'ぷ':['pu'], 'ぺ':['pe'], 'ぽ':['po'],
+    'ぱ':['pa'], 'ぴ':['pi'], 'ぷ':['po'], 'ぺ':['pe'], 'ぽ':['po'],
     'きゃ':['kya'], 'きゅ':['kyu'], 'きょ':['kyo'],
     'しゃ':['sha','sya'], 'しゅ':['shu','syu'], 'しょ':['sho','syo'],
     'ちゃ':['cha','tya'], 'ちゅ':['chu','tyu'], 'ちょ':['cho','tyo'],
@@ -27,7 +27,7 @@ const ROMAJI_TABLE = {
     'みゃ':['mya'], 'みゅ':['myu'], 'みょ':['myo'],
     'りゃ':['rya'], 'りゅ':['ryu'], 'りょ':['ryo'],
     'ぎゃ':['gya'], 'ぎゅ':['gyu'], 'ぎょ':['gyo'],
-    'じゃ':['ja','zi'], 'じゅ':['ju'], 'じょ':['jo'],
+    'じゃ':['ja','ji','zi'], 'じゅ':['ju'], 'じょ':['jo'],
     'びゃ':['bya'], 'びゅ':['byu'], 'びょ':['byo'],
     'ぴゃ':['pya'], 'ぴゅ':['pyu'], 'ぴょ':['pyo'],
     'ふぁ':['fa'], 'ふぃ':['fi'], 'ふぇ':['fe'], 'ふぉ':['fo'],
@@ -41,7 +41,11 @@ class TypingApp {
         this.data = null;
         this.currentCategory = 'it_terms';
         this.state = "START"; 
-        this.soundEnabled = false;
+        
+        // 設定とベストスコアをLocalStorageから復元
+        this.soundEnabled = localStorage.getItem('pasotore_sound') === 'true';
+        this.bestScores = JSON.parse(localStorage.getItem('pasotore_best')) || {};
+        
         this.targetLimit = 320;
         this.inactivityLimit = 120000;
         this.startTime = null;
@@ -50,6 +54,7 @@ class TypingApp {
         this.totalMissedCount = 0; 
         this.missMap = {};
         this.lastQuestion = null;
+        this.lastResult = null;
         this.init();
     }
 
@@ -59,8 +64,30 @@ class TypingApp {
             this.data = await res.json();
             this.validateData();
         } catch (e) { console.error(e); }
+        
         this.setupEventListeners();
         this.renderKeyboard();
+        this.updateSoundBtnDisplay();
+        this.updateBestScoreDisplay();
+        
+        // オートスケーリングの初期実行とイベント登録
+        this.handleResize();
+        window.addEventListener('resize', () => this.handleResize());
+    }
+
+    handleResize() {
+        const app = document.getElementById('app');
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        // 1100px幅、850px高さを基準に、はみ出す場合は縮小する
+        const baseWidth = 1100;
+        const baseHeight = 850;
+        
+        let scale = Math.min(width / baseWidth, height / baseHeight);
+        if (scale > 1) scale = 1; // 拡大はさせない
+
+        app.style.transform = `scale(${scale})`;
+        app.style.transformOrigin = 'top center';
     }
 
     validateData() {
@@ -77,17 +104,33 @@ class TypingApp {
                 document.querySelectorAll('.btn-category').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 this.currentCategory = btn.dataset.cat;
+                this.updateBestScoreDisplay();
             });
         });
-        document.getElementById('sound-toggle').addEventListener('click', (e) => {
+        document.getElementById('sound-toggle').addEventListener('click', () => {
             this.soundEnabled = !this.soundEnabled;
-            e.target.innerText = `タイプ音: ${this.soundEnabled ? 'ON' : 'OFF'}`;
+            localStorage.setItem('pasotore_sound', this.soundEnabled);
+            this.updateSoundBtnDisplay();
         });
         document.getElementById('start-btn').addEventListener('click', () => this.prepareReady());
+        
+        // シェアボタンのイベント
+        document.getElementById('share-btn').addEventListener('click', () => this.shareResult());
+
         window.addEventListener('keydown', (e) => {
             if (e.key === " " && (this.state === "READY" || this.state === "PLAYING")) e.preventDefault();
             this.handleKeyDown(e);
         });
+    }
+
+    updateSoundBtnDisplay() {
+        const btn = document.getElementById('sound-toggle');
+        btn.innerText = `タイプ音: ${this.soundEnabled ? 'ON' : 'OFF'}`;
+    }
+
+    updateBestScoreDisplay() {
+        const best = this.bestScores[this.currentCategory] || 0;
+        document.getElementById('best-score-display').innerText = `自己ベストスコア: ${best}`;
     }
 
     prepareReady() {
@@ -202,9 +245,9 @@ class TypingApp {
         const next = this.guideRemainRomaji[0] || "";
         el.innerHTML = `<span class="typed">${this.typedFullRomaji.toUpperCase()}</span><span class="current">${next.toUpperCase()}</span><span>${this.guideRemainRomaji.substring(1).toUpperCase()}</span>`;
         
-        // ★修正：スクロール移動の計算を「40 - offset」に固定
         const typedSpan = el.querySelector('.typed');
         const offset = typedSpan.offsetWidth;
+        // 40px左固定スクロール
         el.style.transform = `translateX(${40 - offset}px)`;
         
         this.highlightKey(next);
@@ -266,8 +309,10 @@ class TypingApp {
         const sec = (performance.now() - this.startTime) / 1000;
         const cpm = Math.floor(this.totalTypedCount / (sec / 60)) || 0;
         const accNum = Math.floor(((this.totalTypedCount - this.totalMissedCount) / this.totalTypedCount) * 100);
-        document.getElementById('wpm').innerText = cpm;
-        document.getElementById('accuracy').innerText = (accNum < 0 ? 0 : accNum);
+        const wpmEl = document.getElementById('wpm');
+        const accEl = document.getElementById('accuracy');
+        if (wpmEl) wpmEl.innerText = cpm;
+        if (accEl) accEl.innerText = (accNum < 0 ? 0 : accNum);
     }
 
     endGame(reason = "") {
@@ -287,6 +332,7 @@ class TypingApp {
             resAcc.innerText = "---";
             document.getElementById('res-miss').innerText = "---";
             document.getElementById('res-total').innerText = "---";
+            this.lastResult = null;
         } else {
             resTitle.innerText = "練習結果";
             const sec = (performance.now() - this.startTime) / 1000;
@@ -302,9 +348,26 @@ class TypingApp {
             document.getElementById('res-miss').innerText = this.totalMissedCount;
             document.getElementById('res-total').innerText = this.totalTypedCount + this.totalMissedCount;
             if (["SSS", "SS", "S", "A+", "A", "A-"].includes(rank)) resRank.classList.add('sparkle');
+            
+            // 自己ベストの保存
+            if (!this.bestScores[this.currentCategory] || score > this.bestScores[this.currentCategory]) {
+                this.bestScores[this.currentCategory] = score;
+                localStorage.setItem('pasotore_best', JSON.stringify(this.bestScores));
+                resScore.innerHTML += ' <span style="font-size:1.2rem; color:var(--error); vertical-align:middle;">New Record!</span>';
+            }
+            
+            this.lastResult = { score, rank, cpm, acc: (accNum < 0 ? 0 : accNum) };
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
         document.getElementById('miss-detail-list').innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span class="miss-count">${v}回</span></div>`).join('') : "ミスなし！";
+    }
+
+    shareResult() {
+        if (!this.lastResult) return;
+        const catNames = { it_terms: "IT用語", word: "Word", excel: "Excel", business: "ビジネス", daily: "日常" };
+        const text = `ぱそトレ！でタイピング練習を完了しました！\nカテゴリ: ${catNames[this.currentCategory]}\nスコア: ${this.lastResult.score}\nランク: ${this.lastResult.rank}\n正確率: ${this.lastResult.acc}%\n#ぱそトレ #タイピング練習 #職業訓練`;
+        const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`;
+        window.open(url, '_blank');
     }
 
     formatTime(ms) {

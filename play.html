@@ -37,6 +37,7 @@
                         <button class="btn-category" data-cat="business">ビジネス用語</button>
                         <button class="btn-category" data-cat="daily">日常会話</button>
                     </div>
+                    <div id="best-score-display">自己ベストスコア: 0</div>
                     <div class="settings-area">
                         <button id="sound-toggle" class="btn-toggle">タイプ音: OFF</button>
                     </div>
@@ -70,7 +71,10 @@
                             <div class="res-item">ミス数: <span id="res-miss">0</span></div>
                             <div class="res-item">総タイプ数: <span id="res-total">0</span></div>
                         </div>
-                        <button onclick="location.reload()" class="btn-main">もう一度挑戦</button>
+                        <div class="result-btns">
+                            <button onclick="location.reload()" class="btn-main">もう一度挑戦</button>
+                            <button id="share-btn" class="btn-share">Xでシェア</button>
+                        </div>
                     </div>
                     <div class="result-ad-box">
                         <div class="ad-video-placeholder">広告スペース</div>
