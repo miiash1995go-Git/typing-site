@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v10.3
- * 修正：ランク判定の緩和 ＆ 中断時のNaN回避 ＆ ミス内訳HTMLタグ復元
+ * ぱそトレ！ Logic v10.4
+ * 修正：WPM表記、総タイプ数、ミス数バグ、重複禁止
  */
 
 const ROMAJI_TABLE = {
@@ -57,9 +57,18 @@ class TypingApp {
         try {
             const res = await fetch('./data/weekly.json');
             this.data = await res.json();
+            this.validateData();
         } catch (e) { console.error(e); }
         this.setupEventListeners();
         this.renderKeyboard();
+    }
+
+    validateData() {
+        for (let cat in this.data.categories) {
+            this.data.categories[cat].forEach((item, idx) => {
+                if (/[一-龠々]/.test(item.kana)) console.error(`重大不備: ${cat} ${idx+1}: かなに漢字混入`);
+            });
+        }
     }
 
     setupEventListeners() {
@@ -115,8 +124,7 @@ class TypingApp {
         this.state = "PLAYING";
         this.startTime = performance.now();
         this.lastInputTime = this.startTime;
-        this.totalTypedCount = 0;
-        this.totalMissedCount = 0;
+        this.misses = 0; this.totalTypedCount = 0; this.totalMissedCount = 0;
         this.missMap = {};
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.nextQuestion();
@@ -272,12 +280,7 @@ class TypingApp {
             if (["SSS", "SS", "S", "A+", "A", "A-"].includes(rank)) resRank.classList.add('sparkle');
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
-        document.getElementById('miss-detail-list').innerHTML = sorted.length ? sorted.map(([k,v])=>`
-            <div class="miss-item">
-                <span class="miss-key">${k}</span>
-                <span class="miss-count">${v}回</span>
-            </div>
-        `).join('') : "ミスなし！";
+        document.getElementById('miss-detail-list').innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span class="miss-count">${v}回</span></div>`).join('') : "ミスなし！";
     }
 
     formatTime(ms) {
@@ -286,27 +289,13 @@ class TypingApp {
         return `${m}分${s}秒${p}`;
     }
 
-    /**
-     * 18段階ランク判定（大幅に緩和・実務教育基準）
-     */
     getRank(s) {
-        if(s >= 350) return "SSS";
-        if(s >= 325) return "SS";
-        if(s >= 300) return "S";
-        if(s >= 275) return "A+";
-        if(s >= 250) return "A";
-        if(s >= 225) return "A-";
-        if(s >= 200) return "B+";
-        if(s >= 175) return "B";
-        if(s >= 150) return "B-";
-        if(s >= 125) return "C+";
-        if(s >= 100) return "C";
-        if(s >= 80) return "C-";
-        if(s >= 65) return "D+";
-        if(s >= 50) return "D";
-        if(s >= 35) return "D-";
-        if(s >= 20) return "E+";
-        if(s >= 10) return "E";
+        if(s >= 350) return "SSS"; if(s >= 325) return "SS"; if(s >= 300) return "S";
+        if(s >= 275) return "A+"; if(s >= 250) return "A"; if(s >= 225) return "A-";
+        if(s >= 200) return "B+"; if(s >= 175) return "B"; if(s >= 150) return "B-";
+        if(s >= 125) return "C+"; if(s >= 100) return "C"; if(s >= 80) return "C-";
+        if(s >= 65) return "D+"; if(s >= 50) return "D"; if(s >= 35) return "D-";
+        if(s >= 20) return "E+"; if(s >= 10) return "E";
         return "E-";
     }
 
