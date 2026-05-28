@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v12.2
- * 修正内容：中央配置の完全固定、スケーリング感度の向上
+ * ぱそトレ！ Logic v12.3
+ * 修正：LPのレイアウト維持 ＆ ゲーム画面の絶対中央固定スケーリング
  */
 
 const ROMAJI_TABLE = {
@@ -41,14 +41,11 @@ class TypingApp {
         this.data = null;
         this.currentCategory = 'it_terms';
         this.state = "START"; 
-        
         this.soundEnabled = localStorage.getItem('pasotore_sound') === 'true';
         this.bestScores = JSON.parse(localStorage.getItem('pasotore_best')) || {};
-        
         this.targetLimit = 320;
         this.inactivityLimit = 120000;
         this.startTime = null;
-        this.misses = 0;
         this.totalTypedCount = 0; 
         this.totalMissedCount = 0; 
         this.missMap = {};
@@ -63,13 +60,10 @@ class TypingApp {
             this.data = await res.json();
             this.validateData();
         } catch (e) { console.error(e); }
-        
         this.setupEventListeners();
         this.renderKeyboard();
         this.updateSoundBtnDisplay();
         this.updateBestScoreDisplay();
-        
-        // 初回スケーリング実行
         this.handleResize();
         window.addEventListener('resize', () => this.handleResize());
     }
@@ -77,16 +71,20 @@ class TypingApp {
     handleResize() {
         const app = document.getElementById('app');
         if (!app) return;
-
+        // ゲーム中以外のページ（LP等）ではスケーリングしない
+        if (!document.body.classList.contains('game-body')) {
+            app.style.transform = 'none';
+            app.style.position = 'relative';
+            app.style.left = 'auto';
+            app.style.top = 'auto';
+            return;
+        }
         const width = window.innerWidth;
         const height = window.innerHeight;
         const baseWidth = 1100;
-        const baseHeight = 820; // 以前より少し小さめに設定して確実に収める
-        
+        const baseHeight = 850;
         let scale = Math.min(width / baseWidth, height / baseHeight);
         if (scale > 1) scale = 1;
-
-        // ★ 中央配置とスケーリングを同時に適用
         app.style.transform = `translate(-50%, -50%) scale(${scale})`;
         app.style.left = '50%';
         app.style.top = '50%';
@@ -116,9 +114,7 @@ class TypingApp {
             this.updateSoundBtnDisplay();
         });
         document.getElementById('start-btn').addEventListener('click', () => this.prepareReady());
-        
         document.getElementById('share-btn').addEventListener('click', () => this.shareResult());
-
         window.addEventListener('keydown', (e) => {
             if (e.key === " " && (this.state === "READY" || this.state === "PLAYING")) e.preventDefault();
             this.handleKeyDown(e);
@@ -127,12 +123,13 @@ class TypingApp {
 
     updateSoundBtnDisplay() {
         const btn = document.getElementById('sound-toggle');
-        btn.innerText = `タイプ音: ${this.soundEnabled ? 'ON' : 'OFF'}`;
+        if(btn) btn.innerText = `タイプ音: ${this.soundEnabled ? 'ON' : 'OFF'}`;
     }
 
     updateBestScoreDisplay() {
         const best = this.bestScores[this.currentCategory] || 0;
-        document.getElementById('best-score-display').innerText = `自己ベストスコア: ${best}`;
+        const el = document.getElementById('best-score-display');
+        if(el) el.innerText = `自己ベストスコア: ${best}`;
     }
 
     prepareReady() {
@@ -152,7 +149,6 @@ class TypingApp {
         let count = 3;
         const area = document.getElementById('typing-container');
         area.innerHTML = `<div class="countdown-overlay">${count}</div>`;
-        
         const timer = setInterval(() => {
             count--;
             if (count > 0) {
@@ -246,11 +242,9 @@ class TypingApp {
         this.guideRemainRomaji = best.substring(this.currentRomajiStr.length) + future;
         const next = this.guideRemainRomaji[0] || "";
         el.innerHTML = `<span class="typed">${this.typedFullRomaji.toUpperCase()}</span><span class="current">${next.toUpperCase()}</span><span>${this.guideRemainRomaji.substring(1).toUpperCase()}</span>`;
-        
         const typedSpan = el.querySelector('.typed');
         const offset = typedSpan.offsetWidth;
         el.style.transform = `translateX(${40 - offset}px)`;
-        
         this.highlightKey(next);
     }
 
@@ -258,11 +252,9 @@ class TypingApp {
         if (e.key === "Escape") { if (this.state !== "START") this.endGame("abort"); return; }
         if (this.state === "READY" && e.key === " ") { this.startCountdown(); return; }
         if (this.state !== "PLAYING" || e.key.length !== 1) return;
-        
         this.lastInputTime = performance.now();
         const key = e.key.toLowerCase();
         let matches = this.pendingRomajiOptions.filter(o => o.startsWith(this.currentRomajiStr + key));
-
         if (matches.length > 0) {
             this.currentRomajiStr += key; this.typedFullRomaji += key;
             this.totalTypedCount++;
@@ -324,7 +316,6 @@ class TypingApp {
         const resScore = document.getElementById('res-score');
         const resRank = document.getElementById('result-rank');
         const resAcc = document.getElementById('res-acc');
-
         if(reason === "abort") {
             resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可";
             resRank.style.color = "#95a5a6"; resRank.style.fontSize = "5rem";
@@ -341,7 +332,6 @@ class TypingApp {
             const accNum = Math.floor(((this.totalTypedCount - this.totalMissedCount) / this.totalTypedCount) * 100);
             const score = Math.floor(cpm * ((accNum < 0 ? 0 : accNum)/100)**3);
             const rank = this.getRank(score);
-
             resScore.innerText = score; resRank.innerText = rank; resRank.style.color = "var(--accent)"; resRank.style.fontSize = "8rem";
             document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
             document.getElementById('res-wpm').innerText = cpm;
@@ -349,13 +339,11 @@ class TypingApp {
             document.getElementById('res-miss').innerText = this.totalMissedCount;
             document.getElementById('res-total').innerText = this.totalTypedCount + this.totalMissedCount;
             if (["SSS", "SS", "S", "A+", "A", "A-"].includes(rank)) resRank.classList.add('sparkle');
-            
             if (!this.bestScores[this.currentCategory] || score > this.bestScores[this.currentCategory]) {
                 this.bestScores[this.currentCategory] = score;
                 localStorage.setItem('pasotore_best', JSON.stringify(this.bestScores));
                 resScore.innerHTML += ' <span style="font-size:1.2rem; color:var(--error); vertical-align:middle;">New Record!</span>';
             }
-            
             this.lastResult = { score, rank, cpm, acc: (accNum < 0 ? 0 : accNum) };
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
