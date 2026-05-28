@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v10.4
- * 修正：WPM表記、総タイプ数、ミス数バグ、重複禁止
+ * ぱそトレ！ Logic v10.5
+ * 修正：左寄せ固定スクロール ＆ ミス数表示バグ ＆ ランク巨大化対応
  */
 
 const ROMAJI_TABLE = {
@@ -116,15 +116,18 @@ class TypingApp {
 
     startGame() {
         document.getElementById('typing-container').innerHTML = `
-            <div id="display-kanji"></div>
-            <div id="display-kana"></div>
-            <div class="romaji-scroll-window">
-                <div id="display-romaji" class="romaji-content"></div>
+            <div class="text-wrapper-left">
+                <div id="display-kanji"></div>
+                <div id="display-kana"></div>
+                <div class="romaji-scroll-window">
+                    <div id="display-romaji" class="romaji-content"></div>
+                </div>
             </div>`;
         this.state = "PLAYING";
         this.startTime = performance.now();
         this.lastInputTime = this.startTime;
-        this.misses = 0; this.totalTypedCount = 0; this.totalMissedCount = 0;
+        this.totalTypedCount = 0;
+        this.totalMissedCount = 0;
         this.missMap = {};
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.nextQuestion();
@@ -184,7 +187,8 @@ class TypingApp {
         while(tempKana.length > 0) {
             let k = tempKana.shift();
             if (k === 'っ' && tempKana.length > 0) {
-                let nr = ROMAJI_TABLE[tempKana[0]] ? ROMAJI_TABLE[tempKana[0]][0] : tempKana[0];
+                let nk = tempKana[0];
+                let nr = ROMAJI_TABLE[nk] ? ROMAJI_TABLE[nk][0] : nk;
                 future += nr[0];
             } else { future += (ROMAJI_TABLE[k] ? ROMAJI_TABLE[k][0] : k); }
         }
