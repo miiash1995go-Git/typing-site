@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v10.4
- * 特徴：打鍵位置を左から固定距離に配置 ＆ ミス数集計の修正 ＆ 重複回避
+ * ぱそトレ！ Logic v10.3
+ * 修正：ランク判定の緩和 ＆ 中断時のNaN回避 ＆ ミス内訳HTMLタグ復元
  */
 
 const ROMAJI_TABLE = {
@@ -46,8 +46,8 @@ class TypingApp {
         this.inactivityLimit = 120000;
         this.startTime = null;
         this.misses = 0;
-        this.totalTypedCount = 0; // 正解数
-        this.totalMissedCount = 0; // ミス数
+        this.totalTypedCount = 0; 
+        this.totalMissedCount = 0; 
         this.missMap = {};
         this.lastQuestion = null;
         this.init();
@@ -272,7 +272,12 @@ class TypingApp {
             if (["SSS", "SS", "S", "A+", "A", "A-"].includes(rank)) resRank.classList.add('sparkle');
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
-        document.getElementById('miss-detail-list').innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span class="miss-count">${v}回</span></div>`).join('') : "ミスなし！";
+        document.getElementById('miss-detail-list').innerHTML = sorted.length ? sorted.map(([k,v])=>`
+            <div class="miss-item">
+                <span class="miss-key">${k}</span>
+                <span class="miss-count">${v}回</span>
+            </div>
+        `).join('') : "ミスなし！";
     }
 
     formatTime(ms) {
@@ -281,13 +286,27 @@ class TypingApp {
         return `${m}分${s}秒${p}`;
     }
 
+    /**
+     * 18段階ランク判定（大幅に緩和・実務教育基準）
+     */
     getRank(s) {
-        if(s >= 400) return "SSS"; if(s >= 370) return "SS"; if(s >= 340) return "S";
-        if(s >= 300) return "A+"; if(s >= 270) return "A"; if(s >= 240) return "A-";
-        if(s >= 210) return "B+"; if(s >= 180) return "B"; if(s >= 150) return "B-";
-        if(s >= 120) return "C+"; if(s >= 100) return "C"; if(s >= 80) return "C-";
-        if(s >= 65) return "D+"; if(s >= 50) return "D"; if(s >= 35) return "D-";
-        if(s >= 20) return "E+"; if(s >= 10) return "E";
+        if(s >= 350) return "SSS";
+        if(s >= 325) return "SS";
+        if(s >= 300) return "S";
+        if(s >= 275) return "A+";
+        if(s >= 250) return "A";
+        if(s >= 225) return "A-";
+        if(s >= 200) return "B+";
+        if(s >= 175) return "B";
+        if(s >= 150) return "B-";
+        if(s >= 125) return "C+";
+        if(s >= 100) return "C";
+        if(s >= 80) return "C-";
+        if(s >= 65) return "D+";
+        if(s >= 50) return "D";
+        if(s >= 35) return "D-";
+        if(s >= 20) return "E+";
+        if(s >= 10) return "E";
         return "E-";
     }
 
