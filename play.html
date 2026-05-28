@@ -20,13 +20,15 @@
                 <a href="contact.html">お問い合わせ</a>
             </nav>
             <div class="logo">ぱそトレ！ <span>by miitype</span></div>
+            <div class="ad-container-top">
+                <div class="ad-placeholder">【広告スペース】</div>
+            </div>
         </header>
 
         <main>
             <section id="start-screen" class="screen">
                 <div class="card">
-                    <h1>タイピング練習</h1>
-                    <p>実務で使うフレーズを練習してスキルを身につけましょう</p>
+                    <h1>練習カテゴリを選択</h1>
                     <div id="category-selector" class="btn-group">
                         <button class="btn-category active" data-cat="it_terms">IT用語</button>
                         <button class="btn-category" data-cat="word">Word (MOS)</button>
@@ -43,15 +45,8 @@
 
             <section id="game-screen" class="screen hidden">
                 <div class="stats"></div>
-                <!-- 打鍵エリア：一行スクロール構造 -->
                 <div id="typing-container" class="typing-display">
-                    <div id="display-kanji"></div>
-                    <div id="display-kana"></div>
-                    <div class="romaji-scroll-window">
-                        <div id="display-romaji" class="romaji-content">
-                            <!-- ここが横にスライドします -->
-                        </div>
-                    </div>
+                    <!-- JSにより動的に生成 -->
                 </div>
                 <div id="keyboard-container"></div>
                 <p class="guide-text">中断して終了するには [Esc] キー</p>
