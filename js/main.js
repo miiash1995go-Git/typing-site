@@ -1,6 +1,6 @@
 /**
  * ぱそトレ！ Logic v10.5
- * 修正：左寄せ固定スクロール ＆ ミス数表示バグ ＆ ランク巨大化対応
+ * 修正：カウントダウンの中央揃え ＆ 総タイプ数・WPM表示
  */
 
 const ROMAJI_TABLE = {
@@ -140,7 +140,6 @@ class TypingApp {
         let available = questions.filter(q => q !== this.lastQuestion);
         const nextQ = available[Math.floor(Math.random() * available.length)];
         this.lastQuestion = nextQ;
-
         this.kanaList = this.splitKana(nextQ.kana);
         this.typedFullRomaji = ""; this.currentRomajiStr = "";
         document.getElementById('display-kanji').innerText = nextQ.kanji;
@@ -181,21 +180,20 @@ class TypingApp {
     refreshDisplay() {
         if (this.state !== "PLAYING") return;
         const el = document.getElementById('display-romaji');
+        if (!el) return;
         let best = this.pendingRomajiOptions.find(o => o.startsWith(this.currentRomajiStr)) || this.pendingRomajiOptions[0];
         let future = "";
         let tempKana = [...this.kanaList];
         while(tempKana.length > 0) {
             let k = tempKana.shift();
             if (k === 'っ' && tempKana.length > 0) {
-                let nk = tempKana[0];
-                let nr = ROMAJI_TABLE[nk] ? ROMAJI_TABLE[nk][0] : nk;
+                let nr = ROMAJI_TABLE[tempKana[0]] ? ROMAJI_TABLE[tempKana[0]][0] : tempKana[0];
                 future += nr[0];
             } else { future += (ROMAJI_TABLE[k] ? ROMAJI_TABLE[k][0] : k); }
         }
         this.guideRemainRomaji = best.substring(this.currentRomajiStr.length) + future;
         const next = this.guideRemainRomaji[0] || "";
         el.innerHTML = `<span class="typed">${this.typedFullRomaji.toUpperCase()}</span><span class="current">${next.toUpperCase()}</span><span>${this.guideRemainRomaji.substring(1).toUpperCase()}</span>`;
-        
         const offset = el.querySelector('.typed').offsetWidth;
         el.style.transform = `translateX(-${offset}px)`;
         this.highlightKey(next);
@@ -205,11 +203,9 @@ class TypingApp {
         if (e.key === "Escape") { if (this.state !== "START") this.endGame("abort"); return; }
         if (this.state === "READY" && e.key === " ") { this.startCountdown(); return; }
         if (this.state !== "PLAYING" || e.key.length !== 1) return;
-        
         this.lastInputTime = performance.now();
         const key = e.key.toLowerCase();
         let matches = this.pendingRomajiOptions.filter(o => o.startsWith(this.currentRomajiStr + key));
-
         if (matches.length > 0) {
             this.currentRomajiStr += key; this.typedFullRomaji += key;
             this.totalTypedCount++;
@@ -258,15 +254,14 @@ class TypingApp {
         const resTitle = document.getElementById('result-title');
         const resScore = document.getElementById('res-score');
         const resRank = document.getElementById('result-rank');
+        const resAcc = document.getElementById('res-acc');
+        const resTotal = document.getElementById('res-total');
+        const resWpm = document.getElementById('res-wpm');
+        const resMiss = document.getElementById('res-miss');
 
         if(reason === "abort") {
-            resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可";
-            resRank.style.color = "#95a5a6";
-            document.getElementById('res-time').innerText = "---";
-            document.getElementById('res-wpm').innerText = "---";
-            document.getElementById('res-acc').innerText = "---";
-            document.getElementById('res-miss').innerText = "---";
-            document.getElementById('res-total').innerText = "---";
+            resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可"; resRank.style.color = "#95a5a6"; resAcc.innerText = "---";
+            document.getElementById('res-time').innerText = "---"; resWpm.innerText = "---"; resMiss.innerText = "---"; resTotal.innerText = "---";
         } else {
             resTitle.innerText = "練習結果";
             const sec = (performance.now() - this.startTime) / 1000;
@@ -274,13 +269,10 @@ class TypingApp {
             const accNum = Math.floor(((this.totalTypedCount - this.totalMissedCount) / this.totalTypedCount) * 100);
             const score = Math.floor(cpm * ((accNum < 0 ? 0 : accNum)/100)**3);
             const rank = this.getRank(score);
-
             resScore.innerText = score; resRank.innerText = rank; resRank.style.color = "var(--accent)";
             document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
-            document.getElementById('res-wpm').innerText = cpm;
-            document.getElementById('res-acc').innerText = (accNum < 0 ? 0 : accNum);
-            document.getElementById('res-miss').innerText = this.totalMissedCount;
-            document.getElementById('res-total').innerText = this.totalTypedCount + this.totalMissedCount;
+            resWpm.innerText = cpm; resAcc.innerText = (accNum < 0 ? 0 : accNum);
+            resMiss.innerText = this.totalMissedCount; resTotal.innerText = this.totalTypedCount + this.totalMissedCount;
             if (["SSS", "SS", "S", "A+", "A", "A-"].includes(rank)) resRank.classList.add('sparkle');
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
@@ -296,7 +288,7 @@ class TypingApp {
     getRank(s) {
         if(s >= 350) return "SSS"; if(s >= 325) return "SS"; if(s >= 300) return "S";
         if(s >= 275) return "A+"; if(s >= 250) return "A"; if(s >= 225) return "A-";
-        if(s >= 200) return "B+"; if(s >= 175) return "B"; if(s >= 150) return "B-";
+        if(s >= 210) return "B+"; if(s >= 180) return "B"; if(s >= 150) return "B-";
         if(s >= 125) return "C+"; if(s >= 100) return "C"; if(s >= 80) return "C-";
         if(s >= 65) return "D+"; if(s >= 50) return "D"; if(s >= 35) return "D-";
         if(s >= 20) return "E+"; if(s >= 10) return "E";
