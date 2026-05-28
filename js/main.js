@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v12.1
- * 修正内容：オートスケーリングの基準調整、シェア機能の安定化
+ * ぱそトレ！ Logic v12.2
+ * 修正内容：中央配置の完全固定、スケーリング感度の向上
  */
 
 const ROMAJI_TABLE = {
@@ -69,22 +69,28 @@ class TypingApp {
         this.updateSoundBtnDisplay();
         this.updateBestScoreDisplay();
         
+        // 初回スケーリング実行
         this.handleResize();
         window.addEventListener('resize', () => this.handleResize());
     }
 
     handleResize() {
         const app = document.getElementById('app');
+        if (!app) return;
+
         const width = window.innerWidth;
         const height = window.innerHeight;
         const baseWidth = 1100;
-        const baseHeight = 900; // 少し余裕を持たせる
+        const baseHeight = 820; // 以前より少し小さめに設定して確実に収める
         
         let scale = Math.min(width / baseWidth, height / baseHeight);
         if (scale > 1) scale = 1;
 
-        app.style.transform = `scale(${scale})`;
-        app.style.transformOrigin = 'top center';
+        // ★ 中央配置とスケーリングを同時に適用
+        app.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        app.style.left = '50%';
+        app.style.top = '50%';
+        app.style.position = 'absolute';
     }
 
     validateData() {
