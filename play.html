@@ -20,14 +20,13 @@
                 <a href="guide.html">学習ガイド</a>
                 <a href="contact.html">お問い合わせ</a>
             </nav>
-            <div class="logo">ぱそトレ！ <span>タイピング練習</span></div>
+            <div class="logo">ぱそトレ！</div>
             <div class="ad-container-top">
                 <div class="ad-placeholder">【広告スペース】</div>
             </div>
         </header>
 
         <main>
-            <!-- 練習開始前の選択画面 -->
             <section id="start-screen" class="screen">
                 <div class="card">
                     <h1>練習カテゴリを選択</h1>
@@ -45,14 +44,11 @@
                 </div>
             </section>
 
-            <!-- ゲームメイン画面 -->
             <section id="game-screen" class="screen hidden">
                 <div id="typing-container" class="typing-display"></div>
                 <div id="keyboard-container"></div>
-                <!-- 準備画面のみEscガイドがここに出現 -->
             </section>
 
-            <!-- 結果表示画面 -->
             <section id="result-screen" class="screen hidden">
                 <div class="result-container">
                     <div class="result-side">
@@ -74,9 +70,6 @@
                             <div class="res-item">総タイプ数: <span id="res-total">0</span></div>
                         </div>
                         <button onclick="location.reload()" class="btn-main">もう一度挑戦</button>
-                    </div>
-                    <div class="result-ad-box">
-                        <div class="ad-video-placeholder">広告スペース</div>
                     </div>
                 </div>
             </section>
