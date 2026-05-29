@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v12.6
- * 改善：スケーリング感度の最適化、LPとゲーム画面の共存安定化
+ * ぱそトレ！ Logic v12.7
+ * 変更点：スケーリング基準を「上端（top）」に変更し、ヘッダーの沈み込みを防止
  */
 
 const ROMAJI_TABLE = {
@@ -72,7 +72,7 @@ class TypingApp {
         const app = document.getElementById('app');
         if (!app) return;
         
-        // ポータルページはスケーリングを無効化（標準のスクロール挙動を優先）
+        // ポータルページは標準のスクロール挙動を維持
         if (document.body.classList.contains('portal-page')) {
             app.style.transform = "none";
             app.style.position = "relative";
@@ -82,19 +82,19 @@ class TypingApp {
             return;
         }
 
-        // ゲーム画面のみ、確実に中央へ収まるようスケール計算
+        // ゲーム画面：上端10pxを起点にスケールフィット
         const width = window.innerWidth;
         const height = window.innerHeight;
         const baseWidth = 1100;
-        const baseHeight = 800; // 見切れ防止のため基準を低めに設定
-        
+        const baseHeight = 850;
         let scale = Math.min(width / baseWidth, height / baseHeight);
         if (scale > 1) scale = 1;
 
         app.style.position = "absolute";
         app.style.left = "50%";
-        app.style.top = "50%";
-        app.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        app.style.top = "10px"; 
+        app.style.transform = `translateX(-50%) scale(${scale})`;
+        app.style.transformOrigin = "top center";
     }
 
     validateData() {
