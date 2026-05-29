@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v12.4
- * 修正：スケーリングの完全分離 ＆ ローマ字位置計算の適正化
+ * ぱそトレ！ Logic v12.6
+ * 改善：スケーリング感度の最適化、LPとゲーム画面の共存安定化
  */
 
 const ROMAJI_TABLE = {
@@ -18,7 +18,7 @@ const ROMAJI_TABLE = {
     'ざ':['za'], 'じ':['ji','zi'], 'ず':['zu'], 'ぜ':['ze'], 'ぞ':['zo'],
     'だ':['da'], 'ぢ':['di'], 'づ':['du'], 'で':['de'], 'ど':['do'],
     'ば':['ba'], 'び':['bi'], 'ぶ':['bu'], 'べ':['be'], 'ぼ':['bo'],
-    'ぱ':['pa'], 'ぴ':['pi'], 'ぷ':['po'], 'ぺ':['pe'], 'ぽ':['po'],
+    'ぱ':['pa'], 'ぴ':['pi'], 'ぷ':['pu'], 'ぺ':['pe'], 'ぽ':['po'],
     'きゃ':['kya'], 'きゅ':['kyu'], 'きょ':['kyo'],
     'しゃ':['sha','sya'], 'しゅ':['shu','syu'], 'しょ':['sho','syo'],
     'ちゃ':['cha','tya'], 'ちゅ':['chu','tyu'], 'ちょ':['cho','tyo'],
@@ -72,7 +72,7 @@ class TypingApp {
         const app = document.getElementById('app');
         if (!app) return;
         
-        // 1. LPや静的ページ（portal-page）の場合はスケーリングをリセット
+        // ポータルページはスケーリングを無効化（標準のスクロール挙動を優先）
         if (document.body.classList.contains('portal-page')) {
             app.style.transform = "none";
             app.style.position = "relative";
@@ -82,11 +82,12 @@ class TypingApp {
             return;
         }
 
-        // 2. ゲーム画面（game-body）の場合のみ中央固定スケーリング
+        // ゲーム画面のみ、確実に中央へ収まるようスケール計算
         const width = window.innerWidth;
         const height = window.innerHeight;
         const baseWidth = 1100;
-        const baseHeight = 850;
+        const baseHeight = 800; // 見切れ防止のため基準を低めに設定
+        
         let scale = Math.min(width / baseWidth, height / baseHeight);
         if (scale > 1) scale = 1;
 
@@ -97,6 +98,7 @@ class TypingApp {
     }
 
     validateData() {
+        if(!this.data) return;
         for (let cat in this.data.categories) {
             this.data.categories[cat].forEach((item, idx) => {
                 if (/[一-龠々]/.test(item.kana)) console.error(`重大不備: ${cat} ${idx+1}: かなに漢字混入`);
@@ -249,7 +251,6 @@ class TypingApp {
         el.innerHTML = `<span class="typed">${this.typedFullRomaji.toUpperCase()}</span><span class="current">${next.toUpperCase()}</span><span>${this.guideRemainRomaji.substring(1).toUpperCase()}</span>`;
         const typedSpan = el.querySelector('.typed');
         const offset = typedSpan.offsetWidth;
-        // 40px地点を死守
         el.style.transform = `translateX(${40 - offset}px)`;
         this.highlightKey(next);
     }
@@ -324,7 +325,7 @@ class TypingApp {
         const resAcc = document.getElementById('res-acc');
         if(reason === "abort") {
             resTitle.innerText = "練習中止"; resScore.innerText = "---"; resRank.innerText = "評価不可";
-            resRank.style.color = "#95a5a6"; resRank.style.fontSize = "5rem";
+            resRank.style.color = "#95a5a6"; resRank.style.fontSize = "4rem";
             document.getElementById('res-time').innerText = "---";
             document.getElementById('res-wpm').innerText = "---";
             resAcc.innerText = "---";
@@ -338,7 +339,7 @@ class TypingApp {
             const accNum = Math.floor(((this.totalTypedCount - this.totalMissedCount) / this.totalTypedCount) * 100);
             const score = Math.floor(cpm * ((accNum < 0 ? 0 : accNum)/100)**3);
             const rank = this.getRank(score);
-            resScore.innerText = score; resRank.innerText = rank; resRank.style.color = "var(--accent)"; resRank.style.fontSize = "8rem";
+            resScore.innerText = score; resRank.innerText = rank; resRank.style.color = "var(--accent)"; resRank.style.fontSize = "7rem";
             document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
             document.getElementById('res-wpm').innerText = cpm;
             resAcc.innerText = (accNum < 0 ? 0 : accNum);
@@ -348,7 +349,7 @@ class TypingApp {
             if (!this.bestScores[this.currentCategory] || score > this.bestScores[this.currentCategory]) {
                 this.bestScores[this.currentCategory] = score;
                 localStorage.setItem('pasotore_best', JSON.stringify(this.bestScores));
-                resScore.innerHTML += ' <span style="font-size:1.2rem; color:var(--error); vertical-align:middle;">New Record!</span>';
+                resScore.innerHTML += ' <span style="font-size:1.1rem; color:var(--error); vertical-align:middle;">New Record!</span>';
             }
             this.lastResult = { score, rank, cpm, acc: (accNum < 0 ? 0 : accNum) };
         }
