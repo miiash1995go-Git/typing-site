@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v12.7
- * 変更点：スケーリング基準を「上端（top）」に変更し、ヘッダーの沈み込みを防止
+ * ぱそトレ！ Logic v12.8
+ * 修正：初期化フローの堅牢化、キーボード消失防止、上端基準スケーリング
  */
 
 const ROMAJI_TABLE = {
@@ -56,14 +56,21 @@ class TypingApp {
 
     async init() {
         try {
+            // 1. UIの構築とイベント登録を最優先（通信エラーで止まらないようにする）
+            this.renderKeyboard();
+            this.updateSoundBtnDisplay();
+            this.updateBestScoreDisplay();
+            this.setupEventListeners();
+
+            // 2. データの取得
             const res = await fetch('./data/weekly.json');
             this.data = await res.json();
-            this.validateData();
-        } catch (e) { console.error(e); }
-        this.setupEventListeners();
-        this.renderKeyboard();
-        this.updateSoundBtnDisplay();
-        this.updateBestScoreDisplay();
+            this.validateData(); 
+        } catch (e) { 
+            console.error("Initialization error:", e); 
+        }
+        
+        // 3. サイズ調整の実行
         this.handleResize();
         window.addEventListener('resize', () => this.handleResize());
     }
@@ -72,7 +79,6 @@ class TypingApp {
         const app = document.getElementById('app');
         if (!app) return;
         
-        // ポータルページは標準のスクロール挙動を維持
         if (document.body.classList.contains('portal-page')) {
             app.style.transform = "none";
             app.style.position = "relative";
@@ -82,11 +88,10 @@ class TypingApp {
             return;
         }
 
-        // ゲーム画面：上端10pxを起点にスケールフィット
         const width = window.innerWidth;
         const height = window.innerHeight;
         const baseWidth = 1100;
-        const baseHeight = 850;
+        const baseHeight = 820; 
         let scale = Math.min(width / baseWidth, height / baseHeight);
         if (scale > 1) scale = 1;
 
@@ -98,12 +103,14 @@ class TypingApp {
     }
 
     validateData() {
-        if(!this.data) return;
-        for (let cat in this.data.categories) {
+        if(!this.data || !this.data.categories) return;
+        Object.keys(this.data.categories).forEach(cat => {
             this.data.categories[cat].forEach((item, idx) => {
-                if (/[一-龠々]/.test(item.kana)) console.error(`重大不備: ${cat} ${idx+1}: かなに漢字混入`);
+                if (item.kana && /[一-龠々]/.test(item.kana)) {
+                    console.warn(`データ不備: ${cat} [${idx}]: かなに漢字混入`);
+                }
             });
-        }
+        });
     }
 
     setupEventListeners() {
@@ -190,6 +197,7 @@ class TypingApp {
 
     nextQuestion() {
         if (this.totalTypedCount >= this.targetLimit) { this.endGame(); return; }
+        if (!this.data) return;
         const questions = this.data.categories[this.currentCategory];
         let available = questions.filter(q => q !== this.lastQuestion);
         const nextQ = available[Math.floor(Math.random() * available.length)];
@@ -384,6 +392,7 @@ class TypingApp {
     renderKeyboard() {
         const layout = [["1","2","3","4","5","6","7","8","9","0","-","^"],["Q","W","E","R","T","Y","U","I","O","P","@"],["A","S","D","F","G","H","J","K","L",";",":","]"],["Shift","Z","X","C","V","B","N","M",",",".","/","Shift"],["Space"]];
         const container = document.getElementById('keyboard-container');
+        if(!container) return;
         container.innerHTML = "";
         layout.forEach((row, i) => {
             const rowEl = document.createElement('div'); rowEl.className = `keyboard-row row-${i}`;
