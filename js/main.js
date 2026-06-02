@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v14.1
- * 修正：スケーリング計算の適正化、レンダリング順序の完全同期
+ * ぱそトレ！ Logic v14.2
+ * 修正：結果画面のミス内訳HTML構造の適正化、レンダリング同期の維持
  */
 
 const ROMAJI_TABLE = {
@@ -157,8 +157,10 @@ class TypingApp {
 
     prepareReady() {
         this.state = "READY";
-        document.getElementById('start-screen').classList.add('hidden');
-        document.getElementById('game-screen').classList.remove('hidden');
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        if (startScreen) startScreen.classList.add('hidden');
+        if (gameScreen) gameScreen.classList.remove('hidden');
 
         const container = document.getElementById('typing-container');
         if (container) {
@@ -208,7 +210,6 @@ class TypingApp {
         this.missMap = {};
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
-        // 完璧な同期：DOMが構築されるのを待ってから1問目を出題
         requestAnimationFrame(() => {
             this.nextQuestion();
             this.updateLoop();
@@ -218,17 +219,14 @@ class TypingApp {
     nextQuestion() {
         if (this.totalTypedCount >= this.targetLimit) { this.endGame(); return; }
         if (!this.currentQuestions || this.currentQuestions.length === 0) return;
-        
         const nextQ = this.currentQuestions[Math.floor(Math.random() * this.currentQuestions.length)];
         this.lastQuestion = nextQ;
         this.kanaList = this.splitKana(nextQ.kana);
         this.typedFullRomaji = ""; this.currentRomajiStr = "";
-        
         const kanjiEl = document.getElementById('display-kanji');
         const kanaEl = document.getElementById('display-kana');
         if (kanjiEl) kanjiEl.innerText = nextQ.kanji;
         if (kanaEl) kanaEl.innerText = nextQ.kana;
-        
         this.prepareNextChar();
     }
 
@@ -280,7 +278,6 @@ class TypingApp {
         this.guideRemainRomaji = best.substring(this.currentRomajiStr.length) + future;
         const next = this.guideRemainRomaji[0] || "";
         el.innerHTML = `<span class="typed">${this.typedFullRomaji.toUpperCase()}</span><span class="current">${next.toUpperCase()}</span><span>${this.guideRemainRomaji.substring(1).toUpperCase()}</span>`;
-        
         const typedSpan = el.querySelector('.typed');
         const offset = typedSpan ? typedSpan.offsetWidth : 0;
         el.style.transform = `translateX(${40 - offset}px)`;
@@ -375,6 +372,7 @@ class TypingApp {
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
         const missListEl = document.getElementById('miss-detail-list');
+        // 修正：miss-keyクラスを使ってキーを赤く強調
         if (missListEl) missListEl.innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span class="miss-count">${v}回</span></div>`).join('') : "ミスなし！";
     }
 
