@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v13.1
- * 修正：拗音テーブルの拡充（じぇ、しぇ等）、小文字単体判定の追加、イベント登録の堅牢化
+ * ぱそトレ！ Logic v13.2
+ * 変更点：マルチJSON動的ロード、総合判定（全統合）モードの実装
  */
 
 const ROMAJI_TABLE = {
@@ -40,8 +40,9 @@ const ROMAJI_TABLE = {
 
 class TypingApp {
     constructor() {
-        this.data = null;
-        this.currentCategory = 'it_terms';
+        this.manifest = null;
+        this.currentQuestions = [];
+        this.currentCategoryId = 'it_terms';
         this.state = "START"; 
         this.soundEnabled = localStorage.getItem('pasotore_sound') === 'true';
         this.bestScores = JSON.parse(localStorage.getItem('pasotore_best')) || {};
@@ -57,20 +58,39 @@ class TypingApp {
 
     async init() {
         try {
-            // UI構築を優先し、いかなる場合も操作不能にしない
             this.renderKeyboard();
             this.updateSoundBtnDisplay();
-            this.updateBestScoreDisplay();
             this.setupEventListeners();
 
-            const res = await fetch('./data/weekly.json');
-            this.data = await res.json();
-            this.validateData(); 
-        } catch (e) { 
-            console.error("Init Error:", e); 
-        }
+            const res = await fetch('./data/category_manifest.json');
+            this.manifest = await res.json();
+            this.updateBestScoreDisplay();
+        } catch (e) { console.error("Init Error:", e); }
+        
         this.handleResize();
         window.addEventListener('resize', () => this.handleResize());
+    }
+
+    async loadQuestions(categoryId) {
+        if (!this.manifest) return;
+        const category = this.manifest.categories.find(c => c.id === categoryId);
+        if (!category) return;
+
+        try {
+            if (category.file === "all") {
+                const fetchTasks = this.manifest.categories
+                    .filter(c => c.file !== "all")
+                    .map(c => fetch(`./data/typing/${c.file}`).then(r => r.json()));
+                const allData = await Promise.all(fetchTasks);
+                this.currentQuestions = allData.flatMap(d => d.questions);
+            } else {
+                const res = await fetch(`./data/typing/${category.file}`);
+                const data = await res.json();
+                this.currentQuestions = data.questions;
+            }
+        } catch (e) {
+            console.error("Data Load Error:", e);
+        }
     }
 
     handleResize() {
@@ -79,9 +99,7 @@ class TypingApp {
         if (document.body.classList.contains('portal-page')) {
             app.style.transform = "none";
             app.style.position = "relative";
-            app.style.left = "auto";
-            app.style.top = "auto";
-            app.style.margin = "0 auto";
+            app.style.left = "auto"; app.style.top = "auto"; app.style.margin = "0 auto";
             return;
         }
         const width = window.innerWidth;
@@ -90,37 +108,22 @@ class TypingApp {
         const baseHeight = 820; 
         let scale = Math.min(width / baseWidth, height / baseHeight);
         if (scale > 1) scale = 1;
-
         app.style.position = "absolute";
-        app.style.left = "50%";
-        app.style.top = "10px"; 
+        app.style.left = "50%"; app.style.top = "10px"; 
         app.style.transform = `translateX(-50%) scale(${scale})`;
         app.style.transformOrigin = "top center";
     }
 
-    validateData() {
-        if(!this.data || !this.data.categories) return;
-        Object.keys(this.data.categories).forEach(cat => {
-            this.data.categories[cat].forEach((item, idx) => {
-                if (item.kana && /[一-龠々]/.test(item.kana)) {
-                    console.warn(`Data Warning: ${cat} [${idx}] contains kanji in kana field.`);
-                }
-            });
-        });
-    }
-
     setupEventListeners() {
-        // カテゴリボタン
         document.querySelectorAll('.btn-category').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.btn-category').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                this.currentCategory = btn.dataset.cat;
+                this.currentCategoryId = btn.dataset.cat;
                 this.updateBestScoreDisplay();
             });
         });
 
-        // サウンド設定
         const soundBtn = document.getElementById('sound-toggle');
         if (soundBtn) {
             soundBtn.addEventListener('click', () => {
@@ -130,34 +133,23 @@ class TypingApp {
             });
         }
 
-        // 開始ボタン
         const startBtn = document.getElementById('start-btn');
         if (startBtn) {
-            startBtn.addEventListener('click', () => this.prepareReady());
+            startBtn.addEventListener('click', async () => {
+                startBtn.disabled = true;
+                await this.loadQuestions(this.currentCategoryId);
+                this.prepareReady();
+                startBtn.disabled = false;
+            });
         }
 
-        // キー入力管理の堅牢化
         window.addEventListener('keydown', (e) => {
             const isSpace = (e.key === " " || e.key === "Spacebar");
             const isEsc = (e.key === "Escape" || e.key === "Esc");
-
-            if (isSpace && (this.state === "READY" || this.state === "PLAYING")) {
-                e.preventDefault();
-            }
-
-            if (isEsc) {
-                if (this.state !== "START") this.endGame("abort");
-                return;
-            }
-
-            if (this.state === "READY" && isSpace) {
-                this.startCountdown();
-                return;
-            }
-
-            if (this.state === "PLAYING" && e.key.length === 1) {
-                this.handleKeyDown(e);
-            }
+            if (isSpace && (this.state === "READY" || this.state === "PLAYING")) e.preventDefault();
+            if (isEsc && this.state !== "START") this.endGame("abort");
+            if (this.state === "READY" && isSpace) this.startCountdown();
+            if (this.state === "PLAYING" && e.key.length === 1) this.handleKeyDown(e);
         });
     }
 
@@ -167,7 +159,7 @@ class TypingApp {
     }
 
     updateBestScoreDisplay() {
-        const best = this.bestScores[this.currentCategory] || 0;
+        const best = this.bestScores[this.currentCategoryId] || 0;
         const el = document.getElementById('best-score-display');
         if(el) el.innerText = `自己ベストスコア: ${best}`;
     }
@@ -226,10 +218,13 @@ class TypingApp {
 
     nextQuestion() {
         if (this.totalTypedCount >= this.targetLimit) { this.endGame(); return; }
-        if (!this.data) return;
-        const questions = this.data.categories[this.currentCategory];
-        let available = questions.filter(q => q !== this.lastQuestion);
-        const nextQ = available[Math.floor(Math.random() * available.length)];
+        if (!this.currentQuestions.length) return;
+        
+        let nextQ;
+        do {
+            nextQ = this.currentQuestions[Math.floor(Math.random() * this.currentQuestions.length)];
+        } while (nextQ === this.lastQuestion && this.currentQuestions.length > 1);
+
         this.lastQuestion = nextQ;
         this.kanaList = this.splitKana(nextQ.kana);
         this.typedFullRomaji = ""; this.currentRomajiStr = "";
@@ -361,20 +356,10 @@ class TypingApp {
         const resTitle = document.getElementById('result-title');
         const resScore = document.getElementById('res-score');
         const resRank = document.getElementById('result-rank');
-        const resAcc = document.getElementById('res-acc');
 
         if(reason === "abort") {
             if (resTitle) resTitle.innerText = "練習中止"; 
-            if (resScore) resScore.innerText = "---"; 
-            if (resRank) {
-                resRank.innerText = "評価不可";
-                resRank.style.color = "#95a5a6"; resRank.style.fontSize = "4rem";
-            }
-            document.getElementById('res-time').innerText = "---";
-            document.getElementById('res-wpm').innerText = "---";
-            if (resAcc) resAcc.innerText = "---";
-            document.getElementById('res-miss').innerText = "---";
-            document.getElementById('res-total').innerText = "---";
+            if (resRank) { resRank.innerText = "評価不可"; resRank.style.color = "#95a5a6"; }
         } else {
             if (resTitle) resTitle.innerText = "練習結果";
             const sec = (performance.now() - this.startTime) / 1000;
@@ -383,28 +368,21 @@ class TypingApp {
             const score = Math.floor(cpm * ((accNum < 0 ? 0 : accNum)/100)**3);
             const rank = this.getRank(score);
             if (resScore) resScore.innerText = score; 
-            if (resRank) {
-                resRank.innerText = rank; 
-                resRank.style.color = "var(--accent)"; 
-                resRank.style.fontSize = "6rem";
-            }
+            if (resRank) { resRank.innerText = rank; resRank.style.color = "var(--accent)"; }
             document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
             document.getElementById('res-wpm').innerText = cpm;
-            if (resAcc) resAcc.innerText = (accNum < 0 ? 0 : accNum);
+            document.getElementById('res-acc').innerText = (accNum < 0 ? 0 : accNum);
             document.getElementById('res-miss').innerText = this.totalMissedCount;
             document.getElementById('res-total').innerText = this.totalTypedCount + this.totalMissedCount;
             if (["SSS", "SS", "S", "A+", "A", "A-"].includes(rank)) resRank.classList.add('sparkle');
-            if (!this.bestScores[this.currentCategory] || score > this.bestScores[this.currentCategory]) {
-                this.bestScores[this.currentCategory] = score;
+            if (!this.bestScores[this.currentCategoryId] || score > this.bestScores[this.currentCategoryId]) {
+                this.bestScores[this.currentCategoryId] = score;
                 localStorage.setItem('pasotore_best', JSON.stringify(this.bestScores));
-                if (resScore) resScore.innerHTML += ' <span style="font-size:1.1rem; color:var(--error); vertical-align:middle;">New Record!</span>';
             }
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
         const missListEl = document.getElementById('miss-detail-list');
-        if (missListEl) {
-            missListEl.innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span class="miss-count">${v}回</span></div>`).join('') : "ミスなし！";
-        }
+        if (missListEl) missListEl.innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span class="miss-count">${v}回</span></div>`).join('') : "ミスなし！";
     }
 
     formatTime(ms) {

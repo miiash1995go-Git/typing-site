@@ -19,22 +19,48 @@
                 <a href="guide.html">学習ガイド</a>
                 <a href="contact.html">お問い合わせ</a>
             </nav>
-            <div class="logo">ぱそトレ！ <span>タイピング練習</span></div>
+            <div class="logo">ぱそトレ！ <span>実務スキル訓練</span></div>
             <div class="ad-container-top"></div>
         </header>
 
         <main>
-            <!-- スタート画面 -->
+            <!-- スタート画面：10カテゴリ＋総合判定を表示 -->
             <section id="start-screen" class="screen">
                 <div class="card">
                     <h1>練習カテゴリを選択</h1>
-                    <div id="category-selector" class="btn-group" style="margin-bottom:15px;">
-                        <button class="btn-category active" data-cat="it_terms">IT用語</button>
-                        <button class="btn-category" data-cat="word">Word (MOS)</button>
-                        <button class="btn-category" data-cat="excel">Excel (MOS)</button>
-                        <button class="btn-category" data-cat="business">ビジネス用語</button>
-                        <button class="btn-category" data-cat="daily">日常会話</button>
+                    
+                    <div id="category-selector" class="btn-group-container">
+                        <!-- 基礎グループ -->
+                        <div class="category-group">
+                            <span class="group-label">【基礎】</span>
+                            <button class="btn-category" data-cat="windows">Windows操作</button>
+                            <button class="btn-category" data-cat="daily">日常会話</button>
+                        </div>
+                        
+                        <!-- Officeグループ -->
+                        <div class="category-group">
+                            <span class="group-label">【Office】</span>
+                            <button class="btn-category" data-cat="word_basic">Word基礎</button>
+                            <button class="btn-category" data-cat="word_mos">Word(MOS)</button>
+                            <button class="btn-category" data-cat="excel_basic">Excel基礎</button>
+                            <button class="btn-category" data-cat="excel_mos">Excel(MOS)</button>
+                        </div>
+                        
+                        <!-- 実務グループ -->
+                        <div class="category-group">
+                            <span class="group-label">【実務】</span>
+                            <button class="btn-category active" data-cat="it_terms">IT用語</button>
+                            <button class="btn-category" data-cat="ai_terms">AI用語</button>
+                            <button class="btn-category" data-cat="business">ビジネス</button>
+                            <button class="btn-category" data-cat="career">就職・転職</button>
+                        </div>
+
+                        <!-- スペシャル -->
+                        <div class="category-group special">
+                            <button class="btn-category btn-total" data-cat="total_test">🔥 ぱそトレ！総合判定</button>
+                        </div>
                     </div>
+
                     <div id="best-score-display">自己ベストスコア: 0</div>
                     <div class="settings-area">
                         <button id="sound-toggle" class="btn-toggle">タイプ音: OFF</button>
@@ -72,10 +98,8 @@
                         </div>
                         <div class="result-btns">
                             <button onclick="location.reload()" class="btn-main">もう一度挑戦</button>
-                            <!-- Xでシェアボタンを削除しました -->
                         </div>
                     </div>
-                    <div class="result-ad-box"></div>
                 </div>
             </section>
         </main>

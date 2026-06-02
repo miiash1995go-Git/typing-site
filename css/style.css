@@ -82,7 +82,7 @@ body.portal-page main { justify-content: flex-start; padding-top: 20px; }
 .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 25px; max-width: 420px; margin: 10px auto; text-align: left; }
 .res-item { font-size: 1.1rem; border-bottom: 1px solid #f1f1f1; padding-bottom: 2px; white-space: nowrap; }
 
-/* カテゴリ選択UIの改善 */
+/* カテゴリ選択UIの改善：10カテゴリ以上をきれいに並べる */
 .btn-group-container { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-bottom: 15px; }
 .category-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; align-items: center; padding: 10px; background: #fdfdfd; border-radius: 12px; }
 .group-label { font-size: 0.8rem; color: #95a5a6; font-weight: bold; width: 100%; text-align: center; margin-bottom: 5px; }
