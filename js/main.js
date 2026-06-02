@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v13.9
- * 修正：レンダリング同期の完全化 (requestAnimationFrame), 10カテゴリ動的ロード
+ * ぱそトレ！ Logic v14.0
+ * 修正：レンダリング同期の完全化、カウントダウンの視認性復元、10カテゴリ統合
  */
 
 const ROMAJI_TABLE = {
@@ -74,20 +74,20 @@ class TypingApp {
         const category = this.manifest.categories.find(c => c.id === categoryId);
         if (!category) return false;
         try {
-            let loaded = [];
+            let loadedData = [];
             if (category.file === "all") {
                 const fetchTasks = this.manifest.categories
                     .filter(c => c.file !== "all")
                     .map(c => fetch(`./data/typing/${c.file}`).then(r => r.json()));
                 const results = await Promise.all(fetchTasks);
-                loaded = results.flatMap(d => d.questions);
+                loadedData = results.flatMap(d => d.questions);
             } else {
                 const res = await fetch(`./data/typing/${category.file}`);
                 const data = await res.json();
-                loaded = data.questions;
+                loadedData = data.questions;
             }
-            this.currentQuestions = loaded;
-            return loaded && loaded.length > 0;
+            this.currentQuestions = loadedData;
+            return loadedData && loadedData.length > 0;
         } catch (e) { return false; }
     }
 
@@ -157,10 +157,8 @@ class TypingApp {
 
     prepareReady() {
         this.state = "READY";
-        const startScreen = document.getElementById('start-screen');
-        const gameScreen = document.getElementById('game-screen');
-        if (startScreen) startScreen.classList.add('hidden');
-        if (gameScreen) gameScreen.classList.remove('hidden');
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
 
         const container = document.getElementById('typing-container');
         if (container) {
@@ -220,6 +218,7 @@ class TypingApp {
     nextQuestion() {
         if (this.totalTypedCount >= this.targetLimit) { this.endGame(); return; }
         if (!this.currentQuestions || this.currentQuestions.length === 0) return;
+        
         const nextQ = this.currentQuestions[Math.floor(Math.random() * this.currentQuestions.length)];
         this.lastQuestion = nextQ;
         this.kanaList = this.splitKana(nextQ.kana);
@@ -281,6 +280,7 @@ class TypingApp {
         this.guideRemainRomaji = best.substring(this.currentRomajiStr.length) + future;
         const next = this.guideRemainRomaji[0] || "";
         el.innerHTML = `<span class="typed">${this.typedFullRomaji.toUpperCase()}</span><span class="current">${next.toUpperCase()}</span><span>${this.guideRemainRomaji.substring(1).toUpperCase()}</span>`;
+        
         const typedSpan = el.querySelector('.typed');
         const offset = typedSpan ? typedSpan.offsetWidth : 0;
         el.style.transform = `translateX(${40 - offset}px)`;
