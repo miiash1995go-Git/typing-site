@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v13.6
- * 修正：レンダリング順序の同期、非同期ロード待機の強化
+ * ぱそトレ！ Logic v13.7
+ * 修正：レンダリングタイミングの完全同期、非同期データの受け渡し修正
  */
 
 const ROMAJI_TABLE = {
@@ -74,18 +74,20 @@ class TypingApp {
         const category = this.manifest.categories.find(c => c.id === categoryId);
         if (!category) return false;
         try {
+            let loaded = [];
             if (category.file === "all") {
                 const fetchTasks = this.manifest.categories
                     .filter(c => c.file !== "all")
                     .map(c => fetch(`./data/typing/${c.file}`).then(r => r.json()));
                 const allData = await Promise.all(fetchTasks);
-                this.currentQuestions = allData.flatMap(d => d.questions);
+                loaded = allData.flatMap(d => d.questions);
             } else {
                 const res = await fetch(`./data/typing/${category.file}`);
                 const data = await res.json();
-                this.currentQuestions = data.questions;
+                loaded = data.questions;
             }
-            return this.currentQuestions && this.currentQuestions.length > 0;
+            this.currentQuestions = loaded;
+            return loaded && loaded.length > 0;
         } catch (e) { return false; }
     }
 
@@ -155,13 +157,19 @@ class TypingApp {
 
     prepareReady() {
         this.state = "READY";
-        document.getElementById('start-screen').classList.add('hidden');
-        document.getElementById('game-screen').classList.remove('hidden');
-        document.getElementById('typing-container').innerHTML = `
-            <div class="ready-container">
-                <div class="ready-text">スペースキーを押して開始</div>
-                <div class="esc-guide-card">中断して終了するには [Esc] キー</div>
-            </div>`;
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        if (startScreen) startScreen.classList.add('hidden');
+        if (gameScreen) gameScreen.classList.remove('hidden');
+
+        const container = document.getElementById('typing-container');
+        if (container) {
+            container.innerHTML = `
+                <div class="ready-container">
+                    <div class="ready-text">スペースキーを押して開始</div>
+                    <div class="esc-guide-card">中断して終了するには [Esc] キー</div>
+                </div>`;
+        }
         this.highlightKey(' ');
     }
 
@@ -169,11 +177,11 @@ class TypingApp {
         this.state = "COUNTDOWN";
         let count = 3;
         const area = document.getElementById('typing-container');
-        area.innerHTML = `<div class="countdown-overlay">${count}</div>`;
+        if (area) area.innerHTML = `<div class="countdown-overlay">${count}</div>`;
         const timer = setInterval(() => {
             count--;
             if (count > 0) {
-                area.innerHTML = `<div class="countdown-overlay">${count}</div>`;
+                if (area) area.innerHTML = `<div class="countdown-overlay">${count}</div>`;
                 if(this.soundEnabled) this.playSound(800, 0.1);
             } else {
                 clearInterval(timer);
@@ -183,15 +191,17 @@ class TypingApp {
     }
 
     startGame() {
-        // 先に器（DOM）を作る
-        document.getElementById('typing-container').innerHTML = `
-            <div class="text-wrapper-left">
-                <div id="display-kanji"></div>
-                <div id="display-kana"></div>
-                <div class="romaji-scroll-window">
-                    <div id="display-romaji" class="romaji-content"></div>
-                </div>
-            </div>`;
+        const container = document.getElementById('typing-container');
+        if (container) {
+            container.innerHTML = `
+                <div class="text-wrapper-left">
+                    <div id="display-kanji"></div>
+                    <div id="display-kana"></div>
+                    <div class="romaji-scroll-window">
+                        <div id="display-romaji" class="romaji-content"></div>
+                    </div>
+                </div>`;
+        }
         this.state = "PLAYING";
         this.startTime = performance.now();
         this.lastInputTime = this.startTime;
@@ -199,14 +209,16 @@ class TypingApp {
         this.totalMissedCount = 0;
         this.missMap = {};
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        // DOMができてから問答無用で最初の問題を出す
+        
+        // 最初の問題を確実にセット
         this.nextQuestion();
         this.updateLoop();
     }
 
     nextQuestion() {
         if (this.totalTypedCount >= this.targetLimit) { this.endGame(); return; }
-        if (!this.currentQuestions.length) return;
+        if (!this.currentQuestions || this.currentQuestions.length === 0) return;
+        
         const nextQ = this.currentQuestions[Math.floor(Math.random() * this.currentQuestions.length)];
         this.lastQuestion = nextQ;
         this.kanaList = this.splitKana(nextQ.kana);
@@ -333,8 +345,11 @@ class TypingApp {
 
     endGame(reason = "") {
         this.state = "RESULT";
-        document.getElementById('game-screen').classList.add('hidden');
-        document.getElementById('result-screen').classList.remove('hidden');
+        const gameScreen = document.getElementById('game-screen');
+        const resultScreen = document.getElementById('result-screen');
+        if (gameScreen) gameScreen.classList.add('hidden');
+        if (resultScreen) resultScreen.classList.remove('hidden');
+
         const resScore = document.getElementById('res-score');
         const resRank = document.getElementById('result-rank');
         if(reason === "abort") {
@@ -361,7 +376,8 @@ class TypingApp {
             }
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
-        document.getElementById('miss-detail-list').innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span class="miss-count">${v}回</span></div>`).join('') : "ミスなし！";
+        const missListEl = document.getElementById('miss-detail-list');
+        if (missListEl) missListEl.innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span class="miss-count">${v}回</span></div>`).join('') : "ミスなし！";
     }
 
     formatTime(ms) {
