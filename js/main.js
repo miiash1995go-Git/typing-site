@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v14.0
- * 修正：レンダリング同期の完全化、カウントダウンの視認性復元、10カテゴリ統合
+ * ぱそトレ！ Logic v14.1
+ * 修正：スケーリング計算の適正化、レンダリング順序の完全同期
  */
 
 const ROMAJI_TABLE = {
@@ -361,7 +361,7 @@ class TypingApp {
             const score = Math.floor(cpm * ((accNum < 0 ? 0 : accNum)/100)**3);
             const rank = this.getRank(score);
             if (resScore) resScore.innerText = score; 
-            if (resRank) { resRank.innerText = rank; resRank.style.color = "var(--accent)"; resRank.style.fontSize = "5.5rem"; }
+            if (resRank) { resRank.innerText = rank; resRank.style.color = "var(--accent)"; resRank.style.fontSize = "6rem"; }
             document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
             document.getElementById('res-wpm').innerText = cpm;
             document.getElementById('res-acc').innerText = (accNum < 0 ? 0 : accNum);
