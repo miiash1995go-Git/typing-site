@@ -1,6 +1,6 @@
 /**
- * ぱそトレ！ Logic v12.9
- * 修正：イベント登録の堅牢化（キー入力不具合の解消）、シェア機能の削除
+ * ぱそトレ！ Logic v13.1
+ * 修正：拗音テーブルの拡充（じぇ、しぇ等）、小文字単体判定の追加、イベント登録の堅牢化
  */
 
 const ROMAJI_TABLE = {
@@ -27,13 +27,15 @@ const ROMAJI_TABLE = {
     'みゃ':['mya'], 'みゅ':['myu'], 'みょ':['myo'],
     'りゃ':['rya'], 'りゅ':['ryu'], 'りょ':['ryo'],
     'ぎゃ':['gya'], 'ぎゅ':['gyu'], 'ぎょ':['gyo'],
-    'じゃ':['ja','ji','zi'], 'じゅ':['ju'], 'じょ':['jo'],
+    'じゃ':['ja','zya'], 'じゅ':['ju','zyu'], 'じょ':['jo','zyo'], 'じぇ':['je','zye'],
+    'しぇ':['she','sye'], 'ちぇ':['che','tye'],
     'びゃ':['bya'], 'びゅ':['byu'], 'びょ':['byo'],
     'ぴゃ':['pya'], 'ぴゅ':['pyu'], 'ぴょ':['pyo'],
     'ふぁ':['fa'], 'ふぃ':['fi'], 'ふぇ':['fe'], 'ふぉ':['fo'],
     'うぃ':['wi'], 'うぇ':['we'], 'うぉ':['wo'],
-    'てぃ':['ti'], 'でぃ':['di'], 'ちぇ':['che','tye'],
-    'っ':['xtu','ltu'], 'ー':['-'], '-':['-'], ' ':[' ']
+    'てぃ':['ti'], 'でぃ':['di'],
+    'っ':['xtu','ltu'], 'ー':['-'], '-':['-'], ' ':[' '],
+    'ぁ':['xa','la'], 'ぃ':['xi','li'], 'ぅ':['xu','lu'], 'ぇ':['xe','le'], 'ぉ':['xo','lo']
 };
 
 class TypingApp {
@@ -55,7 +57,7 @@ class TypingApp {
 
     async init() {
         try {
-            // UI構築を優先
+            // UI構築を優先し、いかなる場合も操作不能にしない
             this.renderKeyboard();
             this.updateSoundBtnDisplay();
             this.updateBestScoreDisplay();
@@ -108,7 +110,7 @@ class TypingApp {
     }
 
     setupEventListeners() {
-        // カテゴリ切り替え
+        // カテゴリボタン
         document.querySelectorAll('.btn-category').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.btn-category').forEach(b => b.classList.remove('active'));
@@ -118,7 +120,7 @@ class TypingApp {
             });
         });
 
-        // サウンド
+        // サウンド設定
         const soundBtn = document.getElementById('sound-toggle');
         if (soundBtn) {
             soundBtn.addEventListener('click', () => {
@@ -134,29 +136,25 @@ class TypingApp {
             startBtn.addEventListener('click', () => this.prepareReady());
         }
 
-        // キーボードイベントの統合管理
+        // キー入力管理の堅牢化
         window.addEventListener('keydown', (e) => {
             const isSpace = (e.key === " " || e.key === "Spacebar");
             const isEsc = (e.key === "Escape" || e.key === "Esc");
 
-            // READYまたはPLAYING中のスペースキーによるスクロール防止
             if (isSpace && (this.state === "READY" || this.state === "PLAYING")) {
                 e.preventDefault();
             }
 
-            // 中断
             if (isEsc) {
                 if (this.state !== "START") this.endGame("abort");
                 return;
             }
 
-            // 開始
             if (this.state === "READY" && isSpace) {
                 this.startCountdown();
                 return;
             }
 
-            // 打鍵判定
             if (this.state === "PLAYING" && e.key.length === 1) {
                 this.handleKeyDown(e);
             }
@@ -403,7 +401,10 @@ class TypingApp {
             }
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
-        document.getElementById('miss-detail-list').innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span class="miss-count">${v}回</span></div>`).join('') : "ミスなし！";
+        const missListEl = document.getElementById('miss-detail-list');
+        if (missListEl) {
+            missListEl.innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span class="miss-count">${v}回</span></div>`).join('') : "ミスなし！";
+        }
     }
 
     formatTime(ms) {
