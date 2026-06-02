@@ -1,8 +1,6 @@
 /**
- * ぱそトレ！ Logic v14.2
- * 修正：結果画面のミス内訳HTML構造の適正化、レンダリング同期の維持
+ * ぱそトレ！ Logic v14.3
  */
-
 const ROMAJI_TABLE = {
     'あ':['a'], 'い':['i'], 'う':['u'], 'え':['e'], 'お':['o'],
     'か':['ka'], 'き':['ki'], 'く':['ku'], 'け':['ke'], 'こ':['ko'],
@@ -157,10 +155,8 @@ class TypingApp {
 
     prepareReady() {
         this.state = "READY";
-        const startScreen = document.getElementById('start-screen');
-        const gameScreen = document.getElementById('game-screen');
-        if (startScreen) startScreen.classList.add('hidden');
-        if (gameScreen) gameScreen.classList.remove('hidden');
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
 
         const container = document.getElementById('typing-container');
         if (container) {
@@ -358,7 +354,7 @@ class TypingApp {
             const score = Math.floor(cpm * ((accNum < 0 ? 0 : accNum)/100)**3);
             const rank = this.getRank(score);
             if (resScore) resScore.innerText = score; 
-            if (resRank) { resRank.innerText = rank; resRank.style.color = "var(--accent)"; resRank.style.fontSize = "6rem"; }
+            if (resRank) { resRank.innerText = rank; resRank.style.color = "var(--accent)"; resRank.style.fontSize = "6.5rem"; }
             document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
             document.getElementById('res-wpm').innerText = cpm;
             document.getElementById('res-acc').innerText = (accNum < 0 ? 0 : accNum);
@@ -372,7 +368,6 @@ class TypingApp {
         }
         const sorted = Object.entries(this.missMap).sort((a,b)=>b[1]-a[1]);
         const missListEl = document.getElementById('miss-detail-list');
-        // 修正：miss-keyクラスを使ってキーを赤く強調
         if (missListEl) missListEl.innerHTML = sorted.length ? sorted.map(([k,v])=>`<div class="miss-item"><span class="miss-key">${k}</span><span class="miss-count">${v}回</span></div>`).join('') : "ミスなし！";
     }
 
