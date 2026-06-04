@@ -64,22 +64,37 @@ main { flex: 1; width: 100%; min-height: 0; }
 .typed { color: #d1d5db !important; }
 .current { color: var(--accent) !important; border-bottom: 5px solid var(--accent); }
 
-/* キーボード：物理ズレと中央配置を両立 (v15.9 修正版) */
-#keyboard-container { width: 860px; padding: 20px; background: #f1f2f6; border-radius: 20px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
-.keyboard-row { display: flex; justify-content: flex-start; gap: 6px; width: fit-content; margin-bottom: 6px; }
+/* --- キーボード：物理配置修正 (v16.0 決定版) --- */
+#keyboard-container { 
+    width: 860px; padding: 25px; background: #f1f2f6; border-radius: 20px; 
+    flex-shrink: 0; display: flex; flex-direction: column; align-items: center; 
+}
 
-/* 物理ピッチ(50px)に基づいた精密オフセット */
-.row-1 { padding-left: 25px; } /* QWERTY列：数字の1と2の間にQを配置 */
-.row-2 { padding-left: 45px; } /* ASDF列：QとWの間にAを配置。これでQがAの左上に来る */
-.row-3 { padding-left: 10px; } /* ZXCV列：Shiftキーの開始位置を調整 */
-.row-4 { justify-content: center; width: 100%; }
+/* 各行の基準幅を統一して左端を揃える */
+.keyboard-row { 
+    display: flex; justify-content: flex-start; gap: 6px; 
+    width: 660px; /* 全ての行の基準幅を固定し、ここからパディングでズラす */
+    margin-bottom: 6px; 
+}
 
-.key { width: 44px; height: 44px; background: white; border-radius: 8px; border: 1px solid var(--key-border); border-bottom-width: 3px; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; font-weight: bold; color: #57606f; flex-shrink: 0; }
-.key.wide-shift { width: 75px; } /* JSで付与されているShift用の幅を追加 */
-.key.space { width: 300px; background: #3498db; border-color: #2980b9; color: white; }
+/* JIS物理ピッチに基づいた精密なズレ */
+.row-0 { padding-left: 0px; }    /* 数字列 */
+.row-1 { padding-left: 22px; }   /* QWERTY列：Qが1と2の間に来るように約半キー分ズラす */
+.row-2 { padding-left: 45px; }   /* ASDF列：AがQとWの間に来るようにさらにズラす（画像通りの位置） */
+.row-3 { padding-left: 5px; }    /* ZXCV列：Shiftキー(88px)の存在により文字の位置が調整される */
+.row-4 { justify-content: center; width: 100%; padding-left: 0; } /* スペースキー行は全体中央 */
+
+.key { 
+    width: 44px; height: 44px; background: white; border-radius: 8px; 
+    border: 1px solid var(--key-border); border-bottom-width: 3px; 
+    display: flex; align-items: center; justify-content: center; 
+    font-size: 0.95rem; font-weight: bold; color: #57606f; flex-shrink: 0; 
+}
+.key.wide-shift { width: 88px; } /* Shiftキーの正しい幅を設定 */
+.key.space { width: 320px; background: #3498db; border-color: #2980b9; color: white; }
 .key.highlight { background: var(--accent); color: white; border-color: #2980b9; transform: translateY(2px); border-bottom-width: 1px; }
 
-/* カテゴリ選択タイルUI */
+/* カテゴリ選択タイルUI (既存デザイン維持) */
 .card { background: white; padding: 25px 35px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; width: 920px; }
 .btn-group-container { display: flex; justify-content: center; gap: 12px; width: 100%; margin-bottom: 15px; }
 .category-group { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 10px; background: #f8f9fa; border-radius: 12px; border: 1px solid #eee; }
@@ -104,7 +119,7 @@ main { flex: 1; width: 100%; min-height: 0; }
 .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 30px; max-width: 450px; margin: 15px auto; text-align: left; }
 .res-item { font-size: 1.15rem; border-bottom: 1px solid #f1f1f1; padding-bottom: 5px; white-space: nowrap; }
 
-/* TOPページ（LP）：完成された全盛期デザインの復元 */
+/* TOPページ（LP）：完成されたデザインの復元 */
 .portal-page .hero-section { text-align: center; padding: 60px 20px; background: linear-gradient(135deg, #1a365d 0%, #2980b9 100%); color: white; border-radius: 30px; margin-bottom: 80px; width: 100%; }
 .portal-page .category-grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 30px !important; width: 100% !important; margin-top: 40px; }
 .portal-page .category-card { background: white; padding: 40px 25px; border-radius: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-decoration: none; color: inherit; border: 1px solid #eee; display: flex !important; flex-direction: column !important; align-items: center !important; transition: all 0.3s ease; }
