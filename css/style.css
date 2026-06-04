@@ -64,25 +64,24 @@ main { flex: 1; width: 100%; min-height: 0; }
 .typed { color: #d1d5db !important; }
 .current { color: var(--accent) !important; border-bottom: 5px solid var(--accent); }
 
-/* --- キーボード：物理配置修正 (v16.1 最終バランス調整) --- */
+/* --- キーボード：Z基準 物理配置修正 (v16.2) --- */
 #keyboard-container { 
     width: 860px; padding: 25px; background: #f1f2f6; border-radius: 20px; 
     flex-shrink: 0; display: flex; flex-direction: column; align-items: center; 
 }
 
-/* 各行を左詰め基準にし、一貫したピッチでパディングを適用 */
 .keyboard-row { 
     display: flex; justify-content: flex-start; gap: 6px; 
-    width: 720px; /* 全行のコンテナ幅を固定 */
+    width: 760px; /* 基準幅 */
     margin-bottom: 6px; 
 }
 
-/* 段ごとの精密なスタッガード配置（JIS規格） */
-.row-0 { padding-left: 10px; }   /* 数字：基準 */
-.row-1 { padding-left: 35px; }   /* QWERTY：数字に対し25px右へ */
-.row-2 { padding-left: 60px; }   /* ASDF：Qに対しさらに25px右へ */
-.row-3 { padding-left: 85px; }   /* ZXCV：Aに対しさらに25px右へ（Z開始位置の修正） */
-.row-4 { padding-left: 295px; }  /* Space：左端をVキーの真下に配置 */
+/* 精密オフセット：Z(row-3)の位置を基準に他を逆算 */
+.row-0 { padding-left: 10px; }    /* 数字 */
+.row-1 { padding-left: 35px; }    /* QWERTY：1と2の間にQ */
+.row-2 { padding-left: 55px; }    /* ASDF：QとWの間にA */
+.row-3 { padding-left: 10px; }    /* ZXCV：左Shift(64px)により ZがAとSの中間(80px)に配置される */
+.row-4 { padding-left: 230px; }   /* Space：Vキー(230px地点)の真下から開始 */
 
 .key { 
     width: 44px; height: 44px; background: white; border-radius: 8px; 
@@ -91,10 +90,10 @@ main { flex: 1; width: 100%; min-height: 0; }
     font-size: 0.95rem; font-weight: bold; color: #57606f; flex-shrink: 0; 
 }
 
-/* Shiftキー：3段目とのバランスをとるため適正化 */
-.key.wide-shift { width: 70px; }
+/* 左Shiftキーの幅を固定し、Zの位置を確定させる */
+.key.wide-shift { width: 64px; }
 
-/* スペースキー：長すぎたため200px（キー約4個分）へ短縮 */
+/* スペースキーを短縮（キー約4個分） */
 .key.space { 
     width: 200px; 
     background: #3498db; border-color: #2980b9; color: white; 
