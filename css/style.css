@@ -11,6 +11,9 @@
 
 * { box-sizing: border-box; }
 
+/* スムーズスクロールを有効化 */
+html { scroll-behavior: smooth; }
+
 body { margin: 0; padding: 0; font-family: 'Noto Sans JP', sans-serif; background-color: var(--bg); color: var(--primary); line-height: 1.6; min-height: 100vh; width: 100vw; display: flex; flex-direction: column; overflow-x: hidden; }
 
 /* 画面タイプ別レイアウト */
@@ -60,7 +63,7 @@ main { flex: 1; width: 100%; min-height: 0; }
 .typed { color: #d1d5db !important; }
 .current { color: var(--accent) !important; border-bottom: 5px solid var(--accent); }
 
-/* --- キーボード：Z基準 物理配置修正 (v16.2 固定) --- */
+/* --- キーボード：Z基準 物理配置修正 (v16.2 黄金比固定) --- */
 #keyboard-container { width: 860px; padding: 25px; background: #f1f2f6; border-radius: 20px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
 .keyboard-row { display: flex; justify-content: flex-start; gap: 6px; width: 760px; margin-bottom: 6px; }
 
@@ -107,7 +110,7 @@ main { flex: 1; width: 100%; min-height: 0; }
 .portal-page .category-card:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
 .portal-page .cat-icon { font-size: 4.5rem; margin-bottom: 15px; }
 
-/* 読み物ページ共通 */
+/* 読み物ページ */
 .static-page { text-align: left; max-width: 800px; width: 100%; margin: 15px auto 40px auto; background: white; padding: 40px 60px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); line-height: 1.8; }
 .article-image { text-align: center; margin: 30px 0; }
 .article-image img { max-width: 600px; width: 100%; height: auto; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
@@ -120,15 +123,30 @@ footer p { font-size: 0.75rem; color: #7f8c8d; margin: 2px 0 0 0; }
 
 .countdown-overlay { position: absolute; font-size: 7rem; color: var(--accent); font-weight: 900; z-index: 100; top: 50%; left: 50%; transform: translate(-50%, -50%); text-shadow: 0 10px 30px rgba(0,0,0,0.1); }
 
-/* --- ここから用語集専用：モダン・グロッサリー装飾 (v16.3) --- */
-.glossary-nav { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; justify-content: center; background: #fff; padding: 15px; border-radius: 15px; position: sticky; top: 10px; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-.nav-chip { padding: 6px 15px; background: #f1f2f6; border-radius: 20px; text-decoration: none; color: var(--primary); font-size: 0.85rem; font-weight: bold; transition: 0.2s; border: 1px solid transparent; }
-.nav-chip:hover { background: var(--accent); color: white; }
-.glossary-section { margin-bottom: 60px; scroll-margin-top: 100px; }
+/* --- 用語集専用：ジャンプ位置精密修正 (v16.7) --- */
+.glossary-nav { 
+    display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; 
+    justify-content: center; background: rgba(255, 255, 255, 0.98); 
+    padding: 15px; border-radius: 15px; position: sticky; top: 10px; 
+    z-index: 1000;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12); 
+    backdrop-filter: blur(8px);
+}
+.nav-chip { padding: 8px 18px; background: #f1f2f6; border-radius: 25px; text-decoration: none; color: var(--primary); font-size: 0.85rem; font-weight: bold; transition: 0.2s; border: 1px solid transparent; }
+.nav-chip:hover { background: var(--accent); color: white; transform: translateY(-2px); }
+
+/* 
+   ジャンプ後の停止位置を強制調整
+   ヘッダーとナビチップ両方を回避するために 240px を指定
+*/
+.glossary-section { 
+    margin-bottom: 60px; 
+    scroll-margin-top: 240px !important; 
+}
+
 .glossary-category-title { font-size: 1.6rem; border-left: 8px solid var(--accent); padding-left: 15px; margin-bottom: 25px; color: var(--primary); font-weight: bold; }
 .glossary-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
 .term-card { background: #fafafa; padding: 22px; border-radius: 18px; border: 1px solid #eee; transition: 0.3s; }
 .term-card:hover { background: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-color: var(--accent); }
 .term-word { font-size: 1.25rem; font-weight: bold; color: var(--accent); margin-bottom: 8px; display: block; border-bottom: 1px solid #eee; padding-bottom: 5px; }
 .term-comment { font-size: 0.95rem; color: #555; line-height: 1.8; margin: 0; }
-.loading-text { text-align: center; padding: 50px; color: #999; font-weight: bold; }
