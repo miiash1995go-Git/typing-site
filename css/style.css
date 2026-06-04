@@ -1,334 +1,104 @@
-/* ============================================================
-   ぱそトレ！～パソコンスキル訓練タイピング～ 
-   Standard Style Sheet (v15.1) - THE ULTIMATE MASTER CODE
-   Update: 2026/06/04
-   
-   【全ページ・全機能を網羅する 9000文字超 相当の完全版】
-   1. Base & Reset
-   2. Layout (Header, Slim Footer)
-   3. Navigation System
-   4. Top Page (Hero, 3-Column Grid, Category Cards)
-   5. Game Logic UI (Absolute Scaling, 40px Scroll)
-   6. Physical JIS Keyboard (Offset Correction - Q over A)
-   7. Information Pages (Guide, Career, Glossary, AI-Tools)
-   8. Result Screen (420px Compression)
-   9. AdSense & SEO Safeguards
-   10. Utilites & Animations
-   11. Responsive Design
-   ============================================================ */
 
-/* --- 1. Base & Variables --- */
-:root {
-    --primary: #3498db;
-    --primary-dark: #2980b9;
-    --secondary: #2c3e50;
-    --accent: #e67e22;
-    --success: #2ecc71;
-    --error: #e74c3c;
-    --bg-light: #f0f2f5;
-    --text-main: #333;
-    --text-sub: #666;
-    --white: #ffffff;
-    --header-h: 60px;
-    --footer-h: 45px;
-    --radius: 12px;
-    --shadow: 0 4px 20px rgba(0,0,0,0.08);
-}
+body { margin: 0; padding: 0; font-family: 'Noto Sans JP', sans-serif; background-color: var(--bg); color: var(--primary); line-height: 1.6; min-height: 100vh; width: 100vw; display: flex; flex-direction: column; overflow-x: hidden; }
 
-* { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
-html { scroll-behavior: smooth; overflow-y: scroll; }
-body {
-    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-    background-color: var(--bg-light);
-    color: var(--text-main);
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-}
+/* ポータル・ガイド設定 */
+/* 画面タイプ別レイアウト */
+body.portal-page { overflow-y: auto; height: auto; background-color: var(--bg); }
+body.portal-page main { justify-content: flex-start; padding: 20px 0; display: block; }
+body.portal-page main { display: block; padding: 20px 0; }
 
-/* --- 2. Header & Navigation (復元) --- */
-header {
-    height: var(--header-h);
-    background: var(--white);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 40px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    position: sticky;
-    top: 0;
-    z-index: 2000;
-}
+/* ゲーム画面設定 */
+body.game-body { overflow: hidden; height: 100vh; background-color: #d1d5db; position: relative; }
+body.game-body main { justify-content: flex-start; padding-top: 10px; display: flex; flex-direction: column; align-items: center; }
+body.game-body main { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 10px; }
 
-.logo-area a {
-    text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--primary);
-    letter-spacing: -0.5px;
-}
+.hidden { display: none !important; }
 
-nav ul {
-    display: flex; /* 横並び強制 */
-    list-style: none;
-    gap: 25px;
-}
+/* コンテナ：馴染み深い1000pxサイズ */
+/* 全体コンテナ：1000pxで視線を安定させる */
+#app { width: 1000px; margin: 0 auto; padding: 10px; display: flex; flex-direction: column; box-sizing: border-box; min-height: 100vh; }
 
-nav ul li a {
-    text-decoration: none;
-    color: var(--text-sub);
-    font-weight: 700;
-    font-size: 0.95rem;
-    transition: color 0.3s;
-}
+header { flex-shrink: 0; text-align: center; margin-bottom: 25px; width: 100%; }
+@@ -33,11 +32,12 @@ header { flex-shrink: 0; text-align: center; margin-bottom: 25px; width: 100%; }
+.nav-menu a { color: var(--primary); text-decoration: none; font-size: 0.85rem; font-weight: bold; padding: 5px 8px; border-bottom: 2px solid transparent; transition: all 0.2s; }
+.nav-menu a:hover { color: var(--accent); border-bottom: 2px solid var(--accent); }
 
-nav ul li a:hover { color: var(--primary); }
+/* アドセンス対策 */
+.ad-container-top, .result-ad-box { display: none !important; }
 
-/* --- 3. Slim Footer (沈み込み防止) --- */
-footer {
-    height: var(--footer-h);
-    background: var(--white);
-    border-top: 1px solid #ddd;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 0.85rem;
-    color: var(--text-sub);
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 1000;
-}
+main { flex: 1; width: 100%; min-height: 0; }
 
-/* --- 4. TOP Page (index.html 完全復元) --- */
-.hero {
-    background: linear-gradient(135deg, var(--secondary) 0%, #34495e 100%);
-    color: var(--white);
-    padding: 100px 20px;
-    text-align: center;
-}
+/* --- プレイ画面 --- */
+/* --- タイピング画面 --- */
+.screen { width: 100%; display: flex; flex-direction: column; align-items: center; }
 
-.hero-content h1 { font-size: 2.8rem; margin-bottom: 20px; font-weight: 800; }
-.hero-content p { font-size: 1.2rem; opacity: 0.9; margin-bottom: 40px; }
+.typing-display { 
+@@ -55,15 +55,16 @@ main { flex: 1; width: 100%; min-height: 0; }
+.ready-text { font-size: 2.8rem; font-weight: 800; color: var(--primary); animation: pulse 1.5s infinite; margin-bottom: 10px; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 
-.main-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 60px 20px;
-}
+#display-kanji { font-size: 2rem; margin-bottom: 2px; font-weight: bold; color: var(--primary); text-align: left; }
+#display-kana { font-size: 1.1rem; color: #888; margin-bottom: 5px; text-align: left; }
+/* 打鍵文字：強調表示を復元 */
+.text-wrapper-left { text-align: left; width: 100%; }
+#display-kanji { font-size: 2rem; margin-bottom: 2px; font-weight: bold; color: var(--primary); }
+#display-kana { font-size: 1.1rem; color: #888; margin-bottom: 5px; }
+.romaji-scroll-window { width: 100%; overflow: hidden; position: relative; height: 4.5rem; display: flex; justify-content: flex-start; align-items: center; background: #fafafa; border-radius: 12px; padding: 0; }
+.romaji-content { font-family: 'Roboto Mono', monospace; font-size: 2.6rem; font-weight: 700; letter-spacing: 0.1em; color: #333; white-space: nowrap; text-transform: uppercase; transition: transform 0.1s ease-out; margin: 0; }
 
-.section-title {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 50px;
-    font-weight: 800;
-    position: relative;
-}
+.typed { color: #d1d5db !important; }
+.current { color: var(--accent) !important; border-bottom: 5px solid var(--accent); }
 
-/* カテゴリーグリッド（3列を絶対死守） */
-.category-grid, .card-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-}
+/* キーボード：横位置中央 */
+/* キーボード：JISズレと中央配置を両立 */
+#keyboard-container { width: 860px; padding: 20px; background: #f1f2f6; border-radius: 20px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
+.keyboard-row { display: flex; justify-content: flex-start; gap: 6px; width: fit-content; margin-bottom: 6px; }
+.row-1 { padding-left: 22px; } .row-2 { padding-left: 40px; }
+@@ -83,24 +84,19 @@ main { flex: 1; width: 100%; min-height: 0; }
+.btn-category.active { background: var(--accent); color: white; border-color: var(--accent); }
+.btn-total { height: 100%; background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important; color: white !important; border: none !important; font-size: 1.1rem !important; }
 
-.category-card, .card-item {
-    background: var(--white);
-    padding: 45px 30px;
-    border-radius: 20px;
-    text-align: center;
-    text-decoration: none;
-    color: inherit;
-    box-shadow: var(--shadow);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
-    border: 1px solid #eee;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+.btn-toggle { background: #ecf0f1; border: 1px solid #bdc3c7; padding: 8px 30px; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+.btn-main { background: var(--primary); color: white; border: none; padding: 14px 70px; font-size: 1.3rem; border-radius: 40px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 0 #1a252f; transition: all 0.1s; text-decoration: none; }
+.btn-main { background: var(--primary); color: white; border: none; padding: 15px 70px; font-size: 1.3rem; border-radius: 40px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 0 #1a252f; transition: all 0.1s; text-decoration: none; display: inline-block; }
+.btn-main:hover:not(:disabled) { background: var(--accent); transform: translateY(-2px); box-shadow: 0 7px 0 #2980b9; }
 
-.category-card:hover, .card-item:hover {
-    transform: translateY(-8px); /* 最適化ホバー移動 */
-    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
-    border-color: var(--primary);
-}
+/* 結果画面：以前のしっかりした黄金レイアウトを完全復元 */
+/* 結果画面：黄金レイアウトを完全復元 */
+.result-container { display: flex !important; flex-direction: row !important; gap: 20px; width: 1000px; margin: 0 auto; height: 460px; align-items: stretch; justify-content: center; }
+.result-side { flex: 1.2; background: white; padding: 25px; border-radius: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; overflow: hidden; }
+.result-main { flex: 2; background: white; padding: 25px; border-radius: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); text-align: center; display: flex; flex-direction: column; justify-content: space-around; }
+.scroll-list { flex: 1; overflow-y: auto; padding-right: 10px; }
 
-.category-card i, .card-icon {
-    font-size: 3.5rem;
-    color: var(--primary);
-    margin-bottom: 25px;
-}
+/* 修正：ミス内訳の項目スタイル */
+.miss-item { display: flex; justify-content: space-between; padding: 10px 15px; border-bottom: 1px solid #f1f1f1; font-family: 'Roboto Mono', monospace; font-size: 1.2rem; }
+.miss-key { font-weight: bold; color: var(--error); } /* キーを赤く */
+.miss-count { color: #555; }
 
-.category-card h3 { font-size: 1.4rem; margin-bottom: 15px; }
-.category-card p { font-size: 0.95rem; color: #666; margin-bottom: 20px; flex-grow: 1; }
-.category-card .arrow { color: var(--accent); font-weight: 800; font-size: 1.1rem; }
+.miss-item { display: flex; justify-content: space-between; padding: 10px 15px; border-bottom: 1px solid #f1f1f1; font-family: 'Roboto Mono', monospace; font-size: 1.1rem; }
+.miss-key { font-weight: bold; color: var(--error); }
+#result-rank { font-size: 6.5rem; font-weight: bold; color: var(--accent); margin: 0; line-height: 1; }
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 35px; max-width: 450px; margin: 10px auto; text-align: left; }
+.res-item { font-size: 1.1rem; border-bottom: 1px solid #f1f1f1; padding-bottom: 5px; white-space: nowrap; }
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 30px; max-width: 450px; margin: 15px auto; text-align: left; }
+.res-item { font-size: 1.15rem; border-bottom: 1px solid #f1f1f1; padding-bottom: 5px; white-space: nowrap; }
 
-/* --- 5. Game Engine UI (play.html 完全復元) --- */
-#game-screen {
-    width: 1000px;
-    margin: 20px auto;
-    position: relative;
-    transform-origin: top center;
-    top: 10px;
-    background: var(--white);
-    padding: 40px;
-    border-radius: 25px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-}
+/* TOPページ（LP）：完成された全盛期デザインの復元 */
+.portal-page .hero-section { text-align: center; padding: 60px 20px; background: linear-gradient(135deg, #1a365d 0%, #2980b9 100%); color: white; border-radius: 30px; margin-bottom: 80px; width: 100%; }
+@@ -109,13 +105,12 @@ main { flex: 1; width: 100%; min-height: 0; }
+.portal-page .category-card:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+.portal-page .cat-icon { font-size: 4.5rem; margin-bottom: 15px; }
 
-/* 40px地点死守：一行スクロール用 */
-.typing-display-area {
-    background: #1a1a1a;
-    height: 150px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    position: relative;
-    overflow: hidden;
-    border: 5px solid #333;
-}
+/* 読み物ページ & 画像サイズ */
+.static-page { text-align: left; max-width: 800px; width: 100%; margin: 15px auto 40px auto; background: white; padding: 40px 60px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); line-height: 1.75; }
+.static-page h1 { font-size: 1.7rem; border-bottom: 3px solid var(--accent); padding-bottom: 8px; margin-bottom: 25px; }
+/* 読み物ページ */
+.static-page { text-align: left; max-width: 800px; width: 100%; margin: 15px auto 40px auto; background: white; padding: 40px 60px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); line-height: 1.8; }
+.article-image { text-align: center; margin: 30px 0; }
+.article-image img { max-width: 600px; width: 100%; height: auto; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-#text-line {
-    position: absolute;
-    left: 40px; /* 打鍵ポイント固定 */
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    white-space: nowrap;
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 3.2rem;
-}
-
-.char.current { color: #fff; border-bottom: 5px solid var(--primary); }
-.char.typed { color: #555; }
-.char.pending { color: #aaa; }
-
-/* --- 6. JIS Physical Keyboard (物理オフセット精密再現) --- */
-.keyboard-area {
-    background: #e9ecef;
-    padding: 30px;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* 横並びを強制し、縦崩れを根絶 */
-.keyboard-row {
-    display: flex !important;
-    justify-content: flex-start;
-    width: 100%;
-    max-width: 860px;
-    margin-bottom: 8px;
-}
-
-/* JIS物理配置：段ごとの左パディングで「Qの下にA」を物理再現 */
-.keyboard-row:nth-child(1) { padding-left: 10px; } /* 基準 */
-.keyboard-row:nth-child(2) { padding-left: 50px; } /* Q段: 半キー強右へ */
-.keyboard-row:nth-child(3) { padding-left: 68px; } /* A段: さらに右へ、これでQとWの間にAが来る */
-.keyboard-row:nth-child(4) { padding-left: 20px; } /* Z段 */
-.keyboard-row:nth-child(5) { justify-content: center; padding-left: 0; }
-
-.key {
-    width: 54px;
-    height: 54px;
-    background: var(--white);
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin: 0 3.5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 1.15rem;
-    box-shadow: 0 4px 0 #bbb;
-    transition: all 0.05s;
-    flex-shrink: 0; /* サイズ縮小を防止 */
-}
-
-.key.active {
-    transform: translateY(4px);
-    box-shadow: none;
-    background-color: var(--primary);
-    color: var(--white);
-}
-
-.key-shift { width: 105px !important; }
-.key-space { width: 360px !important; }
-
-/* --- 7. Information Pages (復元: 800px/600px 制限) --- */
-.info-content {
-    max-width: 800px;
-    margin: 50px auto;
-    background: var(--white);
-    padding: 50px;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
-}
-
-.info-content h1 { font-size: 2.2rem; border-bottom: 4px solid var(--primary); padding-bottom: 15px; margin-bottom: 35px; }
-.info-content h2 { font-size: 1.7rem; border-left: 8px solid var(--primary); padding-left: 20px; margin: 45px 0 20px; background: #f8f9fa; padding-top: 5px; padding-bottom: 5px; }
-.info-content p { margin-bottom: 25px; font-size: 1.05rem; color: #444; }
-
-.info-content img {
-    max-width: 600px; /* 画像サイズ制限死守 */
-    width: 100%;
-    height: auto;
-    display: block;
-    margin: 35px auto;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-}
-
-/* 用語集(glossary.html)の装飾 */
-.glossary-list dt { font-weight: 900; color: var(--primary); font-size: 1.25rem; margin-top: 30px; }
-.glossary-list dd { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #ddd; color: #555; }
-
-/* キャリア(career.html)のボックス */
-.highlight-box { background: #fffaf0; border: 2px solid #fbd38d; padding: 30px; border-radius: 15px; margin: 30px 0; }
-
-/* --- 8. Result Screen (v12.9 圧縮設計) --- */
-#result-container {
-    max-height: 420px; /* ノートPCで見切れない高さ */
-    overflow-y: auto;
-    text-align: center;
-    padding: 30px;
-}
-
-.score-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin: 30px 0;
-}
-
-.stat-item { background: #f8fafc; padding: 20px; border-radius: 15px; border: 1px solid #e2e8f0; }
-.stat-item span { display: block; }
-.stat-item .val { font-size: 2.2rem; font-weight: 900; color: var(--primary); }
-.stat-item .lbl { font-size: 0.85rem; color: var(--text-sub); }
-
-/* --- 9. AdSense & SEO Safeguards --- */
-.ad-slot { display: none !important; } /* 審査完了まで隠蔽 */
-
-/* --- 10. Utilities & Animations --- */
-.btn {
-    display: inline-block;
-    padding: 15px 35px;
-    border-radius: 50px;
-    font-weight: 800;
-    text-decoration: none;
-    cursor: pointer;
-    transition: 0.3s;
-    border: none;
-}
-.btn-main { background: var(--primary); color: #fff; }
-.btn-main:hover { background: var(--primary-dark); transform: scale(1.05); }
-
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-/* --- 11. Responsive Design --- */
-@media (max-width: 1100px) {
-    #game-screen { width: 95%; transform: scale(0.95); }
-    .category-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 768px) {
-    header { padding: 0 20px; }
+/* フッター */
+/* フッター：極小スリム化 */
+footer { margin-top: auto; padding: 8px 0; border-top: 1px solid #eee; text-align: center; background: white; flex-shrink: 0; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 3px; width: 100%; }
+.footer-links a { color: var(--primary); text-decoration: none; font-size: 0.8rem; }
