@@ -64,12 +64,18 @@ main { flex: 1; width: 100%; min-height: 0; }
 .typed { color: #d1d5db !important; }
 .current { color: var(--accent) !important; border-bottom: 5px solid var(--accent); }
 
-/* キーボード：JISズレと中央配置を両立 */
+/* キーボード：物理ズレと中央配置を両立 (v15.9 修正版) */
 #keyboard-container { width: 860px; padding: 20px; background: #f1f2f6; border-radius: 20px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
 .keyboard-row { display: flex; justify-content: flex-start; gap: 6px; width: fit-content; margin-bottom: 6px; }
-.row-1 { padding-left: 22px; } .row-2 { padding-left: 40px; }
+
+/* 物理ピッチ(50px)に基づいた精密オフセット */
+.row-1 { padding-left: 25px; } /* QWERTY列：数字の1と2の間にQを配置 */
+.row-2 { padding-left: 45px; } /* ASDF列：QとWの間にAを配置。これでQがAの左上に来る */
+.row-3 { padding-left: 10px; } /* ZXCV列：Shiftキーの開始位置を調整 */
 .row-4 { justify-content: center; width: 100%; }
-.key { width: 44px; height: 44px; background: white; border-radius: 8px; border: 1px solid var(--key-border); border-bottom-width: 3px; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; font-weight: bold; color: #57606f; }
+
+.key { width: 44px; height: 44px; background: white; border-radius: 8px; border: 1px solid var(--key-border); border-bottom-width: 3px; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; font-weight: bold; color: #57606f; flex-shrink: 0; }
+.key.wide-shift { width: 75px; } /* JSで付与されているShift用の幅を追加 */
 .key.space { width: 300px; background: #3498db; border-color: #2980b9; color: white; }
 .key.highlight { background: var(--accent); color: white; border-color: #2980b9; transform: translateY(2px); border-bottom-width: 1px; }
 
