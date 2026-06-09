@@ -1,11 +1,15 @@
 /**
- * ぱそトレ！ Logic v14.3
+ * ぱそトレ！ Logic v18.9
+ * - 4分経過（240秒）で強制終了判定を搭載
+ * - ち(ti), ちゃ(tya), ちゅ(tyu), ちょ(tyo) を優先出力に変更
+ * - 1024px以下のスケーリング停止を維持
  */
+
 const ROMAJI_TABLE = {
     'あ':['a'], 'い':['i'], 'う':['u'], 'え':['e'], 'お':['o'],
     'か':['ka'], 'き':['ki'], 'く':['ku'], 'け':['ke'], 'こ':['ko'],
     'さ':['sa'], 'し':['shi','si'], 'す':['su'], 'せ':['se'], 'そ':['so'],
-    'た':['ta'], 'ち':['chi','ti'], 'つ':['tsu','tu'], 'て':['te'], 'と':['to'],
+    'た':['ta'], 'ち':['ti','chi'], 'つ':['tsu','tu'], 'て':['te'], 'と':['to'],
     'な':['na'], 'に':['ni'], 'ぬ':['nu'], 'ね':['ne'], 'の':['no'],
     'は':['ha'], 'ひ':['hi'], 'ふ':['fu','hu'], 'へ':['he'], 'ほ':['ho'],
     'ま':['ma'], 'み':['mi'], 'む':['mu'], 'め':['me'], 'も':['mo'],
@@ -19,14 +23,14 @@ const ROMAJI_TABLE = {
     'ぱ':['pa'], 'ぴ':['pi'], 'ぷ':['pu'], 'ぺ':['pe'], 'ぽ':['po'],
     'きゃ':['kya'], 'きゅ':['kyu'], 'きょ':['kyo'],
     'しゃ':['sha','sya'], 'しゅ':['shu','syu'], 'しょ':['sho','syo'],
-    'ちゃ':['cha','tya'], 'ちゅ':['chu','tyu'], 'ちょ':['cho','tyo'],
+    'ちゃ':['tya','cha'], 'ちゅ':['tyu','chu'], 'ちょ':['tyo','cho'],
     'にゃ':['nya'], 'にゅ':['nyu'], 'にょ':['nyo'],
     'ひゃ':['hya'], 'ひゅ':['hyu'], 'ひょ':['hyo'],
     'みゃ':['mya'], 'みゅ':['myu'], 'みょ':['myo'],
     'りゃ':['rya'], 'りゅ':['ryu'], 'りょ':['ryo'],
     'ぎゃ':['gya'], 'ぎゅ':['gyu'], 'ぎょ':['gyo'],
     'じゃ':['ja','zya'], 'じゅ':['ju','zyu'], 'じょ':['jo','zyo'], 'じぇ':['je','zye'],
-    'しぇ':['she','sye'], 'ちぇ':['che','tye'],
+    'しぇ':['she','sye'], 'ちぇ':['tye','che'],
     'びゃ':['bya'], 'びゅ':['byu'], 'びょ':['byo'],
     'ぴゃ':['pya'], 'ぴゅ':['pyu'], 'ぴょ':['pyo'],
     'ふぁ':['fa'], 'ふぃ':['fi'], 'ふぇ':['fe'], 'ふぉ':['fo'],
@@ -45,6 +49,7 @@ class TypingApp {
         this.soundEnabled = localStorage.getItem('pasotore_sound') === 'true';
         this.bestScores = JSON.parse(localStorage.getItem('pasotore_best')) || {};
         this.targetLimit = 320;
+        this.timeLimitMs = 240000; // 4分
         this.inactivityLimit = 120000;
         this.startTime = null;
         this.totalTypedCount = 0; 
@@ -92,16 +97,20 @@ class TypingApp {
     handleResize() {
         const app = document.getElementById('app');
         if (!app) return;
-        if (document.body.classList.contains('portal-page')) {
-            app.style.transform = "none"; app.style.position = "relative";
-            app.style.left = "auto"; app.style.top = "auto"; app.style.margin = "0 auto";
+        if (document.body.classList.contains('portal-page') || window.innerWidth <= 1024) {
+            app.style.position = "relative";
+            app.style.left = "auto";
+            app.style.top = "auto";
+            app.style.transform = "none";
+            app.style.margin = "0 auto";
             return;
         }
         const width = window.innerWidth;
         const height = window.innerHeight;
         const scale = Math.min(width / 1000, height / 800, 1);
         app.style.position = "absolute";
-        app.style.left = "50%"; app.style.top = "10px"; 
+        app.style.left = "50%"; 
+        app.style.top = "10px"; 
         app.style.transform = `translateX(-50%) scale(${scale})`;
         app.style.transformOrigin = "top center";
     }
@@ -213,7 +222,12 @@ class TypingApp {
     }
 
     nextQuestion() {
-        if (this.totalTypedCount >= this.targetLimit) { this.endGame(); return; }
+        const elapsed = performance.now() - this.startTime;
+        if (this.totalTypedCount >= this.targetLimit || (this.startTime && elapsed > this.timeLimitMs)) { 
+            this.endGame(); 
+            return; 
+        }
+
         if (!this.currentQuestions || this.currentQuestions.length === 0) return;
         const nextQ = this.currentQuestions[Math.floor(Math.random() * this.currentQuestions.length)];
         this.lastQuestion = nextQ;
@@ -354,7 +368,7 @@ class TypingApp {
             const score = Math.floor(cpm * ((accNum < 0 ? 0 : accNum)/100)**3);
             const rank = this.getRank(score);
             if (resScore) resScore.innerText = score; 
-            if (resRank) { resRank.innerText = rank; resRank.style.color = "var(--accent)"; resRank.style.fontSize = "6.5rem"; }
+            if (resRank) { resRank.innerText = rank; resRank.style.color = "var(--accent)"; resRank.style.fontSize = "4.5rem"; }
             document.getElementById('res-time').innerText = this.formatTime(performance.now() - this.startTime);
             document.getElementById('res-wpm').innerText = cpm;
             document.getElementById('res-acc').innerText = (accNum < 0 ? 0 : accNum);
