@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>タイピング練習画面｜実務用語を指で覚える｜ぱそトレ！</title>
     <meta name="description" content="事務職の即戦力を目指すタイピング練習が無料でできます。Word、Excelの基礎からMOS試験頻出用語、ビジネスメール定型句まで。">
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -37,6 +37,8 @@
                 <a href="contact.html">お問い合わせ</a>
             </nav>
             <div class="logo">ぱそトレ！ <span>実務スキル訓練</span></div>
+    <!-- ここに追加：高さ90pxのエリア -->
+    <div class="ad-container-top"></div>
         </header>
 
         <main>
@@ -70,6 +72,7 @@
                     <div id="best-score-display">自己ベストスコア: 0</div>
                     <div class="settings-area">
                         <button id="sound-toggle" class="btn-toggle">タイプ音: OFF</button>
+			<button id="color-toggle" class="btn-toggle">ガイド色: ON</button>
                     </div>
                     <button id="start-btn" class="btn-main">練習開始</button>
                 </div>
@@ -80,28 +83,58 @@
                 <div id="keyboard-container"></div>
             </section>
 
-            <section id="result-screen" class="screen hidden">
-                <div class="result-container">
-                    <div class="result-side">
-                        <h3 style="margin:0 0 15px 0;">ミス内訳</h3>
-                        <div id="miss-detail-list" class="scroll-list"></div>
+<!-- 結果画面：ここから -->
+<section id="result-screen" class="screen hidden">
+    <div class="result-container">
+        <div class="result-side">
+            <h3 style="margin:0 0 20px 0; font-size:1.2rem; color:var(--primary); font-weight: bold; border-bottom: 2px solid #eee; padding-bottom: 10px;">苦手キー分析</h3>
+            <div id="miss-detail-list" class="scroll-list"></div>
+        </div>
+        
+        <div class="result-main">
+            <h2 id="result-title" style="margin-bottom:10px; font-weight: bold; color: var(--primary);">練習結果</h2>
+            
+            <div class="result-content-wrapper">
+                <div class="rank-display-area">
+                    <div id="result-rank">-</div>
+                    <p style="font-size:0.9rem; color:#95a5a6; font-weight:bold; letter-spacing: 0.2em;">判定ランク</p>
+                </div>
+                
+                <div class="stats-display-area">
+                    <div class="res-grid-row">
+                        <span class="res-label">スコア</span>
+                        <span id="res-score" class="res-value">0</span>
                     </div>
-                    <div class="result-main">
-                        <h2 id="result-title">練習結果</h2>
-                        <div id="result-rank">-</div>
-                        <div class="result-grid">
-                            <div class="res-item">スコア: <span id="res-score">0</span></div>
-                            <div class="res-item">タイム: <span id="res-time">0</span></div>
-                            <div class="res-item">WPM: <span id="res-wpm">0</span></div>
-                            <div class="res-item">正確率: <span id="res-acc">0</span>%</div>
-                            <div class="res-item">ミス数: <span id="res-miss">0</span></div>
-                            <div class="res-item">総タイプ数: <span id="res-total">0</span></div>
-                        </div>
-                        <button onclick="location.reload()" class="btn-main">もう一度挑戦</button>
+                    <div class="res-grid-row">
+                        <span class="res-label">タイム</span>
+                        <span id="res-time" class="res-value">0</span>
+                    </div>
+                    <div class="res-grid-row">
+                        <span class="res-label">入力速度(CPM)</span>
+                        <span id="res-wpm" class="res-value">0</span>
+                    </div>
+                    <div class="res-grid-row">
+                        <span class="res-label">正確率</span>
+                        <span class="res-value"><span id="res-acc">0.0</span>%</span>
+                    </div>
+                    <div class="res-grid-row">
+                        <span class="res-label">ミス数</span>
+                        <span id="res-miss" class="res-value">0</span>
+                    </div>
+                    <div class="res-grid-row" style="border-bottom: none;">
+                        <span class="res-label">総タイプ数</span>
+                        <span id="res-total" class="res-value">0</span>
                     </div>
                 </div>
-            </section>
-        </main>
+            </div>
+
+            <button onclick="location.reload()" class="btn-main" style="margin-top:30px; padding: 12px 60px;">もう一度挑戦</button>
+            <div class="ad-container-bottom"></div>
+        </div>
+    </div>
+</section>
+<!-- 結果画面：ここまで --> 
+</main>
 
         <footer>
             <div class="footer-links">
