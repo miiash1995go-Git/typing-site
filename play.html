@@ -10,16 +10,10 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="game-body">
-    <!-- スマホ・タブレット用制限画面：z-index 10000で確実に最前面へ -->
     <div class="mobile-restriction-overlay">
         <div class="restriction-card">
             <h2>PC環境での学習を推奨</h2>
-            <p>
-                本サイトのタイピング練習は、パソコンでの学習を前提としています。<br><br>
-                スマートフォンではキーボード仕様の都合により、正確なタイピング計測ができないためご利用いただけません。<br><br>
-                業務スキル向上のため、パソコン環境での学習を推奨しています。<br>
-                推奨ブラウザ：Edge / Chrome / Firefox / Safari
-            </p>
+            <p>本サイトのタイピング練習は、パソコンでの学習を前提としています。<br><br>スマートフォンでは正確な計測ができないため、PC環境での学習を推奨しています。</p>
             <a href="index.html" class="btn-main" style="padding: 10px 30px; font-size: 1rem; box-shadow: none;">ホームへ戻る</a>
         </div>
     </div>
@@ -37,14 +31,13 @@
                 <a href="contact.html">お問い合わせ</a>
             </nav>
             <div class="logo">ぱそトレ！ <span>実務スキル訓練</span></div>
-    <!-- ここに追加：高さ90pxのエリア -->
-    <div class="ad-container-top"></div>
+            <div class="ad-container-top"></div>
         </header>
 
         <main>
             <section id="start-screen" class="screen">
                 <div class="card">
-                    <h1>練習カテゴリを選択</h1>
+                    <h1 style="font-size: 1.4rem; margin-bottom: 8px;">練習カテゴリを選択</h1>
                     <div id="category-selector" class="btn-group-container">
                         <div class="category-group">
                             <span class="group-label">基礎</span>
@@ -69,12 +62,17 @@
                             <button class="btn-category btn-total" data-cat="total_test">🔥 ぱそトレ！<br>総合判定</button>
                         </div>
                     </div>
-                    <div id="best-score-display">自己ベストスコア: 0</div>
-                    <div class="settings-area">
-                        <button id="sound-toggle" class="btn-toggle">タイプ音: OFF</button>
-			<button id="color-toggle" class="btn-toggle">ガイド色: ON</button>
+                    <div class="controls-master-row">
+                        <div id="best-score-display" class="compact-best">
+                            <span class="best-label">自己ベスト</span>
+                            <span class="best-value">0</span>
+                        </div>
+                        <button id="start-btn" class="btn-main compact-start">練習開始</button>
+                        <div class="settings-area compact-settings">
+                            <button id="sound-toggle" class="btn-toggle">タイプ音: OFF</button>
+                            <button id="color-toggle" class="btn-toggle">ガイド色: ON</button>
+                        </div>
                     </div>
-                    <button id="start-btn" class="btn-main">練習開始</button>
                 </div>
             </section>
 
@@ -83,58 +81,42 @@
                 <div id="keyboard-container"></div>
             </section>
 
-<!-- 結果画面：ここから -->
-<section id="result-screen" class="screen hidden">
-    <div class="result-container">
-        <div class="result-side">
-            <h3 style="margin:0 0 20px 0; font-size:1.2rem; color:var(--primary); font-weight: bold; border-bottom: 2px solid #eee; padding-bottom: 10px;">苦手キー分析</h3>
-            <div id="miss-detail-list" class="scroll-list"></div>
-        </div>
-        
-        <div class="result-main">
-            <h2 id="result-title" style="margin-bottom:10px; font-weight: bold; color: var(--primary);">練習結果</h2>
-            
-            <div class="result-content-wrapper">
-                <div class="rank-display-area">
-                    <div id="result-rank">-</div>
-                    <p style="font-size:0.9rem; color:#95a5a6; font-weight:bold; letter-spacing: 0.2em;">判定ランク</p>
-                </div>
-                
-                <div class="stats-display-area">
-                    <div class="res-grid-row">
-                        <span class="res-label">スコア</span>
-                        <span id="res-score" class="res-value">0</span>
+            <section id="result-screen" class="screen hidden">
+                <div class="result-container">
+                    <div class="result-side">
+                        <h3 style="margin:0 0 10px 0; font-size:1.1rem; color:var(--primary); font-weight: bold; border-bottom: 2px solid #eee; padding-bottom: 5px;">タイプミスキー</h3>
+                        <div id="miss-detail-list" class="scroll-list"></div>
                     </div>
-                    <div class="res-grid-row">
-                        <span class="res-label">タイム</span>
-                        <span id="res-time" class="res-value">0</span>
-                    </div>
-                    <div class="res-grid-row">
-                        <span class="res-label">入力速度(CPM)</span>
-                        <span id="res-wpm" class="res-value">0</span>
-                    </div>
-                    <div class="res-grid-row">
-                        <span class="res-label">正確率</span>
-                        <span class="res-value"><span id="res-acc">0.0</span>%</span>
-                    </div>
-                    <div class="res-grid-row">
-                        <span class="res-label">ミス数</span>
-                        <span id="res-miss" class="res-value">0</span>
-                    </div>
-                    <div class="res-grid-row" style="border-bottom: none;">
-                        <span class="res-label">総タイプ数</span>
-                        <span id="res-total" class="res-value">0</span>
+                    
+                    <div class="result-main">
+                        <div class="result-content-wrapper">
+                            <!-- 左部：上・中・下に分離して配置 -->
+                            <div class="rank-display-area">
+                                <h2 id="result-title">練習結果</h2>
+                                <div class="rank-main-box">
+                                    <div id="result-rank">-</div>
+                                    <p>判定ランク</p>
+                                </div>
+                                <div class="result-action-area">
+                                    <button onclick="location.reload()" class="btn-main">もう一度挑戦</button>
+                                </div>
+                            </div>
+                            
+                            <!-- 右部：統計スタッツ -->
+                            <div class="stats-display-area">
+                                <div class="res-grid-row"><span class="res-label">スコア</span><span id="res-score" class="res-value">0</span></div>
+                                <div class="res-grid-row"><span class="res-label">タイム</span><span id="res-time" class="res-value">0</span></div>
+                                <div class="res-grid-row"><span class="res-label">入力速度(CPM)</span><span id="res-wpm" class="res-value">0</span></div>
+                                <div class="res-grid-row"><span class="res-label">正確率</span><span class="res-value"><span id="res-acc">0.0</span>%</span></div>
+                                <div class="res-grid-row"><span class="res-label">ミス数</span><span id="res-miss" class="res-value">0</span></div>
+                                <div class="res-grid-row" style="border-bottom: none;"><span class="res-label">総タイプ数</span><span id="res-total" class="res-value">0</span></div>
+                            </div>
+                        </div>
+                        <div class="ad-container-bottom"></div>
                     </div>
                 </div>
-            </div>
-
-            <button onclick="location.reload()" class="btn-main" style="margin-top:30px; padding: 12px 60px;">もう一度挑戦</button>
-            <div class="ad-container-bottom"></div>
-        </div>
-    </div>
-</section>
-<!-- 結果画面：ここまで --> 
-</main>
+            </section>
+        </main>
 
         <footer>
             <div class="footer-links">
