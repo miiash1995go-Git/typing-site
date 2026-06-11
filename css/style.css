@@ -549,3 +549,75 @@ footer p { font-size: 0.75rem; color: #7f8c8d; margin: 2px 0 0 0; }
 .stats-display-area {
     justify-content: center !important;
 }
+
+/* --- v19.9.10：スマホ版用語集ナビのスリム化 (横スワイプ対応) --- */
+
+@media (max-width: 768px) {
+    /* ナビゲーションエリア：縦に並べず、横一行でスクロールさせる */
+    .glossary-nav {
+        flex-wrap: nowrap !important; /* 折り返しを禁止 */
+        overflow-x: auto !important;  /* 横スクロールを許可 */
+        justify-content: flex-start !important; /* 左端から並べる */
+        padding: 8px 10px !important; /* 上下を絞る */
+        gap: 8px !important;
+        -webkit-overflow-scrolling: touch; /* iOSでのスクロールを滑らかに */
+        scrollbar-width: none; /* Firefoxでスクロールバーを隠す */
+    }
+
+    /* Chrome, Safari, Edgeでスクロールバーを隠す */
+    .glossary-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* 各チップ（ボタン）：サイズを適正化し、横に並ぶように固定 */
+    .nav-chip {
+        flex: 0 0 auto !important; /* 幅が縮まないように固定 */
+        font-size: 0.75rem !important; /* 文字を少し小さく */
+        padding: 6px 12px !important; /* パディングを凝縮 */
+        white-space: nowrap !important; /* 文字が2行にならないように */
+    }
+
+    /* 用語集の見出し：スマホではスクロール位置を調整 */
+    .glossary-section, .glossary-category-title {
+        scroll-margin-top: 100px !important; /* 上部にナビが固定されても被らない位置 */
+    }
+}
+
+/* --- v19.9.11：スマホ版用語集ナビ 強制横スワイプ化 --- */
+
+@media (max-width: 768px) {
+    /* ナビゲーションコンテナ */
+    .glossary-nav {
+        display: flex !important;
+        flex-wrap: nowrap !important; /* 絶対に折り返さない */
+        overflow-x: auto !important;  /* 横スクロールを強制許可 */
+        overflow-y: hidden !important;
+        justify-content: flex-start !important; /* 左端から並べる */
+        padding: 12px 15px !important;
+        gap: 10px !important;
+        background: #fff !important;
+        position: sticky !important;
+        top: 0 !important; /* スマホ画面の最上部に固定 */
+        z-index: 2000 !important;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
+        -webkit-overflow-scrolling: touch; /* 指での操作を滑らかにする */
+    }
+
+    /* 各ボタン（チップ） */
+    .nav-chip {
+        flex: 0 0 auto !important; /* ★最重要：絶対に縮ませない */
+        display: inline-block !important;
+        padding: 8px 16px !important;
+        background: #f1f2f6 !important;
+        border-radius: 20px !important;
+        font-size: 0.8rem !important;
+        color: var(--primary) !important;
+        border: 1px solid #ddd !important;
+        text-decoration: none !important;
+    }
+
+    /* スクロールバーを非表示（見た目をスッキリさせる） */
+    .glossary-nav::-webkit-scrollbar {
+        display: none !important;
+    }
+}
