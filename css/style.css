@@ -621,3 +621,416 @@ footer p { font-size: 0.75rem; color: #7f8c8d; margin: 2px 0 0 0; }
         display: none !important;
     }
 }
+
+/* --- 学習ポータル用追加定義 (v19.9.12) --- */
+
+/* ロードマップ */
+.roadmap-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin-top: 20px;
+}
+.roadmap-step {
+    flex: 1;
+    text-align: center;
+}
+.step-num {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 5px;
+}
+.roadmap-step h4 {
+    margin: 5px 0;
+    font-size: 1.05rem;
+    color: var(--primary);
+}
+.roadmap-step p {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+    margin: 0;
+}
+.roadmap-arrow {
+    color: #eee;
+    font-size: 1.2rem;
+    padding: 0 10px;
+}
+
+/* 特徴セクション */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+.feature-card {
+    background: white;
+    padding: 30px 20px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    border: 1px solid #f0f0f0;
+}
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+.feature-card h4 {
+    color: var(--primary);
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+.feature-card p {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Newsリスト */
+.news-list {
+    background: white;
+    border-radius: 20px;
+    padding: 10px 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+.news-item {
+    display: flex;
+    padding: 15px 0;
+    border-bottom: 1px solid #f5f5f5;
+    align-items: center;
+}
+.news-item:last-child { border-bottom: none; }
+.news-date {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: var(--accent);
+    min-width: 120px;
+}
+.news-content {
+    font-size: 0.95rem;
+    color: var(--primary);
+}
+
+/* 運営者プロフィール（ポータル版） */
+.profile-card-horizontal {
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+}
+.profile-info h3 { font-size: 1.4rem; margin-bottom: 5px; }
+.profile-tag { color: var(--accent); font-weight: bold; font-size: 0.9rem; margin-bottom: 15px; }
+.profile-bio { font-size: 0.95rem; line-height: 1.8; margin-bottom: 25px; color: #555; }
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+    .roadmap-container { flex-direction: column; gap: 20px; }
+    .roadmap-arrow { transform: rotate(90deg); padding: 5px 0; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .news-item { flex-direction: column; align-items: flex-start; gap: 5px; }
+}
+
+/* AdSenseプレースホルダー（呼吸の確保） */
+.ad-container-mid {
+    width: 100%;
+    min-height: 90px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* --- index.html 改善：静的カードと動的カードの差別化 --- */
+
+/* 選ばれる理由（押せないカード）の調整 */
+.feature-card {
+    background: white;
+    padding: 30px 20px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02); /* 影を極限まで薄く */
+    border: 1px solid #f0f0f0;
+    cursor: default; /* 指マークにしない */
+    transition: none; /* 動かさない */
+}
+
+/* おすすめコンテンツ（押せるエリア）全体の青い囲い */
+.recommended-box {
+    background: #f4f8fb; /* うっすら青い背景 */
+    padding: 50px 30px;
+    border-radius: 30px;
+    border: 1px solid #eef2f6;
+    margin-top: 20px;
+}
+
+/* おすすめカード（リンク付き） */
+.rec-card {
+    background: white !important;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+/* リンク付きカードだけホバーで浮き上がらせる */
+.rec-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+    border-color: var(--accent);
+}
+
+/* カード右下の「→」ヒント */
+.rec-btn-hint {
+    margin-top: 15px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--accent);
+    text-align: right;
+    opacity: 0.7;
+}
+
+.rec-card:hover .rec-btn-hint {
+    opacity: 1;
+}
+
+.rec-btn-hint span {
+    display: inline-block;
+    transition: transform 0.3s;
+}
+
+.rec-card:hover .rec-btn-hint span {
+    transform: translateX(5px); /* 矢印が右にピョコっと動く */
+}
+
+/* --- AI活用ページ専用スタイル (v19.9.13) --- */
+
+.static-card {
+    cursor: default !important;
+    transform: none !important;
+    border: 1px solid #eee !important;
+    box-shadow: none !important;
+}
+
+.example-box {
+    background: #2c3e50;
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    position: relative;
+    font-family: 'Roboto Mono', monospace;
+    line-height: 1.8;
+}
+
+.example-label {
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--accent);
+    color: white;
+    padding: 2px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.basics-priority-section {
+    margin-top: 40px;
+}
+
+.priority-box {
+    background: #fff9f0;
+    padding: 40px;
+    border-radius: 30px;
+    border: 2px dashed #f39c12;
+}
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 25px;
+}
+
+.comparison-item {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #ffe8cc;
+}
+
+.comparison-item h4 {
+    color: #e67e22;
+    margin-bottom: 10px;
+}
+
+.faq-item {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 25px 0 !important;
+}
+
+.faq-q {
+    font-weight: bold;
+    color: var(--accent);
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.faq-a {
+    color: #555;
+    line-height: 1.7;
+    padding-left: 10px;
+    border-left: 3px solid #f1f2f6;
+}
+
+.instructor-advice {
+    background: #eef9ff;
+    padding: 15px 25px;
+    border-radius: 10px;
+    color: #2980b9;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    .comparison-grid { grid-template-columns: 1fr; }
+}
+/* --- AI活用ページ 最終進化版スタイル (v19.9.15) --- */
+
+.tools-comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.tool-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px 20px;
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column; /* 縦並びにして、ボタンを下に寄せる */
+    justify-content: space-between;
+    transition: 0.3s;
+}
+
+.tool-card:hover {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    border-color: var(--accent);
+}
+
+.tool-header { text-align: center; margin-bottom: 15px; }
+.tool-icon { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+.tool-card h4 { color: var(--primary); font-size: 1.15rem; margin: 0; }
+
+.tool-body { flex-grow: 1; margin-bottom: 20px; }
+.tool-summary { font-weight: bold; color: var(--primary); font-size: 0.9rem; margin-bottom: 10px; line-height: 1.4; }
+.tool-usage { font-size: 0.85rem; color: #7f8c8d; line-height: 1.6; margin-bottom: 15px; }
+.tool-badge { background: #eef9ff; color: var(--accent); font-size: 0.75rem; font-weight: bold; padding: 4px 10px; border-radius: 5px; }
+
+.tool-footer { text-align: center; }
+.tool-footer .btn-main { width: 100%; padding: 12px 0 !important; font-size: 0.9rem !important; margin: 0; }
+
+.example-unit { margin-bottom: 30px; }
+
+/* まとめセクションのボタン位置修正 */
+.summary-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 20px !important;
+    height: 46px !important; /* 高さを揃えて中心を合わせる */
+    vertical-align: middle !important;
+    background: white;
+    text-decoration: none;
+    line-height: 1;
+}
+
+@media (max-width: 1024px) {
+    .tools-comparison-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .tools-comparison-grid { grid-template-columns: 1fr; }
+    .summary-nav { flex-direction: column; align-items: stretch; }
+    .summary-btn { width: 100%; }
+}
+
+/* --- AI活用ページ：お悩みリストの装飾 (v19.9.16) --- */
+.user-voices-container {
+    max-width: 720px;
+    margin: 0 auto 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border-left: 6px solid #d1d5db;
+}
+
+.voice-intro {
+    font-weight: bold;
+    color: var(--accent);
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.voice-list { list-style: none; padding: 0; margin: 0; }
+
+.voice-list li {
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.7;
+    font-weight: 500;
+}
+
+.voice-list li::before {
+    content: "💬";
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 1.2rem;
+}
+
+.voice-outro {
+    margin-top: 20px;
+    text-align: center;
+    font-weight: 800;
+    color: var(--primary);
+    font-size: 1.05rem;
+    border-top: 1px dashed #eee;
+    padding-top: 15px;
+}
+
+/* まとめセクションのボタン位置を真ん中に揃える */
+.summary-nav {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+.summary-nav .btn-main, 
+.summary-nav .summary-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 160px;
+    height: 50px;
+    margin: 0;
+    line-height: 1.2;
+}
