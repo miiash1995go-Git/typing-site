@@ -300,7 +300,11 @@ main { flex: 1; width: 100%; min-height: 0; }
 .btn-toggle.active { background: var(--accent); color: white; border-color: var(--accent); }
 
 /* 指別パステルカラー */
-.key.f-lp { background-color: #ffdce0; } .key.f-lr { background-color: #fff3d6; } .key.f-lm { background-color: #e2f9e1; } .key.f-li, .key.f-ri { background-color: #e2e9ff; } .key.f-rm { background-color: #e2f9e1; } .key.f-rr { background-color: #fff3d6; } .key.f-rp { background-color: #ffdce0; }
+.key.f-lp { background-color: #ffdce0; } .key.f-lr { background-color: #fff3d6; } .key.f-lm { background-color: #e2f9e1; } /* 左手人差し指：パステルブルー */
+.key.f-li { background-color: #e2e9ff; } 
+/* 右手人差し指：パステルパープル（新規追加） */
+.key.f-ri { background-color: #f0e1ff; }
+.key.f-rm { background-color: #e2f9e1; } .key.f-rr { background-color: #fff3d6; } .key.f-rp { background-color: #ffdce0; }
 .key[class*="f-"] { color: #57606f; }
 
 /* 集中モード：眼精疲労対策 & カードスライド */
