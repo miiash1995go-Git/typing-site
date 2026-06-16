@@ -1278,3 +1278,214 @@ footer p { font-size: 0.75rem; color: #7f8c8d; margin: 2px 0 0 0; }
     .summary-nav { flex-direction: column; }
     .summary-nav .btn-main, .summary-nav .summary-btn { width: 100%; }
 }
+/* --- TOPページ AdSense最適化 ＆ 4枚グリッド統合 (v19.9.27) --- */
+
+/* 1. 4枚並びのグリッド設定（PC用） */
+.grid-4 {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+}
+
+/* 2. 広告・プロモカード専用スタイル */
+.ad-promo-card {
+    background: #f9f9f9 !important;
+    border: 1px dashed #ddd !important;
+    position: relative;
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.ad-tag-label {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.65rem;
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #999;
+    font-weight: bold;
+}
+
+/* 3. 広告エリア④：ヒーロー前（横長バナー） */
+.ad-container-top-banner {
+    width: 100%;
+    max-width: 1000px;
+    margin: 10px auto 20px auto;
+    background: #eef9ff;
+    border-radius: 12px;
+    text-align: center;
+    padding: 15px;
+    border: 1px solid #d0e7ff;
+}
+
+.ad-placeholder-link {
+    text-decoration: none;
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.ad-tag {
+    background: var(--accent);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/* 4. 広告エリア③：News手前（横長リーダーボード） */
+.ad-container-mid-banner {
+    width: 100%;
+    max-width: 1000px;
+    margin: 60px auto;
+    text-align: center;
+}
+
+.ad-placeholder-leaderboard {
+    background: #fafafa;
+    border: 1px solid #eee;
+    padding: 30px;
+    border-radius: 15px;
+    font-size: 1rem;
+}
+
+.ad-placeholder-leaderboard a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 800;
+}
+
+/* 5. レスポンシブ調整（スマホ・タブレット） */
+@media (max-width: 1024px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 600px) {
+    .grid-4 { grid-template-columns: 1fr !important; }
+    .ad-container-top-banner { margin: 10px 10px 20px 10px; width: calc(100% - 20px); }
+}
+/* --- TOPページ：4枚横並びを1000px以内に収める究極調整 (v19.9.29) --- */
+
+/* 1. コンテナを強制的に4分割し、溢れを禁止する */
+.category-grid.grid-4 {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 12px !important; /* カード間の隙間を15pxから12pxへ微調整 */
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 20px auto !important;
+}
+
+/* 2. カード1枚ずつのサイズをスリム化する */
+.grid-4 .category-card {
+    width: auto !important; /* 横幅を固定せずグリッドに任せる */
+    padding: 20px 10px !important; /* 左右の余白を極限まで削る */
+    min-height: 250px !important; /* 縦幅をコンパクトに */
+    margin: 0 !important;
+}
+
+/* 3. アイコンと文字を小さくして、窮屈さを解消する */
+.grid-4 .cat-icon {
+    font-size: 2.2rem !important; /* アイコンを小さくして可読性アップ */
+    margin-bottom: 10px !important;
+}
+
+.grid-4 h3 {
+    font-size: 1.05rem !important; /* タイトルサイズを調整 */
+    margin-bottom: 8px !important;
+    white-space: nowrap !important; /* 改行を禁止して1行でビシッと見せる */
+}
+
+.grid-4 p {
+    font-size: 0.78rem !important; /* 説明文を小さくして情報密度を高める */
+    line-height: 1.4 !important;
+}
+
+/* 4. 4枚目の「おすすめ/注目」枠を広告サイズ（300x250）に寄せる */
+.ad-promo-card {
+    background: #fafafa !important;
+    border: 2px dashed #ddd !important;
+    opacity: 0.9;
+}
+
+/* --- レスポンシブ：ノートPC以下でも崩さない --- */
+@media (max-width: 1024px) {
+    .category-grid.grid-4 {
+        grid-template-columns: repeat(2, 1fr) !important; /* タブレットでは2枚×2段 */
+        padding: 0 15px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .category-grid.grid-4 {
+        grid-template-columns: 1fr !important; /* スマホでは縦1列 */
+    }
+}
+/* --- 「選ばれる理由」のデザイン刷新 (v19.9.30) --- */
+
+.value-proposition-section {
+    background: transparent; /* 背景を透明にして下の青いエリアと差別化 */
+    padding: 20px 0;
+}
+
+.benefit-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2x2に並べることで「箱感」を消す */
+    gap: 30px 40px;
+    max-width: 900px;
+    margin: 40px auto 0 auto;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.benefit-icon {
+    font-size: 2.2rem;
+    background: white;
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* アイコンを丸で囲む */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    flex-shrink: 0;
+}
+
+.benefit-text h4 {
+    margin: 0 0 8px 0 !important;
+    font-size: 1.15rem !important;
+    color: var(--primary);
+    text-align: left !important;
+}
+
+.benefit-text p {
+    margin: 0;
+    font-size: 0.88rem !important;
+    color: #666;
+    line-height: 1.6 !important;
+    text-align: left !important;
+}
+
+/* スマホ対応：縦1列に */
+@media (max-width: 768px) {
+    .benefit-list {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+    }
+    .benefit-item {
+        align-items: center;
+        text-align: left;
+    }
+}
