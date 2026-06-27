@@ -19,6 +19,7 @@
   gtag('config', 'G-KWS4RPPBVV');
 </script>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/portal-shared.css">
 <link rel="stylesheet" href="css/glossary.css"> <!-- 用語集専用 -->
 </head>
 <body class="portal-page">
@@ -29,7 +30,7 @@
                 <a href="play.html">タイピング</a>
                 <a href="ai-tools.html">AI活用</a>
                 <a href="career.html">就職・転職</a>
-                <a href="glossary.html">用語集</a>
+                <a href="glossary.html" class="active">用語集</a>
                 <a href="guide.html">学習ガイド</a>
 		<a href="column.html">ぱそトレ！コラム</a>
                 <a href="contact.html">お問い合わせ</a>
@@ -459,5 +460,9 @@
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	});
 	</script>
+<!-- ページトップへ戻るボタン：読みものページ標準装備 -->
+    <a href="#" id="backToTop" class="back-to-top">↑</a>
+    <!-- 共通ロジック：スクロール制御用 -->
+    <script src="js/main.js"></script>
 </body>
 </html>

@@ -117,22 +117,28 @@ class TypingApp {
         }
     }
 
-    /**
-     * handleResize: ノートPCに完全対応させるため、
-     * 「全体縮小(scale)」をやめ、「中央配置のみ」に特化。
-     */
-    handleResize() {
+handleResize() {
         const app = document.getElementById('app');
         if (!app) return;
-        if (document.body.classList.contains('portal-page') || window.innerWidth <= 1024) {
-            app.style.position = "relative";
-            app.style.left = "auto";
-            app.style.top = "auto";
+
+        // 読みものページ（portal-page）では、この関数自体を終了（何もしない）
+        if (document.body.classList.contains('portal-page')) {
+            app.style.position = "static"; // 絶対配置を確実に解除
+            app.style.margin = "0 auto";
             app.style.transform = "none";
+            return;
+        }
+
+        // タイピング練習画面（game-body）のみ絶対配置を適用
+        if (window.innerWidth <= 1024) {
+            app.style.position = "";
+            app.style.left = "";
+            app.style.top = "";
+            app.style.transform = "";
             app.style.margin = "0 auto";
             return;
         }
-        // 常に実寸で表示し、上の余白を0にすることで、広告が見えるようにする
+
         app.style.position = "absolute";
         app.style.left = "50%"; 
         app.style.top = "0"; 
@@ -465,11 +471,21 @@ if (success) {
             
             if (resScore) resScore.innerText = score; 
 
-            if (typeof gtag === 'function') {
+// [最新版：GA4詳細分析ロジック] 
+            // カテゴリIDから日本語のカテゴリ名を取得（例：windows -> Windows操作）
+            const categoryName = this.manifest ? this.manifest.categories.find(c => c.id === this.currentCategoryId)?.name : this.currentCategoryId;
+
+if (typeof gtag === 'function') {
+                // [最終完全版] 全スタッツをGA4へ送信
                 gtag('event', 'typing_complete', {
-                    'score': score,
-                    'rank': rank,
-                    'category_id': this.currentCategoryId
+                    'score': score,                   /* スコア */
+                    'rank': rank,                     /* 判定ランク (A, S, Legend等) */
+                    'category_name': categoryName,    /* カテゴリ名 */
+                    'cpm': cpm,                       /* 打鍵速度 */
+                    'accuracy': parseFloat(accNumRaw.toFixed(1)), /* 正確率 */
+                    'miss_count': this.totalMissedCount, /* ミス数 */
+                    'time_spent_sec': Math.floor(sec), /* かかった時間（秒） */
+                    'total_keys': this.totalTypedCount + this.totalMissedCount
                 });
             }
 
@@ -572,3 +588,17 @@ if (success) {
     }
 }
 const app = new TypingApp();
+
+/* ============================================================
+   共通機能：ページトップへ戻るボタンの制御
+   ============================================================ */
+window.addEventListener('scroll', () => {
+    const btn = document.getElementById('backToTop');
+    if (btn) {
+        if (window.scrollY > 300) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    }
+});
