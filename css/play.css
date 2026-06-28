@@ -603,3 +603,227 @@ body.game-body #keyboard-container {
     body.game-body .mobile-restriction-overlay { display: flex; }
     body.game-body #app { display: none !important; }
 }
+
+/* ============================================================
+   play.html 追加解説エリア専用スタイル (v19.9.139 正典)
+   ------------------------------------------------------------
+   - 垂直配置の深度調整：解説ボックスをさらに深く沈める
+   - 入力ルール：薄い青色(#f0f7ff)の背景を適用
+   - カテゴリカード：太い枠線と背景色、強固なタイトル装飾
+   - 冗長記述：プロパティ完全展開を維持
+   ============================================================ */
+
+body.game-body .game-description-wrapper {
+    background-color: transparent;
+    width: 100%;
+    /* 1366x768環境で、冒頭の挨拶がちょうど隠れるよう上余白を120pxへ拡大 */
+    padding-top: 120px;
+    padding-right: 0px;
+    padding-bottom: 120px;
+    padding-left: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    transition-property: opacity;
+    transition-duration: 0.6s;
+    transition-timing-function: ease;
+}
+
+body.focus-mode .game-description-wrapper {
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+body.game-body .game-info-section {
+    max-width: 920px !important;
+    background-color: #ffffff;
+    margin-top: 0px !important;
+    margin-right: auto !important;
+    margin-bottom: 0px !important;
+    margin-left: auto !important;
+    padding-top: 50px;
+    padding-right: 60px;
+    padding-bottom: 60px;
+    padding-left: 60px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    box-shadow: 0px 25px 50px -20px rgba(0, 0, 0, 0.12) !important;
+    border-top-style: none !important;
+    border-right-style: none !important;
+    border-bottom-style: none !important;
+    border-left-style: none !important;
+}
+
+/* 入力ルールボックス：薄い青色の背景を適用 */
+body.game-body article.static-page .content-body .input-rule-box {
+    background-color: #f0f7ff;
+    margin-top: 40px;
+    margin-right: 0px;
+    margin-bottom: 40px;
+    margin-left: 0px;
+    padding-top: 25px;
+    padding-right: 30px;
+    padding-bottom: 25px;
+    padding-left: 30px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: #d1e3f8;
+    border-right-color: #d1e3f8;
+    border-bottom-color: #d1e3f8;
+    border-left-color: #d1e3f8;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+body.game-body article.static-page .content-body .input-rule-box h3 {
+    color: #2c3e50;
+    font-size: 1.2rem;
+    font-weight: 900;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 15px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    border-bottom-style: none;
+}
+
+body.game-body .example-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+body.game-body .example-item {
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+    padding-right: 18px;
+    padding-bottom: 10px;
+    padding-left: 18px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: #d1e3f8;
+    border-right-color: #d1e3f8;
+    border-bottom-color: #d1e3f8;
+    border-left-color: #d1e3f8;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #2c3e50;
+}
+
+/* カテゴリ説明グリッドの強化 */
+body.game-body .category-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+body.game-body .info-card {
+    background-color: #f8fbfe; /* 薄い青白系の背景で清潔感を出す */
+    display: flex;
+    flex-direction: column;
+    padding-top: 25px;
+    padding-right: 25px;
+    padding-bottom: 25px;
+    padding-left: 25px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-width: 2px; /* 枠線を太く */
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: #e2e8f0;
+    border-right-color: #e2e8f0;
+    border-bottom-color: #e2e8f0;
+    border-left-color: #e2e8f0;
+    transition: border-color 0.2s ease;
+}
+
+body.game-body .info-card h3 {
+    font-size: 1.2rem; /* タイトルを大きくハッキリと */
+    font-weight: 900;
+    color: var(--primary);
+    display: block;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 15px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 10px;
+    padding-left: 0px;
+    border-bottom-width: 3px; /* 見出しの下線を太く */
+    border-bottom-style: solid;
+    border-bottom-color: #e2e8f0;
+}
+
+body.game-body .info-card p {
+    font-size: 0.95rem;
+    color: #4a5568;
+    line-height: 1.7;
+    margin-top: 0px;
+}
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+    body.game-body .category-info-grid {
+        grid-template-columns: 1fr;
+    }
+    body.game-body .game-info-section {
+        width: 95% !important;
+        padding-top: 40px !important;
+        padding-right: 25px !important;
+        padding-bottom: 40px !important;
+        padding-left: 25px !important;
+    }
+}
+/* --- portal-shared.css のパーツを練習画面（game-body）でも使えるように同期 --- */
+body.game-body .instructor-advice {
+    background-color: #fff9e6;
+    border-left: 5px solid #f39c12;
+    padding-top: 22px; padding-right: 30px; padding-bottom: 22px; padding-left: 30px;
+    border-radius: 12px; margin-top: 30px; margin-bottom: 30px;
+    font-size: 0.98rem; line-height: 1.8; color: #333333; box-sizing: border-box;
+    text-align: left;
+}
+body.game-body .instructor-advice b {
+    display: inline-block;
+    color: #e67e22;
+    font-weight: 900;
+    margin-bottom: 10px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(230, 126, 34, 0.25);
+}

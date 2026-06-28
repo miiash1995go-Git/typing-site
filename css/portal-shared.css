@@ -853,3 +853,78 @@ body.portal-page .summary-nav .summary-btn {
     padding: 12px 24px !important; /* ヘッダーボタンに影響を与えない */
     min-width: 160px;
 }
+/* ============================================================
+   v19.9.142 目次タイトル1行死守設定
+   ------------------------------------------------------------
+   - 全角22文字規定を物理的に補完するロジック
+   - 万が一長くなった場合も「...」で省略し、カードの高さを維持
+   ============================================================ */
+
+body.portal-page .step-content h3 {
+    /* 1行で固定し、はみ出しを隠す */
+    white-space: nowrap;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    /* はみ出た部分を「...」にする */
+    text-overflow: ellipsis;
+    /* タイトルエリアの最大幅を指定（ボタンとの干渉防止） */
+    max-width: 420px;
+    /* 既存スタイルの継承 */
+    display: block;
+}
+/* ============================================================
+   v19.9.143 記事見出し・サブタイトル構成
+   ------------------------------------------------------------
+   - H1をスッキリさせ、詳細情報をサブタイトルへ分離
+   - 冗長記述：プロパティ完全展開を維持
+   ============================================================ */
+
+body.portal-page article.static-page h1.page-title {
+    margin-top: 40px;
+    margin-right: 0px;
+    margin-bottom: 15px; /* サブタイトルを近づけるために縮小 */
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    font-size: 2rem; /* 少しだけ大きくして主役感を強調 */
+    line-height: 1.3;
+}
+
+body.portal-page article.static-page .page-subtitle {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: #64748b; /* 落ち着いたグレーでメインを邪魔しない */
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 45px; /* 本文との間に十分なゆとりを確保 */
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    line-height: 1.6;
+}
+/* ============================================================
+   v19.9.145 記事内見出し(H2) 1行死守設定
+   ------------------------------------------------------------
+   - 全角25文字規定を物理的に補完
+   - 改行によるデザイン崩れを根絶
+   - 冗長記述を維持
+   ============================================================ */
+
+body.portal-page .content-body h2 {
+    /* 1行に固定 */
+    white-space: nowrap;
+    /* はみ出しを物理的にカット */
+    overflow-x: hidden;
+    overflow-y: hidden;
+    /* はみ出た末尾を「...」で表現 */
+    text-overflow: ellipsis;
+    /* 既存の装飾を維持しつつ表示を安定化 */
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
