@@ -55,6 +55,7 @@
         <span class="logo-subtext">就職・転職</span>
     </div>
 </div>
+<div class="ad-container-top"></div>
 </header>
 
         <main>
@@ -150,16 +151,16 @@
 
                 <p>書類の準備とスキルの積み上げ、その両輪で、就職・転職の成功に近づいていきましょう。</p>
 
-                <div style="text-align: center; margin-top: 50px;">
-                    <a href="index.html" class="btn-main">ホームへ戻る</a>
-                </div>
+<!-- === ページ末尾ナビ：学習ガイド用標準セット === -->
+<div class="summary-nav">
+    <a href="play.html" class="btn-main">タイピング練習へ</a>
+    <a href="column.html" class="summary-btn">現場コラムへ</a>
+    <a href="index.html" class="summary-btn">ホームに戻る</a>
+</div>
             </article>
         </main>
 
-        <!-- ページトップへ戻るボタン -->
-        <a href="#" id="backToTop" class="back-to-top">↑</a>
-
-        <footer>
+<footer>
             <div class="footer-links">
                 <a href="privacy.html">プライバシーポリシー</a>
                 <a href="contact.html">お問い合わせ</a>
@@ -168,23 +169,11 @@
             <p>&copy; 2026 ぱそトレ！ Produced by miitype - All Rights Reserved.</p>
         </footer>
     </div>
-</div>
-    <script>
-        const backToTopBtn = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 500) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        });
-        backToTopBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    </script>
+
+    <!-- ページトップへ戻るボタン (v19.9.203 統一規格) -->
+    <a href="#" id="back-to-top" class="back-to-top">↑</a>
+
+    <!-- 共通ロジックの読み込み -->
+    <script src="js/main.js"></script>
 </body>
 </html>

@@ -174,23 +174,53 @@ header .logo {
     white-space: nowrap;
 }
 
-.ad-container-top {
+/* --- 1. タイピング画面専用（game-body）：物理的に高さを死守しつつ極限まで圧縮 (v19.9.200 正典) --- */
+body.game-body #app header .ad-container-top {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     width: 100%;
     max-width: 1000px;
-    height: 90px;
-    margin: 0 auto !important;
-    background-color: transparent !important; /* 透明にする */
-    border: none !important;
+    height: 90px; /* 広告の高さを確保 */
+    margin-top: 2px !important; /* ノートPCでのボタン見切れを防止するため極限まで圧縮 */
+    margin-right: auto !important;
+    margin-bottom: 2px !important;
+    margin-left: auto !important;
+    background-color: transparent;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+    box-sizing: border-box;
 }
+
+/* --- 2. 読みものページ専用（portal-page）：遷移時のガタつきを防止する90px固定空間 (v19.9.201) --- */
+body.portal-page #app header .ad-container-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1000px;
+    height: 90px; /* 広告枠の高さを90pxで予約 */
+    margin-top: 15px;
+    margin-right: auto;
+    margin-bottom: 25px; /* 下部コンテンツとの呼吸を確保 */
+    margin-left: auto;
+    background-color: transparent;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+    box-sizing: border-box;
+}
+
+/* タイピング練習画面のコンパクトさは既存の記述で別途保護 (style.css 147行目付近を維持) */
 
 /* --- 4. タイピング画面（game-body）専用：1画面に収めるための強制圧縮 --- */
 body.game-body #app { padding-top: 5px !important; }
 body.game-body .nav-menu { margin: 5px 0 5px 0 !important; }
 body.game-body header .logo { margin: 0 auto !important; }
-body.game-body .ad-container-top { margin: 2px auto !important; } /* 練習画面のみさらに圧縮 */
+body.game-body .ad-container-top { height: 90px !important; margin: 2px auto !important; } /* 練習画面は高さを保ちつつ極限圧縮 */
 
 /* --- 3. スマホ表示：構造の最適化（詳細度による上書き） --- */
 @media (max-width: 768px) {
@@ -292,9 +322,52 @@ main {
 .point-badge { display: inline-block; background: var(--accent); color: white; padding: 4px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; margin-bottom: 15px; }
 .point-badge.green { background: #27ae60; }
 
+/* --- ページトップへ戻るボタン：スマホ最適化・統一デザイン (v19.9.203 正典) --- */
+body .back-to-top {
+    position: fixed;
+    right: 25px;
+    bottom: 30px;
+    width: 54px; /* スマホで押しやすい50px以上の黄金サイズ */
+    height: 54px;
+    background-color: var(--accent);
+    color: #ffffff;
+    border-top-left-radius: 50%; /* 完全な円形 */
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.5rem; /* 矢印を大きく */
+    font-weight: 900;
+    z-index: 9999; /* 最前面を死守 */
+    opacity: 0;
+    visibility: hidden;
+    transition-property: opacity, visibility, transform, background-color;
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+    cursor: pointer;
+}
 
-.back-to-top { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; z-index: 3000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
-.back-to-top.visible { opacity: 1; visibility: visible; }
+/* スクロール時に表示されるクラス */
+body .back-to-top.visible {
+    opacity: 0.9; /* 少し透かして背後の文字を見せる */
+    visibility: visible;
+    transform: translateY(0px);
+}
+
+body .back-to-top:hover {
+    opacity: 1;
+    background-color: var(--accent-hover);
+    transform: scale(1.1); /* ホバー時にわずかに大きくして「押せる」ことを強調 */
+}
+
 /* --- 7. 各種ブラッシュアップ定義・最終統合 --- */
 @media (max-width: 768px) {
     body.portal-page h1 { font-size: 1.6rem !important; }
@@ -699,9 +772,42 @@ footer p { font-size: 0.75rem; color: #7f8c8d; margin: 2px 0 0 0; }
     white-space: nowrap !important; /* 改行を禁止して1行でビシッと見せる */
 }
 
+/* アイコン画像の強化設定 (v19.9.196 正典) */
+.cat-icon {
+    filter: drop-shadow(0px 0px 15px rgba(52, 152, 219, 0.25));
+    margin-top: 5px;
+    margin-right: 0px;
+    margin-bottom: 20px;
+    margin-left: 0px;
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover .cat-icon {
+    filter: drop-shadow(0px 0px 20px rgba(52, 152, 219, 0.4));
+    transform: scale(1.05);
+}
+
+.cat-icon-img {
+    height: 85px;
+    width: auto;
+    display: block;
+    margin-top: 0px;
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: auto;
+    image-rendering: -webkit-optimize-contrast;
+}
+
+/* 説明文：読みやすさを最優先にサイズアップ */
 .grid-4 p {
-    font-size: 0.78rem !important; /* 説明文を小さくして情報密度を高める */
-    line-height: 1.4 !important;
+    font-size: 0.95rem !important; /* 0.78から0.95へ拡大 */
+    line-height: 1.6 !important; /* 行間を広げて「目の滑り」を防止 */
+    color: #4b5563 !important;
+    font-weight: 500 !important;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
 }
 
 /* 4. 4枚目の「おすすめ/注目」枠を広告サイズ（300x250）に寄せる */
@@ -710,7 +816,26 @@ footer p { font-size: 0.75rem; color: #7f8c8d; margin: 2px 0 0 0; }
     border: 2px dashed #ddd !important;
     opacity: 0.9;
 }
+/* 広告・プロモ枠内のリンクボタンを強調 (v19.9.194) */
+.ad-promo-card .cat-link {
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    color: var(--accent);
+    margin-top: 10px;
+    display: inline-block;
+    text-decoration: none;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 2px; /* 下線のみ設定 */
+    border-left-width: 0px;
+    border-style: solid;
+    border-color: transparent;
+    transition: border-color 0.2s ease;
+}
 
+.ad-promo-card .cat-link:hover {
+    border-bottom-color: var(--accent);
+}
 /* --- レスポンシブ：ノートPC以下でも崩さない --- */
 @media (max-width: 1024px) {
     .category-grid.grid-4 {
@@ -1019,5 +1144,131 @@ body.portal-page .content-body table.setup-table td {
     body.portal-page .content-body table.setup-table th.row-label {
         width: 100px; /* スマホでは少し絞る */
         font-size: 0.85rem;
+    }
+}
+/* ============================================================
+   index.html Newsセクション：メディアスタイル刷新 (v19.9.175)
+   ------------------------------------------------------------
+   - カテゴリタグの導入とホバーエフェクトの強化
+   - 行間・余白を「ぱそトレ！」標準の30px/12pxルールに最適化
+   - 冗長記述：プロパティ完全展開を維持
+   ============================================================ */
+
+.news-list {
+    background-color: #ffffff;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    padding-top: 15px;
+    padding-right: 30px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.04);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: #f1f3f5;
+    border-right-color: #f1f3f5;
+    border-bottom-color: #f1f3f5;
+    border-left-color: #f1f3f5;
+}
+
+.news-item {
+    display: flex;
+    align-items: center;
+    padding-top: 18px;
+    padding-right: 0px;
+    padding-bottom: 18px;
+    padding-left: 0px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #f8f9fa;
+    transition: transform 0.2s ease;
+}
+
+.news-item:last-child {
+    border-bottom-style: none;
+}
+
+.news-item:hover {
+    transform: translateX(5px); /* 右に少し動くことで「押せる感」を演出 */
+}
+
+/* 最新のニュースにだけ付けるアクセント */
+.news-item.new-release {
+    position: relative;
+}
+
+/* 日付とタグのエリア */
+.news-meta {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 240px;
+    flex-shrink: 0;
+}
+
+.news-date {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+/* カテゴリタグの装飾 */
+.news-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding-top: 3px;
+    padding-right: 10px;
+    padding-bottom: 3px;
+    padding-left: 10px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    white-space: nowrap;
+}
+
+.tag-update { background-color: #eef9ff; color: #3498db; }
+.tag-column { background-color: #f0fdf4; color: #27ae60; }
+
+/* ニュース本文 */
+.news-content {
+    flex-grow: 1;
+}
+
+.news-content a {
+    text-decoration: none;
+    color: #2c3e50;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.news-content a:hover {
+    color: #3498db;
+}
+
+/* スマホ対応：縦並びへの切り替え */
+@media (max-width: 768px) {
+    .news-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .news-meta {
+        gap: 10px;
+        min-width: 0;
+    }
+    .news-list {
+        padding-right: 20px;
+        padding-left: 20px;
     }
 }
