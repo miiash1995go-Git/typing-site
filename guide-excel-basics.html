@@ -83,40 +83,56 @@
 
 <body class="portal-page">
     <div id="app">
-        <header>
-            <nav class="nav-menu">
-                <a href="index.html">ホーム</a>
-                <a href="play.html">タイピング</a>
-                <a href="ai-tools.html">AI活用</a>
-                <a href="career.html">就職・転職</a>
-                <a href="glossary.html">用語集</a>
-                <a href="guide.html" class="active">学習ガイド</a>
-                <a href="column.html">ぱそトレ！コラム</a>
-                <a href="contact.html">お問い合わせ</a>
-            </nav>
-            <div class="logo">
-                <div class="logo-spacer"></div>
-                <div class="logo-center">
-                    <a href="index.html">
-                        <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
-                    </a>
-                </div>
-                <div class="logo-right">
-                    <span class="logo-subtext">学習ガイド</span>
+<header>
+            <div class="header-inner">
+                <!-- 左：ロゴ（バッジ込み） -->
+                <a href="index.html" class="header-logo-link">
+                    <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
+                </a>
+
+                <!-- 右：ナビ -->
+                <nav class="header-nav">
+                    <div class="nav-grid">
+                        <!-- 上段 -->
+                        <a href="index.html" class="nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                        <a href="hub-typing.html" class="nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                        <a href="hub-windows.html" class="nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                        <a href="hub-word.html" class="nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                        <!-- 下段 -->
+                        <a href="hub-excel.html" class="nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                        <a href="hub-ai.html" class="nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                        <a href="hub-career.html" class="nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                        <a href="hub-column.html" class="nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                    </div>
+
+                    <!-- スマホ用メニューボタン：ハンバーガー ＋ メニューラベル -->
+                    <button class="mobile-menu-trigger" id="mobile-menu-btn">
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="menu-label">メニュー</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- スマホ全画面メニュー本体：初期状態はCSSで非表示 -->
+            <div class="mobile-nav-overlay" id="mobile-menu-overlay">
+                <button class="menu-close-btn" id="menu-close-btn">×</button>
+                <div class="mobile-nav-grid">
+                    <a href="index.html" class="mobile-nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                    <a href="hub-typing.html" class="mobile-nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                    <a href="hub-windows.html" class="mobile-nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                    <a href="hub-word.html" class="mobile-nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                    <a href="hub-excel.html" class="mobile-nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                    <a href="hub-ai.html" class="mobile-nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                    <a href="hub-career.html" class="mobile-nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                    <a href="hub-column.html" class="mobile-nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
                 </div>
             </div>
-            <div class="ad-container-top"></div>
         </header>
 
-        <main class="portal-main">
-            <article class="static-page">
-                <nav class="breadcrumb">
-                    <a href="index.html">ホーム</a>
-                    <span class="breadcrumb-separator">></span>
-                    <a href="guide.html">学習ガイド</a>
-                    <span class="breadcrumb-separator">></span>
-                    <span>仕事で困らないExcel講座</span>
-                </nav>
+<main class="portal-main">
+            <article class="static-page"><nav class="breadcrumb" id="dynamic-breadcrumb"></nav>
 
                 <h1 class="page-title">実際に仕事で困らないためのExcel講座</h1>
                 <p class="page-subtitle">現役講師が教える、情報を整理・計算・管理するための本質的な考え方</p>
@@ -169,7 +185,7 @@
                         <li><strong>シートタブ：</strong> 画面下部にあり、複数のワークシートを切り替えるのに使います。</li>
                     </ul>
 
-                    <h2>Excelはセル番地を使って計算する</h2>
+                    <h2 id="structure">Excelはセル番地を使って計算する</h2>
                     <p>ここがExcel学習において最も大切なポイントです。プロの事務スタッフは、Excelを単に数字を計算するものではなく、<strong>「セル番地（セルの住所）を使って計算するソフト」</strong>だと考えています。</p>
 
                     <ul class="rich-list">
@@ -186,7 +202,7 @@
                     </div>
 
 <!-- （第2回：データ入力と編集 〜 数値と文字列の違い 〜 セル・行・列の操作 編へ続く） -->
-<h2>データ入力の基本と正確な編集方法</h2>
+<h2 id="input">データ入力の基本と正確な編集方法</h2>
                     <p>Excelでの作業は、セルに文字や数字を打ち込むことから始まります。Excelには「入力された情報の種類を自動で判別する」という機能が備わっています。この仕組みを知っておくことが、正確な計算への近道となります。</p>
 
                     <div class="article-image article-image--window">
@@ -253,7 +269,7 @@
                         実務で一番使うショートカットキーは、間違いなく <strong><kbd>Ctrl</kbd> + <kbd>S</kbd>（上書き保存）</strong> です。1時間集中して作った表が、パソコンのフリーズで一瞬にして消えてしまう……。そんな悲劇を避けるためにも、「5分作業したらCtrl+S」を指の癖にしてしまいましょう。自分を守るための大切な技術ですよ。
                     </div>
 
-                    <h2>数式の基本：Excelに計算の命令を出す</h2>
+                    <h2 id="formula">数式の基本：Excelに計算の命令を出す</h2>
                     <p>Excelの真骨頂は、セルに入力されたデータを使って自動で計算をさせることにあります。初心者が最初につまずきやすいポイントですが、理屈さえわかればこれほど便利なものはありません。</p>
 
                     <div class="article-image article-image--window">
@@ -298,7 +314,7 @@
                         <li><strong>連続データの作成：</strong> 「1、2、3……」といった連番や、日付、曜日などを自動で埋めることができます。</li>
                     </ul>
 
-                    <h2>基本関数を使って計算を自動化しましょう</h2>
+                    <h2 id="function">基本関数を使って計算を自動化しましょう</h2>
                     <p>数式をさらに便利にしたものが「関数（かんすう）」です。複雑な計算を、あらかじめ決められた「名前」で呼び出すことができます。事務職で使われる関数の多くは、これから紹介する基本の5種類でカバーできます。</p>
 
                     <div class="article-image article-image--window">
@@ -341,7 +357,7 @@
                     
                     <p>固定したいセル番地を選んだ状態で、キーボードの <strong><kbd>F4</kbd> キー</strong> を1回押してください。番地が「$C$1」のように変化します。この「$」マークが、Excelにおける「ここを動かさないで！」という固定の印です。</p>
 
-                    <h2>表を見やすく整える書式と表示形式</h2>
+                    <h2 id="format">表を見やすく整える書式と表示形式</h2>
                     <p>計算が正しくできても、見た目が整っていない表は、情報の受け取り手に不安を与えてしまいます。Word講座で大切にしていた「揃える」意識をExcelでも持ちましょう。</p>
 
                     <div class="article-image article-image--window">
@@ -407,7 +423,7 @@
 
                     <p>シート間集計を行うための絶対条件は、<strong>「すべてのシートのレイアウト（表の形）を統一しておくこと」</strong>です。データの位置が1セルでもズレていると、正しい合計が出せません。最初に「ひな形」となるシートを1枚作り、それをコピーして使うのが実務の基本です。</p>
 
-                    <h2>情報を自在に操るデータ管理術</h2>
+                    <h2 id="management">情報を自在に操るデータ管理術</h2>
                     <p>実務において、Excelは「大量の情報を管理するデータベース」としても使われます。住所録や在庫リストなど、データの集まりを整理する際は、以下の機能を使いこなしましょう。</p>
 
                     <div class="article-image article-image--window">
@@ -427,7 +443,7 @@
                     </div>
 
 <!-- === [v19.9.170] グラフ作成と印刷設定の強化版 === -->
-                    <h2>情報を視覚的に伝えるグラフの作成</h2>
+                    <h2 id="chart">情報を視覚的に伝えるグラフの作成</h2>
                     <p>数字の羅列だけでは読み取ることが難しい「変化」や「割合」も、グラフにすることで一瞬で共有できるようになります。まずは実務で最も多用される<strong>「縦棒グラフ」</strong>の作り方を覚えましょう。</p>
 
                     <div class="article-image article-image--window">
@@ -444,7 +460,7 @@
                         <li><strong>配置の調整：</strong> グラフの端をドラッグして、表の邪魔にならない場所へ移動させましょう。</li>
                     </ul>
 
-                    <h2>失敗を防ぐための印刷設定と確認</h2>
+                    <h2 id="print">失敗を防ぐための印刷設定と確認</h2>
                     <p>ExcelはWordと違い、1枚のシートが非常に広いため、何も設定せずに印刷すると表が途中で切れてしまうことがあります。印刷前には「紙の中にどう収まっているか」を確認する手順が必要です。</p>
 
                     <div class="article-image article-image--window">
@@ -546,17 +562,19 @@
                         <p>少しずつできることを増やしていけば、仕事でも自信を持ってExcelを使えるようになります。あなたの学びを、心から応援しています。</p>
                     </div>
 
-                    <div class="next-step-guide">
-                        習った機能を、実際の文章入力や活用法で深めていきましょう
+<!-- 記事末尾の共通ナビ資産 (v20.1.39) -->
+                    <div class="article-footer-nav">
+                        <p class="article-footer-nav__text">Excelの基本がわかったら、次は生成AIを活用して実務をさらに効率化しましょう</p>
+                        <div class="summary-nav">
+                            <!-- 1. メイン：生成AI（btn-main） -->
+                            <a href="hub-ai.html" class="btn-main">生成AI活用へ</a>
+                            <!-- 2. サブ：タイピング（summary-btn） -->
+                            <a href="hub-typing.html" class="summary-btn">タイピング練習へ</a>
+                            <!-- 3. ホームに戻る（summary-btn） -->
+                            <a href="index.html" class="summary-btn">ホームに戻る</a>
+                        </div>
                     </div>
-
-<!-- === ページ末尾ナビ：学習ガイド用標準セット === -->
-<div class="summary-nav">
-    <a href="ai-tools.html" class="btn-main">AI活用へ</a>
-    <a href="guide.html" class="summary-btn">ガイド一覧へ</a>
-    <a href="index.html" class="summary-btn">ホームに戻る</a>
-</div>
-                </div>
+                    </div>
             </article>
         </main>
 

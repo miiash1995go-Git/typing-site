@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5分間タイピングテスト｜模擬試験モード｜ぱそトレ！</title>
+    <link rel="icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-shared.css">
+    <link rel="stylesheet" href="css/test.css">
+</head>
+<body class="test-body">
+    <div id="app">
+        <!-- サイト共通ヘッダー -->
+        <header>
+            <div class="header-inner">
+                <!-- 左：ロゴ -->
+                <a href="index.html" class="header-logo-link">
+                    <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
+                </a>
+
+                <!-- 右：ナビ（4x2グリッドを維持） -->
+                <nav class="header-nav">
+                    <div class="nav-grid">
+                        <a href="index.html" class="nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                        <a href="hub-typing.html" class="nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                        <a href="hub-windows.html" class="nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                        <a href="hub-word.html" class="nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                        <a href="hub-excel.html" class="nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                        <a href="hub-ai.html" class="nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                        <a href="hub-career.html" class="nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                        <a href="hub-column.html" class="nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <main class="test-main-wrapper">
+            <!-- 1. 開始前（準備）画面 -->
+            <section id="start-screen" class="test-screen-container">
+                <div class="test-info-card">
+                    <h1 class="test-card-title">5分間タイピングテスト</h1>
+                    <div class="test-instruction">
+                        <p class="test-lead-text">企業の採用試験を想定した5分間の模擬タイピングテストです。実務で使用される文章を入力し、現在の入力速度と正確性を測定できます。</p>
+                        
+                        <div class="test-notice-box">
+                            <p class="notice-title">💡 テスト前の確認</p>
+                            <ul class="test-notice-list">
+                                <li>日本語入力システムを<strong>「オン」</strong>にしてください。</li>
+                                <li>Excelの関数名などの英単語は、<strong>「半角英字」</strong>で入力・確定してください。</li>
+                                <li>テストを中断して終了する場合は <strong>[Esc]</strong> キーを押してください。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="test-action-area">
+                        <button id="test-start-btn" class="btn-main">テスト開始</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. 試験実施画面 -->
+            <section id="game-screen" class="test-screen-container hidden">
+                <!-- 上段：ステータスカード -->
+                <div class="test-stat-card">
+                    <div class="stat-group">
+                        <span class="stat-label">⏱ 残り時間</span>
+                        <span id="test-timer" class="stat-value">05:00</span>
+                    </div>
+                    <div class="stat-group">
+                        <span class="stat-label">✏️ 入力済み文字数</span>
+                        <span id="test-char-count" class="stat-value">0</span><span class="stat-unit">文字</span>
+                    </div>
+                    <div class="stat-group">
+                        <span class="stat-label">🎯 正確率</span>
+                        <span id="test-accuracy-live" class="stat-value">---</span><span class="stat-unit">%</span>
+                    </div>
+                </div>
+
+                <!-- 下段：メインタイピングカード -->
+                <div class="test-typing-card">
+                    <div class="test-typing-label">📖 サンプル文書（お手本）</div>
+                    <div id="sample-box" class="test-text-display">
+                        <!-- ここに文章が表示される -->
+                    </div>
+                    
+                    <div class="test-typing-label" style="margin-top: 25px;">🖋️ 入力エリア（ここに入力）</div>
+                    <div id="input-view-box" class="test-text-display test-input-view">
+                        <!-- 物理的な入力口：ボックス内のパディング位置に重ねる -->
+                        <input type="text" id="test-real-input" class="test-hidden-field" autocomplete="off" autofocus>
+                        <!-- テキスト表示専用のレイヤー -->
+                        <div id="test-visual-text"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. 結果表示画面 -->
+            <section id="result-screen" class="test-screen-container hidden">
+                <div class="test-result-card">
+                    <div class="res-main-layout">
+                        <!-- 左側：タイトルとランクを縦にスタック -->
+                        <div class="res-rank-block">
+                            <div class="res-header">試験結果</div>
+                            <span class="res-label">判定ランク</span>
+                            <div id="res-rank" class="res-rank-text">-</div>
+                        </div>
+                        
+                        <!-- 右側：統計数値（一段上に繰り上げ） -->
+                        <div class="res-stats-block">
+                            <div class="res-stat-row">
+                                <span class="res-stat-label">入力文字数</span>
+                                <div class="res-stat-val-group"><span id="res-total-chars" class="res-stat-num">0</span><span class="res-stat-unit">文字</span></div>
+                            </div>
+                            <div class="res-stat-row">
+                                <span class="res-stat-label">正確率</span>
+                                <div class="res-stat-val-group"><span id="res-accuracy" class="res-stat-num">0.0</span><span class="res-stat-unit">%</span></div>
+                            </div>
+                            <div class="res-stat-row">
+                                <span class="res-stat-label">1分あたりの入力</span>
+                                <div class="res-stat-val-group"><span id="res-cpm" class="res-stat-num">0</span><span class="res-stat-unit">文字/分</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- アドバイスエリア：ラベルをカットし、背景を強調 -->
+                    <div class="res-advice-box">
+                        <p id="res-comment" class="advice-text">--</p>
+                    </div>
+                    <div class="res-actions">
+                        <!-- 1. メインアクション（塗りつぶしボタン） -->
+                        <button onclick="location.reload()" class="btn-main">もう一度テストする</button>
+                        <!-- 2. サブアクション（白背景・青枠ボタンへ変更） -->
+                        <a href="play.html" class="summary-btn">タイピング練習へ戻る</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- サイト共通フッター（test.html用：物理高節約版） -->
+        <footer>
+            <div class="footer-links">
+                <a href="privacy.html">プライバシーポリシー</a>
+                <a href="contact.html">お問い合わせ</a>
+                <a href="about.html">運営者情報</a>
+            </div>
+            <p>&copy; 2026 ぱそトレ！ Produced by miitype - All Rights Reserved.</p>
+        </footer>
+    </div>
+    <script src="js/test.js"></script>
+</body>
+</html>

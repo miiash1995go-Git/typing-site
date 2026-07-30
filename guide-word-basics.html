@@ -80,45 +80,125 @@
             line-height: 1.8;
             text-align: left;
         }
+/* --- スマホ表示の最適化：表を完全に分解し、文字を自動改行させる --- */
+        @media (max-width: 768px) {
+            /* 1. 表の構造を強制解体し、ただの「箱」にする */
+            body.portal-page .content-body table.setup-table,
+            body.portal-page .content-body table.setup-table thead,
+            body.portal-page .content-body table.setup-table tbody,
+            body.portal-page .content-body table.setup-table tr,
+            body.portal-page .content-body table.setup-table th,
+            body.portal-page .content-body table.setup-table td {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+                /* 文字の突き抜けを防止する重要設定 */
+                white-space: normal !important; 
+                word-break: break-all !important;
+                overflow-wrap: break-word !important;
+            }
+
+            /* 2. PC用の横幅固定設定（table-layout）を物理的に解除 */
+            body.portal-page .content-body table.setup-table {
+                table-layout: auto !important;
+                border-top-style: none !important;
+                border-right-style: none !important;
+                border-bottom-style: none !important;
+                border-left-style: none !important;
+            }
+
+            /* 3. ヘッダーを非表示 */
+            body.portal-page .content-body table.setup-table thead {
+                display: none !important;
+            }
+
+            /* 4. 項目名ラベルの装飾 */
+            body.portal-page .content-body table.setup-table th.row-label {
+                background-color: #f1f5f9 !important;
+                border-top-width: 1px !important;
+                border-top-style: solid !important;
+                border-top-color: #e2e8f0 !important;
+                border-bottom-width: 1px !important;
+                border-bottom-style: solid !important;
+                border-bottom-color: #e2e8f0 !important;
+                padding-top: 15px !important;
+                padding-right: 15px !important;
+                padding-bottom: 15px !important;
+                padding-left: 15px !important;
+                text-align: left !important;
+                color: var(--primary) !important;
+            }
+            /* 項目名ラベル内の改行（brタグ）をスマホでは無効化して1行に戻す */
+            body.portal-page .content-body table.setup-table th.row-label br {
+                display: none !important;
+            }
+
+            /* 5. 説明文エリアの余白と改行の保証 */
+            body.portal-page .content-body table.setup-table td {
+                padding-top: 15px !important;
+                padding-right: 15px !important;
+                padding-bottom: 35px !important;
+                padding-left: 15px !important;
+                line-height: 1.7 !important;
+                background-color: #ffffff !important;
+            }
+        }
     </style>
 </head>
 
 <body class="portal-page">
-    <div id="app">
+<div id="app">
         <header>
-            <nav class="nav-menu">
-                <a href="index.html">ホーム</a>
-                <a href="play.html">タイピング</a>
-                <a href="ai-tools.html">AI活用</a>
-                <a href="career.html">就職・転職</a>
-                <a href="glossary.html">用語集</a>
-                <a href="guide.html" class="active">学習ガイド</a>
-                <a href="column.html">ぱそトレ！コラム</a>
-                <a href="contact.html">お問い合わせ</a>
-            </nav>
-            <div class="logo">
-                <div class="logo-spacer"></div>
-                <div class="logo-center">
-                    <a href="index.html">
-                        <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
-                    </a>
-                </div>
-                <div class="logo-right">
-                    <span class="logo-subtext">学習ガイド</span>
+            <div class="header-inner">
+                <!-- 左：ロゴ（バッジ込み） -->
+                <a href="index.html" class="header-logo-link">
+                    <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
+                </a>
+
+                <!-- 右：ナビ -->
+                <nav class="header-nav">
+                    <div class="nav-grid">
+                        <!-- 上段 -->
+                        <a href="index.html" class="nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                        <a href="hub-typing.html" class="nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                        <a href="hub-windows.html" class="nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                        <a href="hub-word.html" class="nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                        <!-- 下段 -->
+                        <a href="hub-excel.html" class="nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                        <a href="hub-ai.html" class="nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                        <a href="hub-career.html" class="nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                        <a href="hub-column.html" class="nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                    </div>
+
+                    <!-- スマホ用メニューボタン：ハンバーガー ＋ メニューラベル -->
+                    <button class="mobile-menu-trigger" id="mobile-menu-btn">
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="menu-label">メニュー</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- スマホ全画面メニュー本体：初期状態はCSSで非表示 -->
+            <div class="mobile-nav-overlay" id="mobile-menu-overlay">
+                <button class="menu-close-btn" id="menu-close-btn">×</button>
+                <div class="mobile-nav-grid">
+                    <a href="index.html" class="mobile-nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                    <a href="hub-typing.html" class="mobile-nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                    <a href="hub-windows.html" class="mobile-nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                    <a href="hub-word.html" class="mobile-nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                    <a href="hub-excel.html" class="mobile-nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                    <a href="hub-ai.html" class="mobile-nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                    <a href="hub-career.html" class="mobile-nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                    <a href="hub-column.html" class="mobile-nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
                 </div>
             </div>
-            <div class="ad-container-top"></div>
         </header>
 
         <main class="portal-main">
-            <article class="static-page">
-                <nav class="breadcrumb">
-                    <a href="index.html">ホーム</a>
-                    <span class="breadcrumb-separator">></span>
-                    <a href="guide.html">学習ガイド</a>
-                    <span class="breadcrumb-separator">></span>
-                    <span>仕事で困らないWord講座</span>
-                </nav>
+            <article class="static-page"><nav class="breadcrumb" id="dynamic-breadcrumb"></nav>
 
                 <h1 class="page-title">実際に仕事で困らないためのWord講座</h1>
                 <p class="page-subtitle">現役講師が教える、就職・転職後に差が出る「文書作成」の正しい手順</p>
@@ -148,7 +228,7 @@
                         <li><strong>ステータスバー：</strong> 画面の一番下。現在のページ数や文字数が表示されており、入力の進捗を確認するのに便利です。</li>
                     </ul>
 
-                    <h2>Wordは文字を打つ前の準備が大切</h2>
+                    <h2 id="setup">Wordは文字を打つ前の準備が大切</h2>
                     <p>初心者の方によく見られますが、多くの方はまず文字を最後まで入力してから、用紙サイズや余白を変更しようとします。しかし実務では、これは避けるべき手順です。</p>
                     <p>入力前に環境を整えることで、1行に入る文字数や改行位置が確定し、後のレイアウト崩れを防ぐことができます。仕事では、最初から「このサイズで作成してください」という指示（様式）があることが多いため、まずは設定から始めましょう。</p>
 
@@ -197,7 +277,7 @@
                         </ul>
                     </div>
 
-                    <h2>文字の配置を整えて見やすくする</h2>
+                    <h2 id="layout">文字の配置を整えて見やすくする</h2>
                     <p>入力した文字を左・中央・右のどこに置くかは、[ホーム] タブの「段落」グループにあるボタンで設定します。ビジネス文書には、それぞれの配置に明確な役割があります。</p>
 
                     <ul class="rich-list">
@@ -285,7 +365,7 @@
 
                     <p>段落番号を使えば、途中に項目を足したり消したりしても、番号が自動的に振り直されます。手作業で数字を書き換える手間がなくなるため、資料作成のミスを大幅に減らすことができます。</p>
 
-                    <h2>情報を整理して見せる表の作成術</h2>
+                    <h2 id="table">情報を整理して見せる表の作成術</h2>
                     <p>スケジュール表や比較表など、複雑な情報を整理する際に「表」は欠かせない機能です。[挿入] タブの「表」ボタンから作成しますが、まずは表を構成する3つの要素の名前を正確に覚えましょう。ここがズレていると、実務での指示が正しく理解できません。</p>
 
                     <div class="article-image article-image--window">
@@ -353,7 +433,7 @@
                     <p>大量の資料の中から特定の単語を探し出したり、すべての「株式会社A」を「株式会社B」へ変更したりする場合、手作業では時間がかかるだけでなく、見落としの恐れもあります。</p>
                     <p>こうした場面では、<strong><kbd>Ctrl</kbd> + <kbd>H</kbd></strong> キーで開く「置換」の機能が活躍します。一瞬ですべての文字を書き換えることができ、事務作業の正確性とスピードを支える重要なテクニックとなります。</p>
 
-                    <h2>データの保存ルールと拡張子の知識</h2>
+                    <h2 id="save">データの保存ルールと拡張子の知識</h2>
                     <p>作成中のデータが突然のトラブルで消えてしまわないよう、作業の区切りごとに保存を行う習慣をつけましょう。保存する際は、後から見ても内容が分かるよう<strong>「日付_宛先_用件」</strong>といったルールでファイル名を付けることをお勧めします。</p>
                     
                     <div class="info-note-box">
@@ -368,7 +448,7 @@
 
                     <div class="article-image article-image--window">
                         <img src="img/guide-word-save-pdf.jpg" alt="Wordの保存画面でPDF形式を選択している様子">
-                        <p class="small-text">▲ [名前を付けて保存] の種類からPDFを選択して書き出します</p>
+                        <p class="small-text">▲ [ファイル]タブの [エクスポート] からPDFを作成します</p>
                     </div>
 
                     <h2>実務でよく見られる「もったいない失敗」と対策</h2>
@@ -396,20 +476,23 @@
                             <li>相手に届ける形（PDF）を常に意識する</li>
                         </ul>
                         <p>焦ってすべてを覚える必要はありません。まずは毎日少しずつ<strong>タッチタイピング</strong>を練習し、Wordで何か一つ「自分のための資料」を形にしてみることから始めてみましょう。その一歩が、就職後の大きな自信と信頼に繋がります。</p>
-                    </div>
-
-                    <div class="next-step-guide">
-                        習った機能を、実際の文章入力で試してみましょう
-                    </div>
-
-<!-- === ページ末尾ナビ：学習ガイド用標準セット === -->
-<div class="summary-nav">
-    <a href="guide-excel-basics.html" class="btn-main">次のステップへ</a>
-    <a href="guide.html" class="summary-btn">ガイド一覧へ</a>
-    <a href="index.html" class="summary-btn">ホームに戻る</a>
 </div>
-                </div>
-            </article>
+
+                    <!-- 記事末尾の共通ナビ資産 (v20.1.39) -->
+                    <div class="article-footer-nav">
+                        <p class="article-footer-nav__text">Wordの基本を覚えたら、次はExcelで数値を扱う力を身につけましょう</p>
+                        <div class="summary-nav">
+                            <!-- 1. メイン：Excel基礎（btn-main） -->
+                            <a href="hub-excel.html" class="btn-main">Excel基礎へ</a>
+                            <!-- 2. サブ：タイピング（summary-btn） -->
+                            <a href="hub-typing.html" class="summary-btn">タイピング練習へ</a>
+                            <!-- 3. ホームに戻る（summary-btn） -->
+                            <a href="index.html" class="summary-btn">ホームに戻る</a>
+                        </div>
+                    </div>
+
+                </div> <!-- content-body 終了 -->
+            </article> <!-- article 終了 -->
         </main>
 
         <footer>

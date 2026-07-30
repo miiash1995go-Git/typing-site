@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STEP0 パソコン選び｜失敗しない最初の1台｜ぱそトレ！</title>
+    <title>パソコン選び｜失敗しない最初の1台｜ぱそトレ！</title>
     <meta name="description" content="現役パソコン講師が教える、初心者・就職準備のためのパソコン選びガイド。Core i3/i5の世代の見分け方やOffice 2024、中古PCの選び方まで。">
     <link rel="canonical" href="https://miitype.com/guide-pc-selection.html">
     <link rel="icon" href="favicon.ico">
@@ -31,68 +31,79 @@ window.dataLayer = window.dataLayer || [];
 	<link rel="stylesheet" href="css/portal-shared.css">
 </head>
 <body class="portal-page">
-    <div id="app">
+<div id="app">
         <header>
-            <nav class="nav-menu">
-                <a href="index.html">ホーム</a>
-                <a href="play.html">タイピング</a>
-                <a href="ai-tools.html">AI活用</a>
-                <a href="career.html">就職・転職</a>
-                <a href="glossary.html">用語集</a>
-                <a href="guide.html" class="active">学習ガイド</a>
-                <a href="column.html">ぱそトレ！コラム</a>
-                <a href="contact.html">お問い合わせ</a>
-            </nav>
-            <div class="logo">
-                <div class="logo-spacer"></div>
-                <div class="logo-center">
-                    <a href="index.html">
-                        <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
-                    </a>
-                </div>
-                <div class="logo-right">
-                    <span class="logo-subtext">学習ガイド</span>
+            <div class="header-inner">
+                <!-- 左：ロゴ（バッジ込み） -->
+                <a href="index.html" class="header-logo-link">
+                    <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
+                </a>
+
+                <!-- 右：ナビ -->
+                <nav class="header-nav">
+                    <div class="nav-grid">
+                        <!-- 上段 -->
+                        <a href="index.html" class="nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                        <a href="hub-typing.html" class="nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                        <a href="hub-windows.html" class="nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                        <a href="hub-word.html" class="nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                        <!-- 下段 -->
+                        <a href="hub-excel.html" class="nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                        <a href="hub-ai.html" class="nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                        <a href="hub-career.html" class="nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                        <a href="hub-column.html" class="nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                    </div>
+
+                    <!-- スマホ用メニューボタン：ハンバーガー ＋ メニューラベル -->
+                    <button class="mobile-menu-trigger" id="mobile-menu-btn">
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="menu-label">メニュー</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- スマホ全画面メニュー本体：初期状態はCSSで非表示 -->
+            <div class="mobile-nav-overlay" id="mobile-menu-overlay">
+                <button class="menu-close-btn" id="menu-close-btn">×</button>
+                <div class="mobile-nav-grid">
+                    <a href="index.html" class="mobile-nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                    <a href="hub-typing.html" class="mobile-nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                    <a href="hub-windows.html" class="mobile-nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                    <a href="hub-word.html" class="mobile-nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                    <a href="hub-excel.html" class="mobile-nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                    <a href="hub-ai.html" class="mobile-nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                    <a href="hub-career.html" class="mobile-nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                    <a href="hub-column.html" class="mobile-nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
                 </div>
             </div>
-            <div class="ad-container-top"></div>
         </header>
 
-        <main>
-            <article class="static-page">
-                <nav class="breadcrumb">
-                    <a href="index.html">ホーム</a> <span class="breadcrumb-separator">/</span>
-                    <a href="guide.html">学習ガイド</a> <span class="breadcrumb-separator">/</span>
-                    <span>STEP0 パソコン選び</span>
-                </nav>
+        <main class="portal-main">
+            <article class="static-page"><nav class="breadcrumb" id="dynamic-breadcrumb"></nav>
+                <!-- パンくずリスト：Windowsハブを親に設定 -->
+                
 
-                <div class="point-badge">STEP 0</div>
-                <h1>パソコン選びの決定版<br>最初の1台で失敗しないために</h1>
+                <h1 class="page-title">パソコン選びの決定版</h1>
+                <p class="page-subtitle">最初の1台で失敗しないための選び方ガイド</p>
 
-<div class="content-body">
-                        <!-- 1. 先生の挨拶（標準スタイルへ統合） -->
-                        <div class="profile-card-horizontal">
-                            <div class="profile-info">
-                                <h3>ぱそトレ！先生からのアドバイス</h3>
-                                <p class="profile-bio">「パソコン選びは、これから学習を始める方にとって最初の大きな壁ですよね。高すぎるものは不要ですが、安すぎて動かないものを買ってしまうのも禁物。事務仕事や学習で『これなら安心』と言える基準を、講師の視点からまとめました。あなたにとっての『良い相棒』を一緒に探していきましょう！」</p>
-                            </div>
-                        </div>
+                <div class="content-body">
+                    <!-- 講師のアドバイス：最新の黄色い箱（instructor-advice）へ変更 -->
+                    <div class="instructor-advice">
+                        <b>💡 講師のアドバイス：パソコン選びは「相棒」探し</b><br>
+                        パソコン選びは、これから学習を始める方にとって最初の大きな壁ですよね。高すぎるものは不要ですが、安すぎて動かないものを買ってしまうのも禁物。事務仕事や学習で「これなら安心」と言える基準を、講師の視点からまとめました。あなたにとっての「良い相棒」を一緒に探していきましょう！
+                    </div>
 
-                        <!-- 2. 2026年6月時点の注釈 -->
-                        <div class="info-note-box">
-                            <p style="font-weight: 800; color: var(--accent); margin-bottom: 8px;">※2026年6月時点の情報です</p>
-                            <p>パソコンの性能（スペック）や価格の相場は日々変動しています。ここで紹介している内容は、2026年6月時点での一般的な基準です。最新の情報を踏まえて選ぶための参考にしてください。</p>
-                        </div>
-
-                        <!-- 3. 導入文（クラス名を contact-intro から標準へ修正） -->
-                        <p style="margin-bottom: 40px;">
-                            「これからパソコンを学びたい！」「就職や転職に備えて、まずは自分のパソコンを用意したい」<br>
-                            そう思ったとき、最初にぶつかる壁が「どんなパソコンを選べばいいの？」という疑問です。家電量販店やネットショップには、見た目は似ていても値段がバラバラなパソコンが並んでいます。<br><br>
-                            でも、安心してください。プロの現場で使うためのパソコン選びには、<b>「ここさえ押さえれば大丈夫」というポイント</b>があります。この記事では、初心者の方が失敗せず、納得して選べるための知識を、STEP0としてやさしく解説します。
-                        </p>
+                    <!-- 補足情報：標準の青い箱（info-note-box）へ修正 -->
+                    <div class="info-note-box">
+                        <strong class="note-title">※2026年6月時点の情報です</strong>
+                        <p>パソコンの性能（スペック）や価格の相場は日々変動しています。ここで紹介している内容は、2026年6月時点での一般的な基準です。最新の情報を踏まえて選ぶための参考にしてください。</p>
+                    </div>
 
                         <!-- 4. セクション1（重複していた黄色いアドバイス枠を削除し、スッキリさせました） -->
                         <section class="section-content">
-                            <h2 class="section-title">1. パソコンは学習の土台</h2>
+                            <h2 class="section-title">パソコンは学習の土台</h2>
                             <p>
                                 「ぱそトレ！」では、タイピングから始まり、WordやExcel、そして最新のAI活用まで、順を追ってスキルを身につけていきます。これらの学習を支える<b>「土台」</b>となるのが、あなたの手元にあるパソコンです。
                             </p>
@@ -100,7 +111,7 @@ window.dataLayer = window.dataLayer || [];
 
                 <!-- 2. 新品・新古品・中古品 -->
                 <section class="section-content">
-                    <h2>2. 新品・新古品・中古品の違いを知ろう</h2>
+                    <h2>新品・新古品・中古品の違いを知ろう</h2>
                     <table class="comparison-table" style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem;">
                         <tr style="background: var(--primary); color: white;">
                             <th style="padding: 12px; border: 1px solid #ddd;">種類</th>
@@ -131,7 +142,7 @@ window.dataLayer = window.dataLayer || [];
 
                 <!-- 3. Microsoft Office -->
                 <section class="section-content">
-                    <h2>3. Microsoft Officeの種類と注意点</h2>
+                    <h2>Microsoft Officeの種類と注意点</h2>
                     <table class="comparison-table" style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.85rem;">
                         <tr style="background: #f1f2f6;">
                             <th style="padding: 10px; border: 1px solid #ddd;">種類</th>
@@ -163,7 +174,7 @@ window.dataLayer = window.dataLayer || [];
 
                 <!-- 4. 3大スペック -->
                 <section class="section-content">
-                    <h2>4. 失敗しないための「3大スペック」</h2>
+                    <h2>失敗しないための「3大スペック」</h2>
                     
                     <h3>① CPU（パソコンの頭脳）</h3>
                     <p>CPUは、パソコンの性能を左右する大切な部品です。迷ったら、<b>「Core i3」または「Core i5」の第8世代以降</b>と書かれているものを選びましょう。</p>
@@ -186,7 +197,7 @@ window.dataLayer = window.dataLayer || [];
 
                 <!-- 5. ノートPCとデスクトップ -->
                 <section class="section-content">
-                    <h2>5. ノートパソコンとデスクトップ、どちらを選ぶ？</h2>
+                    <h2>ノートパソコンとデスクトップ、どちらを選ぶ？</h2>
 <div class="pc-type-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">                        <div style="background: #fafafa; padding: 20px; border-radius: 15px;">
                             <h4 style="margin-top: 0; color: var(--primary);">ノートパソコン</h4>
                             <ul style="font-size: 0.9rem; padding-left: 20px;">
@@ -215,7 +226,7 @@ window.dataLayer = window.dataLayer || [];
 
                 <!-- 6. テンキー -->
                 <section class="section-content">
-                    <h2>6. テンキーは必要？</h2>
+                    <h2>テンキーは必要？</h2>
                     <p>キーボードの右側にある数字キー（テンキー）の有無は、あなたの目指す方向で決めましょう。</p>
                     <ul>
                         <li><b>テンキーあり：</b> 事務職、経理、Excelのデータ入力を中心にしたい人向き。</li>
@@ -225,9 +236,9 @@ window.dataLayer = window.dataLayer || [];
 
                 <!-- 7. 消耗品 -->
                 <section class="section-content">
-                    <h2>7. パソコンは「消耗品」だと考えよう</h2>
+                    <h2>パソコンは「消耗品」だと考えよう</h2>
                     <p>
-                        パソコンはスマートフォンと同じで、永久に使えるものではありません。一般的には<b>5年〜8年程度</b>使われることが多く、ソフトウェアの進化やWindowsのサポート終了などをきっかけに買い替える人も少なくありません。
+                        パソコンはスマートフォンと同じで、永久に使えるものではありません。一般的には<b>4年〜8年程度</b>使われることが多く、ソフトウェアの進化やWindowsのサポート終了などをきっかけに買い替える人も少なくありません。
                     </p>
                     <p>部品が故障していなくても、「動きが遅くて今のソフトが使いにくい」と感じる時期がいつかはやってきます。だからこそ、最初にしっかりした性能を選んでおくことが、長く使い続けるコツです。</p>
                 </section>
@@ -261,21 +272,24 @@ window.dataLayer = window.dataLayer || [];
                     </p>
                 </div>
                     
-<div class="next-step-guide">
-                    パソコンの準備が整ったら、タイピングという基礎スキルの習得へ進みましょう
-                </div>
+</div>
 
-            </div> <!-- [重要] ここで .content-body を閉じます -->
+                <!-- 記事末尾の共通ナビ資産：ファイル管理誘導へ同期 (v20.7.26.Next) -->
+                    <div class="article-footer-nav">
+                        <p class="article-footer-nav__text">Windowsの操作に慣れたら、次は「ファイルとフォルダの管理」を学びましょう</p>
+                        <div class="summary-nav">
+                            <!-- 1. メイン：ファイルとフォルダの管理術（btn-main） -->
+                            <a href="guide-windows-folder.html" class="btn-main">ファイルとフォルダの管理術へ</a>
+                            <!-- 2. サブ：Windowsハブ（summary-btn） -->
+                            <a href="hub-windows.html" class="summary-btn">Windowsガイドへ</a>
+                            <!-- 3. ホームへ戻る（summary-btn） -->
+                            <a href="index.html" class="summary-btn">ホームへ戻る</a>
+                        </div>
+                    </div>
 
-            <!-- === ページ末尾ナビ：学習ガイド用標準セット (v19.9.187) === -->
-            <div class="summary-nav">
-                <a href="guide-basics.html" class="btn-main">次のステップへ</a>
-                <a href="guide.html" class="summary-btn">ガイド一覧へ</a>
-                <a href="index.html" class="summary-btn">ホームに戻る</a>
-            </div>
-
-        </article>
-        </main>
+            </div> <!-- content-body 終了 -->
+        </article> <!-- article 終了 -->
+    </main>
 
         <footer>
             <!-- 既存のフッター内容 -->

@@ -33,41 +33,57 @@
 <body class="portal-page">
     <div id="app">
         <header>
-            <nav class="nav-menu">
-                <a href="index.html">ホーム</a>
-                <a href="play.html">タイピング</a>
-                <a href="ai-tools.html">AI活用</a>
-                <a href="career.html">就職・転職</a>
-                <a href="glossary.html">用語集</a>
-                <a href="guide.html">学習ガイド</a>
-                <a href="column.html">ぱそトレ！コラム</a>
-                <a href="contact.html">お問い合わせ</a>
-            </nav>
-<div class="logo">
-    <div class="logo-spacer"></div>
-    <div class="logo-center">
-        <a href="index.html">
-            <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
-        </a>
-    </div>
-    <div class="logo-right">
-        <span class="logo-subtext">ぱそトレ！コラム</span>
-    </div>
-</div>
-<div class="ad-container-top"></div>
-</header>
+            <div class="header-inner">
+                <!-- 左：ロゴ（バッジ込み） -->
+                <a href="index.html" class="header-logo-link">
+                    <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
+                </a>
+
+                <!-- 右：ナビ -->
+                <nav class="header-nav">
+                    <div class="nav-grid">
+                        <!-- 上段 -->
+                        <a href="index.html" class="nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                        <a href="hub-typing.html" class="nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                        <a href="hub-windows.html" class="nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                        <a href="hub-word.html" class="nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                        <!-- 下段 -->
+                        <a href="hub-excel.html" class="nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                        <a href="hub-ai.html" class="nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                        <a href="hub-career.html" class="nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                        <a href="hub-column.html" class="nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                    </div>
+
+                    <!-- スマホ用メニューボタン：ハンバーガー ＋ メニューラベル -->
+                    <button class="mobile-menu-trigger" id="mobile-menu-btn">
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="menu-label">メニュー</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- スマホ全画面メニュー本体：初期状態はCSSで非表示 -->
+            <div class="mobile-nav-overlay" id="mobile-menu-overlay">
+                <button class="menu-close-btn" id="menu-close-btn">×</button>
+                <div class="mobile-nav-grid">
+                    <a href="index.html" class="mobile-nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                    <a href="hub-typing.html" class="mobile-nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                    <a href="hub-windows.html" class="mobile-nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                    <a href="hub-word.html" class="mobile-nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                    <a href="hub-excel.html" class="mobile-nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                    <a href="hub-ai.html" class="mobile-nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                    <a href="hub-career.html" class="mobile-nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                    <a href="hub-column.html" class="mobile-nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                </div>
+            </div>
+        </header>
 
         <main class="portal-main">
-            <article class="static-page">
-                <div class="point-badge" style="background:#3498db;">AI活用</div>
+            <article class="static-page"><nav class="breadcrumb" id="dynamic-breadcrumb"></nav>
                 
-                <nav class="breadcrumb">
-                    <a href="index.html">ホーム</a>
-                    <span class="breadcrumb-separator">＞</span>
-                    <a href="column.html">ぱそトレ！コラム</a>
-                    <span class="breadcrumb-separator">＞</span>
-                    <span>記事詳細</span>
-                </nav>
+                
 
                 <h1>ChatGPT活用ガイド：プロンプトの基本<br><span style="font-size: 1.2rem; font-weight: normal; color: #7f8c8d;">～ AIへの「頼み方」を知るだけで、使いやすさが変わります ～</span></h1>
 <div class="content-body">
@@ -134,7 +150,7 @@
                 <p>「もっと詳しく教えて」「この部分を直して」「別のパターンも出して」……AIとのやりとり（試行錯誤）を重ねるほど、タイピングの量は増えていきます。タイピングが速い人は、AIに対して次々と新しい指示を出せるため、短時間で理想の答えにたどり着けます。</p>
                 <p><strong>AIを「使いこなす力」は、タイピングという基礎スキルの上に積み上がります。</strong>キーボードに慣れることが、AI活用の土台になるのです。</p>
 
-<!-- 7. まとめセクション：最新のsummary-box形式へ刷新 (v19.9.183) -->
+<!-- 7. まとめセクション：最新の規格へ再同期 (v20.7.26.Column) -->
                 <div class="summary-box">
                     <h2 class="section-title--summary">まとめ｜プロンプトは「伝え方」の練習</h2>
                     <p>ChatGPTを上手に使いこなすコツは、AIの性能よりも「プロンプトの伝え方」にあります。まずは以下の3点を意識してみましょう。</p>
@@ -146,16 +162,18 @@
                     <p>最初から完璧を目指す必要はありません。タイピングを練習しながら、何度も「追加で頼む」「言い換える」を繰り返すことで、AIとの距離はぐっと縮まります。</p>
                 </div>
 
-                <div class="next-step-guide">
-                    キーボードから紡ぐ確かな言葉が、これからの実務の可能性をより大きく広げます
+                <!-- === 記事末尾ナビ：最新の article-footer-nav 統治仕様 === -->
+                <div class="article-footer-nav">
+                    <p class="article-footer-nav__text">キーボードから紡ぐ確かな言葉が、これからの実務の可能性をより大きく広げます</p>
+                    <div class="summary-nav">
+                        <!-- 1. メインアクション：タイピング -->
+                        <a href="play.html" class="btn-main">タイピング練習へ</a>
+                        <!-- 2. カテゴリトップ：生成AIハブ -->
+                        <a href="hub-ai.html" class="summary-btn">生成AIガイドへ</a>
+                        <!-- 3. ホーム：最新の表記「へ戻る」を適用 -->
+                        <a href="index.html" class="summary-btn">ホームへ戻る</a>
+                    </div>
                 </div>
-
-<!-- === ページ末尾ナビ：コラム用標準セット === -->
-<div class="summary-nav">
-    <a href="play.html" class="btn-main">タイピング練習へ</a>
-    <a href="column.html" class="summary-btn">コラム一覧へ</a>
-    <a href="index.html" class="summary-btn">ホームに戻る</a>
-</div>
             </article>
         </main>
 

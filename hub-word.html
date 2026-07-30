@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word（ワード）基礎・書類作成ガイド｜実務で困らない文書作成｜ぱそトレ！</title>
+    <meta name="description" content="パソコン初心者のためのWord学習ハブ。履歴書や職務経歴書、ビジネスメールの作成など、仕事で本当に使われる操作に絞って現役講師がガイドします。PDF書き出しまでマスターしましょう。">
+    <link rel="icon" href="favicon.ico">
+    <!-- Google Fonts 読み込み -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;800&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- 1. アドセンス（全ページ共通） -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6634013670088700" crossorigin="anonymous"></script>
+
+    <!-- 2. 管理者除外スクリプト -->
+    <script>
+        if (localStorage.getItem('pasotore_admin') === 'true') {
+            window['ga-disable-G-KWS4RPPBVV'] = true;
+            console.log("【ぱそトレ！管理者モード】GA4計測は現在オフになっています。");
+        }
+    </script>
+     
+    <!-- 3. Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KWS4RPPBVV"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-KWS4RPPBVV');
+    </script>
+
+    <!-- 4. CSS資産（正典） -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-shared.css">
+    <link rel="stylesheet" href="css/hub-pages.css">
+</head>
+<body class="portal-page">
+    <div id="app">
+        <!-- 統合ヘッダー：固定8カテゴリ構成 -->
+        <header>
+            <div class="header-inner">
+                <!-- 左：ロゴ（バッジ込み） -->
+                <a href="index.html" class="header-logo-link">
+                    <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
+                </a>
+
+                <!-- 右：ナビ -->
+                <nav class="header-nav">
+                    <div class="nav-grid">
+                        <!-- 上段 -->
+                        <a href="index.html" class="nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                        <a href="hub-typing.html" class="nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                        <a href="hub-windows.html" class="nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                        <a href="hub-word.html" class="nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                        <!-- 下段 -->
+                        <a href="hub-excel.html" class="nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                        <a href="hub-ai.html" class="nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                        <a href="hub-career.html" class="nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                        <a href="hub-column.html" class="nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                    </div>
+
+                    <!-- スマホ用メニューボタン：ハンバーガー ＋ メニューラベル -->
+                    <button class="mobile-menu-trigger" id="mobile-menu-btn">
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="menu-label">メニュー</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- スマホ全画面メニュー本体：初期状態はCSSで非表示 -->
+            <div class="mobile-nav-overlay" id="mobile-menu-overlay">
+                <button class="menu-close-btn" id="menu-close-btn">×</button>
+                <div class="mobile-nav-grid">
+                    <a href="index.html" class="mobile-nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                    <a href="hub-typing.html" class="mobile-nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                    <a href="hub-windows.html" class="mobile-nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                    <a href="hub-word.html" class="mobile-nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                    <a href="hub-excel.html" class="mobile-nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                    <a href="hub-ai.html" class="mobile-nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                    <a href="hub-career.html" class="mobile-nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                    <a href="hub-column.html" class="mobile-nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                </div>
+            </div>
+        </header>
+
+        <main class="portal-main">
+            <article class="static-page static-page--wide"><nav class="breadcrumb" id="dynamic-breadcrumb"></nav>
+                <!-- パンくずリスト -->
+                
+
+                <!-- ハブ・ヒーロー：就職・転職を軸にした誠実なメッセージ -->
+                <section class="hub-hero">
+                    <div class="hub-hero__icon">
+                        <img src="img/icon-word.png" alt="Word学習ハブのアイコン" class="cat-icon-img">
+                    </div>
+                    <div class="hub-hero__body">
+                        <h1 class="hub-hero__title">Word基礎・書類作成ガイド</h1>
+                        <p class="hub-hero__description">
+                            Wordは、就職・転職を目指す方が最初に身につけたいパソコンスキルの一つです。現役パソコン講師が、仕事で本当に必要な基礎だけを、初心者にもわかりやすく解説します。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Wordで身につくこと：具体性を高めつつ、期待感を適正化 -->
+                <section class="hub-benefit-section">
+                    <h2 class="hub-benefit-title">Wordを覚えると、こんな書類が作れます</h2>
+                    <div class="hub-benefit-list">
+                        <div class="hub-benefit-item">
+                            <span class="hub-benefit-icon">✔</span>
+                            <p>履歴書・職務経歴書</p>
+                        </div>
+                        <div class="hub-benefit-item">
+                            <span class="hub-benefit-icon">✔</span>
+                            <p>書類送付状（添え状）</p>
+                        </div>
+                        <div class="hub-benefit-item">
+                            <span class="hub-benefit-icon">✔</span>
+                            <p>報告書・社内文書</p>
+                        </div>
+                        <div class="hub-benefit-item">
+                            <span class="hub-benefit-icon">✔</span>
+                            <p>わかりやすいお知らせ・案内文</p>
+                        </div>
+                    </div>
+                    <p style="text-align: center; font-size: 0.95rem; color: #4b5563; margin-top: 25px; font-weight: 500;">
+                        完成した書類をPDF形式で保存する方法まで覚えれば、応募書類の提出にも安心です。
+                    </p>
+                </section>
+
+                <!-- セクション①：学習を始める（本質的な講座へ最短導線） -->
+                <section class="hub-section">
+                    <h2 class="section-title">まずはここから！学習を始める</h2>
+                    <div class="hub-priority-grid">
+                        <!-- カード1：メイン講座（一択の強さ） -->
+                        <a href="guide-word-basics.html" class="hub-priority-card hub-priority-card--featured">
+                            <span class="hub-priority-card__badge">メイン講座</span>
+                            <h3>仕事で困らないWord講座</h3>
+                            <p>用紙設定の理由から、文字の装飾、表の作成まで。現場で評価される正しい手順を一気に学びます。</p>
+                            <div class="rec-btn-hint">講座の入り口へ <span>→</span></div>
+                        </a>
+                        <!-- カード2：タイピング（土台への回帰） -->
+                        <a href="play.html" class="hub-priority-card">
+                            <span class="hub-priority-card__badge">土台作り</span>
+                            <h3>タイピング練習</h3>
+                            <p>Wordを使いこなすには、正確な文字入力が欠かせません。実務用語を打ちながら、指の基本を固めましょう。</p>
+                            <div class="rec-btn-hint">練習を始める <span>→</span></div>
+                        </a>
+                        <!-- カード3：用語集への導線（Word用） -->
+                        <a href="glossary.html#cat-word-b" class="hub-priority-card">
+                            <span class="hub-priority-card__badge">辞書</span>
+                            <h3>Word実務用語辞典</h3>
+                            <p>「インデント」「セクション区切り」など、専門用語の意味をいつでも確認できます。言葉の迷いをなくしましょう。</p>
+                            <div class="rec-btn-hint">用語を調べる <span>→</span></div>
+                        </a>
+
+                    </div>
+                </section>
+
+                <!-- セクション②：ロードマップ（Word内完結 ＋ Next2分岐） -->
+                <section class="hub-section">
+                    <h2 class="section-title">Word習得ロードマップ（目次）</h2>
+                    <div class="hub-roadmap">
+<!-- Step 1：用紙設定セクションへ -->
+                        <a href="guide-word-basics.html#setup" class="hub-roadmap__item">
+                            <div class="hub-roadmap__num">Step 1</div>
+                            <div class="hub-roadmap__content">
+                                <h4>文書作成の基本ルールと準備</h4>
+                                <p>文字を打つ前の「用紙設定」こそが最大のポイント。日本のビジネス標準であるA4設定と余白を習得します。</p>
+                            </div>
+                            <div class="hub-roadmap__btn">解説へ ＞</div>
+                        </a>
+                        <!-- Step 2：レイアウト・段落セクションへ -->
+                        <a href="guide-word-basics.html#layout" class="hub-roadmap__item">
+                            <div class="hub-roadmap__num">Step 2</div>
+                            <div class="hub-roadmap__content">
+                                <h4>見やすいレイアウトの整え方</h4>
+                                <p>フォント調整や段落の設定を学び、相手が「読みやすい」と感じるプロの文書の型を身につけます。</p>
+                            </div>
+                            <div class="hub-roadmap__btn">解説へ ＞</div>
+                        </a>
+                        <!-- Step 3：表・画像セクションへ -->
+                        <a href="guide-word-basics.html#table" class="hub-roadmap__item">
+                            <div class="hub-roadmap__num">Step 3</div>
+                            <div class="hub-roadmap__content">
+                                <h4>表の作成と思い通りの画像配置</h4>
+                                <p>情報を整理する「表」の技術と、初心者がつまずきやすい「画像の動かし方」をマスターします。</p>
+                            </div>
+                            <div class="hub-roadmap__btn">解説へ ＞</div>
+                        </a>
+                        <!-- Step 4：保存・PDFセクションへ -->
+                        <a href="guide-word-basics.html#save" class="hub-roadmap__item">
+                            <div class="hub-roadmap__num">Step 4</div>
+                            <div class="hub-roadmap__content">
+                                <h4>文書の保存とPDF書き出し</h4>
+                                <p>作成した大切なデータを守り、相手へ届ける最終工程。PDF形式への変換と印刷のコツを確認します。</p>
+                            </div>
+                            <div class="hub-roadmap__btn">解説へ ＞</div>
+                        </a>
+                        
+                        <!-- Nextステップ：2つの進路を提示（対応色グラデーション仕様） -->
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px;">
+                            <!-- クラスを hub-roadmap__item--next-excel へ変更 -->
+                            <a href="hub-excel.html" class="hub-roadmap__item hub-roadmap__item--next-excel" style="flex: 1; min-width: 280px;">
+                                <div class="hub-roadmap__num">Next</div>
+                                <div class="hub-roadmap__content">
+                                    <h4>Excel基礎へ進む</h4>
+                                    <p>次は数値管理の王道「Excel」へ。事務スキルの二本柱を完成させましょう。</p>
+                                </div>
+                            </a>
+                            <!-- クラスを hub-roadmap__item--next-career へ変更 -->
+                            <a href="hub-career.html" class="hub-roadmap__item hub-roadmap__item--next-career" style="flex: 1; min-width: 280px;">
+                                <div class="hub-roadmap__num">Next</div>
+                                <div class="hub-roadmap__content">
+                                    <h4>就職書類の作成へ進む</h4>
+                                    <p>Wordを武器に、実際の履歴書・職務経歴書の作成にチャレンジしましょう。</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 階層化エリア（薄緑背景） -->
+                <div class="hub-accent-area">
+<!-- セクション③：講師おすすめ記事（本質を提示） -->
+                    <section class="hub-section" style="margin-bottom: 60px;">
+                        <h2 class="section-title">現役講師のおすすめ記事</h2>
+                        <div class="hub-popular-grid">
+                            <a href="guide-word-basics.html" class="hub-popular-card">
+                                <div class="hub-popular-card__tag">おすすめ</div>
+                                <h4>仕事で困らないWord講座</h4>
+                            </a>
+                            <a href="play.html" class="hub-popular-card">
+                                <div class="hub-popular-card__tag">練習</div>
+                                <h4>実務用語タイピング</h4>
+                            </a>
+                        </div>
+                    </section>
+
+                    <!-- セクション④：すべての記事一覧 -->
+                    <section class="hub-section" style="margin-bottom: 0px;">
+                        <div class="hub-archive-header">
+                            <h2 class="section-title">すべての記事一覧</h2>
+                            <div class="hub-tag-nav">
+                                <button class="hub-tag active">すべて</button>
+                            </div>
+                        </div>
+                        <div class="hub-article-grid">
+                            <a href="guide-word-basics.html" class="hub-article-item">
+                                <div class="hub-article-item__info">
+                                    <h4>実際に仕事で困らないためのWord講座</h4>
+                                    <p>初心者が就職後に差が出るポイントを、現役講師の視点で徹底解説。</p>
+                                </div>
+                            </a>
+                        </div>
+                    </section>
+                </div> <!-- /hub-accent-area：ここで薄緑の背景色が真四角に終わります -->
+
+                <!-- 接続導線：白背景エリア（正しいボタン構成） -->
+                <div class="hub-footer-nav">
+                    <p class="hub-footer-nav__text">Wordの基本を覚えたら、次はExcelで数値を扱う力を身につけましょう</p>
+                    <div class="summary-nav">
+                        <a href="hub-excel.html" class="btn-main">Excel基礎へ</a>
+                        <a href="play.html" class="summary-btn">タイピング練習へ</a>
+                        <a href="index.html" class="summary-btn">ホームへ戻る</a>
+                    </div>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            <div class="footer-links">
+                <a href="privacy.html">プライバシーポリシー</a>
+                <a href="contact.html">お問い合わせ</a>
+                <a href="about.html">運営者情報</a>
+            </div>
+            <p>&copy; 2026 ぱそトレ！ Produced by miitype - All Rights Reserved.</p>
+        </footer>
+    </div>
+    <!-- ページトップへ戻るボタン -->
+    <a href="#" id="back-to-top" class="back-to-top">↑</a>
+    <script src="js/main.js"></script>
+</body>
+</html>

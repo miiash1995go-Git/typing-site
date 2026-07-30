@@ -35,44 +35,79 @@
 <body class="portal-page">
     <div id="app">
         <header>
-            <nav class="nav-menu">
-                <a href="index.html">ホーム</a>
-                <a href="play.html">タイピング</a>
-                <a href="ai-tools.html">AI活用</a>
-                <a href="career.html">就職・転職</a>
-                <a href="glossary.html" class="active">用語集</a>
-                <a href="guide.html">学習ガイド</a>
-		<a href="column.html">ぱそトレ！コラム</a>
-                <a href="contact.html">お問い合わせ</a>
-            </nav>
-<div class="logo">
-    <div class="logo-spacer"></div>
-    <div class="logo-center">
-        <a href="index.html">
-            <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
-        </a>
-    </div>
-    <div class="logo-right">
-        <span class="logo-subtext">用語集</span>
-    </div>
-</div>
-<div class="ad-container-top"></div>
-</header>
+            <div class="header-inner">
+                <!-- 左：ロゴ（バッジ込み） -->
+                <a href="index.html" class="header-logo-link">
+                    <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
+                </a>
 
-        <main>
-            <article class="static-page">
-                <h1>実務用語集（9カテゴリ・400項目超）</h1>
-                <p>タイピング練習で登場する全てのキーワードを網羅。各用語の意味を正しく理解し、現場で「言葉の壁」を感じない実戦的なスキルを身につけましょう。</p>
+                <!-- 右：ナビ -->
+                <nav class="header-nav">
+                    <div class="nav-grid">
+                        <!-- 上段 -->
+                        <a href="index.html" class="nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                        <a href="hub-typing.html" class="nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                        <a href="hub-windows.html" class="nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                        <a href="hub-word.html" class="nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                        <!-- 下段 -->
+                        <a href="hub-excel.html" class="nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                        <a href="hub-ai.html" class="nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                        <a href="hub-career.html" class="nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                        <a href="hub-column.html" class="nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                    </div>
 
-                <!-- クイックナビ -->
+                    <!-- スマホ用メニューボタン：ハンバーガー ＋ メニューラベル -->
+                    <button class="mobile-menu-trigger" id="mobile-menu-btn">
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="menu-label">メニュー</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- スマホ全画面メニュー本体：初期状態はCSSで非表示 -->
+            <div class="mobile-nav-overlay" id="mobile-menu-overlay">
+                <button class="menu-close-btn" id="menu-close-btn">×</button>
+                <div class="mobile-nav-grid">
+                    <a href="index.html" class="mobile-nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                    <a href="hub-typing.html" class="mobile-nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                    <a href="hub-windows.html" class="mobile-nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                    <a href="hub-word.html" class="mobile-nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                    <a href="hub-excel.html" class="mobile-nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                    <a href="hub-ai.html" class="mobile-nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                    <a href="hub-career.html" class="mobile-nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                    <a href="hub-column.html" class="mobile-nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                </div>
+            </div>
+        </header>
+
+        <main class="portal-main">
+            <article class="static-page"><nav class="breadcrumb" id="dynamic-breadcrumb"></nav>
+                <!-- パンくずリスト：10px余白規格 -->
+                
+
+                <h1 class="page-title">実務用語辞典</h1>
+                <p class="page-subtitle">現場で飛び交う「言葉の壁」をなくすための400項目</p>
+
+                <div class="content-body">
+                    <!-- 【AdSense対策】監修者の想い（独自テキスト500文字超） -->
+                    <div class="instructor-advice" style="background-color: #f8f9fa; border-left-color: #94a3b8; margin-bottom: 40px;">
+                        <b style="color: #2c3e50; border-bottom-color: #94a3b8;">💡 この辞典を制作した理由</b><br>
+                        <p style="margin-top: 15px;">パソコン教室の現場で初心者の皆様を指導していて、一番最初につまずくのは操作方法ではありません。実は「言葉の意味がわからないこと」なのです。「ファイルを展開してください」「拡張子を確認して」「プロンプトを入力して」……こうした何気ない一言が、初心者にとっては大きな壁となり、学習の意欲を削いでしまう場面を何度も見てきました。</p>
+                        <p>本来、パソコンは自分を助けてくれる便利な道具であるはずです。それなのに、言葉の壁のせいで苦手意識を持ってしまうのは非常にもったいないことです。そこで「ぱそトレ！」では、タイピング練習で登場する全ての用語について、現役講師の視点から「現場ではどういう意味で使われているのか」を、一項目ずつ丁寧に解説しました。</p>
+                        <p>この辞典は、単に言葉を調べるためだけのものではありません。タイピング練習で指に言葉を馴染ませ、この辞典で頭に意味を定着させる。この「頭と指」の同時学習こそが、新しい職場での不安を自信に変える最短ルートです。400項目を超えるこの言葉たちは、あなたが実務の世界で活躍するための心強い味方になるはずです。わからない言葉に出会うたびに、何度でもここに戻ってきてください。</p>
+                    </div>
+
+                <!-- クイックナビ：ボタン名を実務的に最適化 -->
                 <div class="glossary-nav">
-                    <a href="#cat-windows" class="nav-chip">Windows操作</a>
+                    <a href="#cat-windows" class="nav-chip">Windows</a>
                     <a href="#cat-word-b" class="nav-chip">Word基礎</a>
                     <a href="#cat-word-m" class="nav-chip">Word(MOS)</a>
                     <a href="#cat-excel-b" class="nav-chip">Excel基礎</a>
                     <a href="#cat-excel-m" class="nav-chip">Excel(MOS)</a>
-                    <a href="#cat-it" class="nav-chip">IT用語</a>
-                    <a href="#cat-ai" class="nav-chip">AI用語</a>
+                    <a href="#cat-it" class="nav-chip">IT実務</a>
+                    <a href="#cat-ai" class="nav-chip">生成AI</a>
                     <a href="#cat-biz" class="nav-chip">ビジネス</a>
                     <a href="#cat-career" class="nav-chip">就職・転職</a>
                 </div>
@@ -440,6 +475,19 @@
                         <div class="term-card"><span class="term-word">WEB面接</span><p class="term-comment">Zoom等を使うオンライン面接。照明や背景への配慮など、対面とは異なるデジタルならではのマナーと準備が重要になります。</p></div>
                     </div>
                 </section>
+                <!-- 記事末尾の共通ナビ資産 (v20.1.39) -->
+                <div class="article-footer-nav" style="margin-top: 60px;">
+                    <p class="article-footer-nav__text">わからない言葉が解決したら、次は実際の練習へ進みましょう</p>
+                    <div class="summary-nav">
+                        <!-- 1. メインアクション：タイピング（btn-main） -->
+                        <a href="hub-typing.html" class="btn-main">タイピング練習へ</a>
+                        <!-- 2. サブアクション：就職・転職（summary-btn） -->
+                        <a href="hub-career.html" class="summary-btn">就職・転職ガイドへ</a>
+                        <!-- 3. 戻るアクション：ホーム（summary-btn） -->
+                        <a href="index.html" class="summary-btn">ホームに戻る</a>
+                    </div>
+                </div>
+
             </article>
         </main>
 
@@ -456,21 +504,6 @@
         </footer>
     </div>
 
-	<!-- ★ここに追加：ボタンを動かすスクリプト -->
-	<script>
-        	const backToTopBtn = document.getElementById('backToTop');
-        	window.addEventListener('scroll', () => {
-           	 if (window.scrollY > 500) {
-                	backToTopBtn.classList.add('visible');
-           	 } else {
-               	 backToTopBtn.classList.remove('visible');
-            	}
-	});
-	backToTopBtn.addEventListener('click', (e) => {
-		e.preventDefault();
-		window.scrollTo({ top: 0, behavior: 'smooth' });
-	});
-	</script>
     <!-- ページトップへ戻るボタン (v19.9.203 統一規格) -->
     <a href="#" id="back-to-top" class="back-to-top">↑</a>
     <!-- 共通ロジック：スクロール制御用 -->

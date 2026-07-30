@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ぱそトレ！現場コラム｜現役パソコン講師が教える実務の本質</title>
+    <meta name="description" content="教科書には載っていない「仕事で本当に必要なPCスキル」を現役パソコン講師が解説。初心者がつまずくポイントから、採用担当者の視点、AI活用の本質まで、現場のリアルな知見をお届けします。">
+    <link rel="icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;800&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- 1. アドセンス（全ページ共通） -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6634013670088700" crossorigin="anonymous"></script>
+
+    <!-- 2. 管理者除外スクリプト -->
+    <script>
+        if (localStorage.getItem('pasotore_admin') === 'true') {
+            window['ga-disable-G-KWS4RPPBVV'] = true;
+            console.log("【ぱそトレ！管理者モード】GA4計測は現在オフになっています。");
+        }
+    </script>
+     
+    <!-- 3. Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KWS4RPPBVV"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-KWS4RPPBVV');
+    </script>
+
+    <!-- 4. CSS資産（Design System v20.1.26） -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-shared.css">
+    <link rel="stylesheet" href="css/hub-pages.css">
+</head>
+<body class="portal-page">
+    <div id="app">
+        <!-- 統合ヘッダー：8カテゴリ構成 -->
+        <header>
+            <div class="header-inner">
+                <!-- 左：ロゴ（バッジ込み） -->
+                <a href="index.html" class="header-logo-link">
+                    <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
+                </a>
+
+                <!-- 右：ナビ -->
+                <nav class="header-nav">
+                    <div class="nav-grid">
+                        <!-- 上段 -->
+                        <a href="index.html" class="nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                        <a href="hub-typing.html" class="nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                        <a href="hub-windows.html" class="nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                        <a href="hub-word.html" class="nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                        <!-- 下段 -->
+                        <a href="hub-excel.html" class="nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                        <a href="hub-ai.html" class="nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                        <a href="hub-career.html" class="nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                        <a href="hub-column.html" class="nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                    </div>
+
+                    <!-- スマホ用メニューボタン：ハンバーガー ＋ メニューラベル -->
+                    <button class="mobile-menu-trigger" id="mobile-menu-btn">
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="menu-label">メニュー</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- スマホ全画面メニュー本体：初期状態はCSSで非表示 -->
+            <div class="mobile-nav-overlay" id="mobile-menu-overlay">
+                <button class="menu-close-btn" id="menu-close-btn">×</button>
+                <div class="mobile-nav-grid">
+                    <a href="index.html" class="mobile-nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                    <a href="hub-typing.html" class="mobile-nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                    <a href="hub-windows.html" class="mobile-nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                    <a href="hub-word.html" class="mobile-nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                    <a href="hub-excel.html" class="mobile-nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                    <a href="hub-ai.html" class="mobile-nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                    <a href="hub-career.html" class="mobile-nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                    <a href="hub-column.html" class="mobile-nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                </div>
+            </div>
+        </header>
+
+        <main class="portal-main">
+            <article class="static-page static-page--wide"><nav class="breadcrumb" id="dynamic-breadcrumb"></nav>
+                <!-- パンくずリスト -->
+                
+
+                <!-- ハブ・ヒーロー：アイコン位置とサイズを他ページと完全同期 -->
+                <section class="hub-hero">
+                    <div class="hub-hero__icon">
+                        <img src="img/icon-genba.png" alt="" class="cat-icon-img">
+                    </div>
+                    <div class="hub-hero__body">
+                        <h1 class="hub-hero__title">ぱそトレ！現場コラム</h1>
+                        <p class="hub-hero__description">
+                            現役パソコン講師の視点から、仕事や学習で本当に役立つスキル、学び方の本質を解説します。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- セクション1：このコラムについて（instructor-adviceを流用） -->
+                <section class="hub-section">
+                    <div class="instructor-advice" style="background-color: #f8fbfe; border-left-color: #3498db;">
+                        <b style="color: #2c3e50; border-bottom-color: #3498db;">💡 パソコンを学ぶとき、教科書だけではわからないことがあります</b><br>
+                        <p style="margin-top: 10px;">「パソコンが使える」とは、単に操作方法を知っていることではありません。実際の仕事では、どのように考えて作業するのか、何を確認すべきなのか、といった教科書だけではわかりにくい部分も重要になります。</p>
+                        <p>このコラムでは、初心者が実際に困りやすいことや、事務の現場で感じることをもとに、確かなスキルと学び方について講師の視点で詳しくお伝えします。</p>
+                    </div>
+                </section>
+
+                <!-- セクション2：現場コラムの特徴（チェックマーク ＆ 強調ボックス） -->
+                <section class="hub-benefit-section">
+                    <h2 class="hub-benefit-title">現場コラムで大切にしていること</h2>
+                    <div class="hub-benefit-list">
+                        <div class="hub-benefit-item">
+                            <span class="hub-benefit-icon">✔</span>
+                            <p>現場で感じた「本当に必要なこと」の解説</p>
+                        </div>
+                        <div class="hub-benefit-item">
+                            <span class="hub-benefit-icon">✔</span>
+                            <p>初心者がつまずくポイントを講師目線で分析</p>
+                        </div>
+                        <div class="hub-benefit-item">
+                            <span class="hub-benefit-icon">✔</span>
+                            <p>学んだ知識を「仕事の成果」につなげる考え方</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- セクション3：おすすめの記事（3記事） -->
+                <section class="hub-section">
+                    <h2 class="section-title">現役講師のおすすめ記事</h2>
+                    <div class="hub-priority-grid">
+                        <!-- 記事1: AI -->
+                        <a href="column-chatgpt-basics.html" class="hub-priority-card hub-priority-card--featured">
+                            <span class="hub-priority-card__badge">AI活用</span>
+                            <h3>ChatGPT活用ガイド｜プロンプトの基本</h3>
+                            <p>AIを仕事の「相棒」にするための、具体的な指示（プロンプト）の書き方を初心者向けに解説します。</p>
+                            <div class="rec-btn-hint">記事を読む <span>→</span></div>
+                        </a>
+                        <!-- 記事2: 仕事の本質 -->
+                        <a href="column-pc-skills.html" class="hub-priority-card">
+                            <span class="hub-priority-card__badge">仕事の本質</span>
+                            <h3>事務職の現場で本当に求められる力</h3>
+                            <p>「パソコンが使える」の定義とは？現場で評価される入力・調査・作成の3つの本質的スキルを解説。</p>
+                            <div class="rec-btn-hint">記事を読む <span>→</span></div>
+                        </a>
+                        <!-- 記事3: 就職対策 -->
+                        <a href="column-interview.html" class="hub-priority-card">
+                            <span class="hub-priority-card__badge">選考対策</span>
+                            <h3>採用を勝ち取るタイピング対策</h3>
+                            <p>「文字入力は得意？」の質問にどう答える？面接官に響く具体的なアピール方法と対策を伝授。</p>
+                            <div class="rec-btn-hint">記事を読む <span>→</span></div>
+                        </a>
+                        <!-- 記事4: タイピング速度の落とし穴 -->
+                        <a href="column-typing-speed.html" class="hub-priority-card">
+                            <span class="hub-priority-card__badge">採用タイピング</span>
+                            <h3>タイピング速度は本当に速い？意外な落とし穴</h3>
+                            <p>「5分750文字」と「5分400文字」の違いとは？測定条件による速度の変化と、面接での正しい伝え方を解説。</p>
+                            <div class="rec-btn-hint">記事を読む <span>→</span></div>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- セクション4：テーマから記事を探す（ロードマップ形式を流用） -->
+                <section class="hub-section">
+                    <h2 class="section-title">テーマから記事を探す</h2>
+                    <div class="hub-roadmap">
+                        <!-- 1. AI活用へのリモートフィルタ -->
+                        <a href="javascript:void(0)" class="hub-roadmap__item" data-remote-filter="ai">
+                            <div class="hub-roadmap__num">AI活用</div>
+                            <div class="hub-roadmap__content">
+                                <h4>AIを仕事や学習に活かす</h4>
+                                <p>日々の業務を効率化するためのAI活用術について。</p>
+                            </div>
+                            <div class="hub-roadmap__btn">一覧へ ＞</div>
+                        </a>
+                        <!-- 2. 仕事術へのリモートフィルタ -->
+                        <a href="javascript:void(0)" class="hub-roadmap__item" data-remote-filter="essence">
+                            <div class="hub-roadmap__num">仕事術</div>
+                            <div class="hub-roadmap__content">
+                                <h4>実務で役立つ考え方</h4>
+                                <p>事務職の現場で求められる、本質的なPCスキルについて。</p>
+                            </div>
+                            <div class="hub-roadmap__btn">一覧へ ＞</div>
+                        </a>
+                        <!-- 3. 就職へのリモートフィルタ -->
+                        <a href="javascript:void(0)" class="hub-roadmap__item" data-remote-filter="career">
+                            <div class="hub-roadmap__num">就職</div>
+                            <div class="hub-roadmap__content">
+                                <h4>就職・転職の準備</h4>
+                                <p>採用試験対策や、スキルを強みに変える書類の書き方について。</p>
+                            </div>
+                            <div class="hub-roadmap__btn">一覧へ ＞</div>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- アクセントエリア（薄緑背景） -->
+                <div class="hub-accent-area">
+                    <!-- セクション5：すべての記事一覧 -->
+                    <section class="hub-section" style="margin-bottom: 0px;">
+                        <div class="hub-archive-header">
+                            <h2 class="section-title">すべての記事一覧</h2>
+                            <!-- タグナビゲーション：フィルタリング機能付き (v20.7.26.Filter) -->
+                            <div class="hub-tag-nav">
+                                <button class="hub-tag active" data-filter="all">すべて</button>
+                                <button class="hub-tag" data-filter="ai">AI活用</button>
+                                <button class="hub-tag" data-filter="essence">仕事術</button>
+                                <button class="hub-tag" data-filter="career">就職対策</button>
+                            </div>
+                        </div>
+                        <div class="hub-article-grid" id="column-article-grid">
+                            <!-- 1. AI活用カテゴリ：data-category="ai" を付与 -->
+                            <a href="column-chatgpt-basics.html" class="hub-article-item" data-category="ai">
+                                <div class="hub-article-item__info">
+                                    <span class="point-badge">AI活用</span>
+                                    <h4>ChatGPT活用ガイド｜プロンプトの基本</h4>
+                                    <p>AIへの「頼み方」を知ることで、仕事の効率を劇的に変えるプロンプトの基本を解説。</p>
+                                </div>
+                            </a>
+
+                            <!-- 2. 仕事術カテゴリ：data-category="essence" を付与 -->
+                            <a href="column-pc-skills.html" class="hub-article-item" data-category="essence">
+                                <div class="hub-article-item__info">
+                                    <span class="point-badge">仕事の本質</span>
+                                    <h4>事務職の現場で本当に求められる力</h4>
+                                    <p>「パソコンが使える」の定義とは？現場で評価される入力・調査・作成の本質を講師が伝授。</p>
+                                </div>
+                            </a>
+
+                            <!-- 3. 就職・転職カテゴリ：data-category="career" を付与 -->
+                            <a href="column-interview.html" class="hub-article-item" data-category="career">
+                                <div class="hub-article-item__info">
+                                    <span class="point-badge">就職・転職</span>
+                                    <h4>採用を勝ち取るタイピング対策</h4>
+                                    <p>面接でのタイピングテストについて、評価されるポイントと具体的な対策を解説。</p>
+                                </div>
+                            </a>
+                            <!-- 4. タイピング速度の落とし穴：data-category="career" を付与 -->
+                            <a href="column-typing-speed.html" class="hub-article-item" data-category="career">
+                                <div class="hub-article-item__info">
+                                    <span class="point-badge">就職・転職</span>
+                                    <h4>タイピング速度は本当に速い？意外な落とし穴</h4>
+                                    <p>「5分750文字」と「5分400文字」の違いとは？測定条件による速度の変化と、面接での正しい伝え方を解説。</p>
+                                </div>
+                            </a>
+                        </div>
+                    </section>
+                </div> <!-- /hub-accent-area：真四角終了 -->
+
+                <!-- 接続導線：ポータル共通資産（article-footer-nav）を適用 -->
+                <div class="article-footer-nav" style="margin-top: 80px;">
+                    <p class="article-footer-nav__text">もっと具体的にパソコンスキルを学びたい方へ</p>
+                    
+                    <!-- 主要ハブへのナビゲーション -->
+                    <div class="summary-nav">
+                        <a href="hub-typing.html" class="summary-btn">タイピング練習</a>
+                        <a href="hub-windows.html" class="summary-btn">Windows基礎</a>
+                        <a href="hub-word.html" class="summary-btn">Word講座</a>
+                        <a href="hub-excel.html" class="summary-btn">Excel講座</a>
+                        <a href="hub-ai.html" class="summary-btn">生成AI活用</a>
+                        <a href="hub-career.html" class="summary-btn">就職・転職</a>
+                    </div>
+
+                    <!-- ホームへの導線：summary-nav で包むことでデザインを適用 -->
+                    <div class="summary-nav" style="margin-top: 20px;">
+                        <a href="index.html" class="summary-btn">ホームに戻る</a>
+                    </div>
+                </div>
+
+            </article>
+        </main>
+
+        <footer>
+            <div class="footer-links">
+                <a href="privacy.html">プライバシーポリシー</a>
+                <a href="contact.html">お問い合わせ</a>
+                <a href="about.html">運営者情報</a>
+            </div>
+            <p>&copy; 2026 ぱそトレ！ Produced by miitype - All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <!-- ページトップへ戻るボタン -->
+    <a href="#" id="back-to-top" class="back-to-top">↑</a>
+    <script src="js/main.js"></script>
+</body>
+</html>

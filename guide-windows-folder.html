@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ファイルとフォルダの管理術｜「作った書類をなくさない」整理の基本｜ぱそトレ！</title>
+    <meta name="description" content="Windows11対応。パソコン初心者が仕事で困らないためのファイル整理術。ドキュメントの活用、フォルダ階層の作り方、一目でわかるファイル名の付け方など、現役講師が実務目線でやさしく解説します。">
+    <link rel="canonical" href="https://miitype.com/guide-windows-folder.html">
+    <link rel="icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;800&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- 1. アドセンス（全ページ共通） -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6634013670088700" crossorigin="anonymous"></script>
+
+    <!-- 2. 管理者除外スクリプト -->
+    <script>
+        if (localStorage.getItem('pasotore_admin') === 'true') {
+            window['ga-disable-G-KWS4RPPBVV'] = true;
+            console.log("【ぱそトレ！管理者モード】GA4計測は現在オフになっています。");
+        }
+    </script>
+     
+    <!-- 3. Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KWS4RPPBVV"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-KWS4RPPBVV');
+    </script>
+
+    <!-- 4. CSS資産（Design System） -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-shared.css">
+</head>
+<body class="portal-page">
+    <div id="app">
+        <!-- 統合ヘッダー：v20.7.22 最新仕様 -->
+        <header>
+            <div class="header-inner">
+                <!-- 左：ロゴ -->
+                <a href="index.html" class="header-logo-link">
+                    <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
+                </a>
+
+                <!-- 右：ナビ（4x2グリッド） -->
+                <nav class="header-nav">
+                    <div class="nav-grid">
+                        <a href="index.html" class="nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                        <a href="hub-typing.html" class="nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                        <a href="hub-windows.html" class="nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                        <a href="hub-word.html" class="nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                        <a href="hub-excel.html" class="nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                        <a href="hub-ai.html" class="nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                        <a href="hub-career.html" class="nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                        <a href="hub-column.html" class="nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                    </div>
+
+                    <!-- スマホ用トリガー -->
+                    <button class="mobile-menu-trigger" id="mobile-menu-btn">
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="menu-label">メニュー</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- スマホサイドドロワー -->
+            <div class="mobile-nav-overlay" id="mobile-menu-overlay">
+                <button class="menu-close-btn" id="menu-close-btn">×</button>
+                <div class="mobile-nav-grid">
+                    <a href="index.html" class="mobile-nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                    <a href="hub-typing.html" class="mobile-nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                    <a href="hub-windows.html" class="mobile-nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                    <a href="hub-word.html" class="mobile-nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                    <a href="hub-excel.html" class="mobile-nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                    <a href="hub-ai.html" class="mobile-nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                    <a href="hub-career.html" class="mobile-nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                    <a href="hub-column.html" class="mobile-nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                </div>
+            </div>
+        </header>
+
+        <main class="portal-main">
+            <article class="static-page">
+                <!-- 動的パンくず：main.jsにより自動生成 -->
+                <nav class="breadcrumb" id="dynamic-breadcrumb"></nav>
+
+                <h1 class="page-title">ファイルとフォルダの管理術</h1>
+                <p class="page-subtitle">「作った書類をなくさない」ための整理の基本</p>
+
+                <div class="content-body">
+                    <p>「保存したはずのファイルが、どうしても見つからない」</p>
+                    <p>「デスクトップがアイコンだらけで、壁紙が全く見えない」</p>
+                    <p>「同じような名前のファイルが何個もあり、どれが最新か分からない」</p>
+                    
+                    <p>パソコンを使い始めたばかりの頃、誰もが一度はこうした経験をします。実は、実務においてタイピングやソフトの使い方と同じくらい大切なのが、この<strong>「ファイルとフォルダの管理」</strong>です。</p>
+
+                    <p>仕事の現場では、書類を「作ること」と同じくらい、「必要な時にすぐに見つけ出せること」が重要視されます。仕事のスピードは、この整理の基本ができているかどうかで決まると言っても過言ではありません。</p>
+
+                    <h2>ファイルとフォルダの違い</h2>
+                    <p>整理を始める前に、まずは基本となる2つの言葉の違いを理解しましょう。パソコンの中の世界を、現実の「事務作業」に例えると非常に分かりやすくなります。</p>
+
+                    <h3>「ファイル」は、一枚一枚の「書類」</h3>
+                    <p>ファイルとは、パソコンで作ったデータそのもののことです。Wordで作った文章、Excelで作った家計簿、スマホから取り込んだ写真など、これらはすべて「ファイル」と呼ばれます。現実の世界で言えば、一枚の紙に書かれた<strong>「報告書」</strong>そのものだと考えてください。</p>
+
+                    <h3>「フォルダ」は、書類を入れる「箱」</h3>
+                    <p>一方、フォルダは、複数のファイルをまとめて入れておくための「入れ物」です。書類（ファイル）がバラバラに散らばらないように分けるための<strong>「バインダー」や「引き出し」</strong>のような役割を果たします。フォルダの中に、さらに別のフォルダ（子フォルダ）を作ることもできます。</p>
+
+                    <div class="article-image article-image--window">
+                        <img src="img/guide-windows-folder-diff.png" alt="ファイルとフォルダの違い：書類と引き出しのイメージ">
+                        <p class="small-text">▲ ファイル＝中身の書類、フォルダ＝整理用の箱、と覚えましょう</p>
+                    </div>
+
+                    <div class="instructor-advice">
+                        <b>💡 講師のアドバイス：まずは「分ける」意識を持つ</b><br>
+                        パソコンが苦手な方は、何でも一つの場所に置いてしまいがちです。まずは「書類そのもの（ファイル）」と「それを分ける箱（フォルダ）」という区別を意識するだけで、パソコンの中身は劇的にスッキリし始めますよ。
+                    </div>
+
+                    <h2>保存場所を意識しよう</h2>
+                    <p>「保存したはずなのに見つからない」最大の原因は、保存ボタンを押す時に「どこに」入れているかを意識していないことです。Windowsには、定番の保存場所がいくつかあります。</p>
+
+                    <ul class="feature-list-vertical">
+                        <li class="feature-item-vertical">
+                            <h4>デスクトップ：一時的な「机の上」</h4>
+                            <p>起動して最初に表示される画面です。すぐに手が届くので便利ですが、ここに何でも置くのは机の上に書類を山積みにするのと同じです。ここは「今日使う分だけ」を置く、一時的な場所にしましょう。</p>
+                        </li>
+                        <li class="feature-item-vertical">
+                            <h4>ドキュメント：書類の「本棚」</h4>
+                            <p>Windowsが「書類はここに入れてね」と用意してくれているメインの保存場所です。WordやExcelで作った仕事の資料は、基本的にこの中にフォルダを作って保存するのが一般的です。</p>
+                        </li>
+                        <li class="feature-item-vertical">
+                            <h4>ダウンロード：インターネットからの「玄関口」</h4>
+                            <p>ネットから入手した資料や、メールの添付ファイルなどは自動的にここに入ります。中身を確認したら、すぐにデスクトップやドキュメントなどへ移動しましょう。</p>
+                        </li>
+                    </ul>
+
+                    <div class="article-image article-image--window">
+                        <img src="img/guide-windows-places.jpg" alt="Windowsの主な保存場所のアイコン">
+                        <p class="small-text">▲ 左側のメニューから、目的の場所を素早く選ぶ習慣をつけましょう</p>
+                    </div>
+
+                    <div class="info-note-box">
+                        <strong class="note-title">OneDrive（ワンドライブ）について</strong>
+                        <p>インターネット上に保存するサービスです。パソコンが故障した場合でもデータを復元しやすくなります。Windows11では最初から利用できるため、仕事でもよく使われています。</p>
+                        <ul style="margin-top: 10px; margin-bottom: 0px;">
+                            <li><strong>5GBまで無料：</strong> Microsoftアカウントがあれば誰でも無料で使い始めることができます。</li>
+                            <li><strong>容量制限に注意：</strong> 無料枠を超えると新しく保存できなくなるため、大切な仕事の書類に絞って活用するのがコツです。</li>
+                        </ul>
+                    </div>
+
+                    <h2>フォルダを作る習慣をつけよう</h2>
+                    <p>整理されていないパソコンの中身は、まるで「すべての書類が床にぶちまけられた部屋」のようです。フォルダを使って、生活や仕事に合わせた「箱」を用意しましょう。</p>
+
+                    <div class="instructor-advice">
+                        <b>💡 講師のアドバイス：フォルダ名には「いつ」や「内容」を入れましょう</b><br>
+                        整理のコツは、後から探しやすい名前をつけることです。たとえば「2024年資料」のように、いつのものかが分かる名前をつけておけば、時間が経っても迷わずに済みます。特定の順番に並べたい大切な工程がある場合などは数字を頭につけることもありますが、まずは自分にとって分かりやすい「年」や「月」で分けることから始めてみましょう。
+                    </div>
+
+                    <h3>フォルダの中に「箱」を作って整理する例</h3>
+                    <p>フォルダの中には、ファイルだけでなく、さらに新しいフォルダを作ることもできます。たとえば、大きな「仕事」という箱の中に、「2024年の資料」「2025年の資料」といった年ごとの箱を作って分けてみましょう。</p>
+                    <p>このように整理しておくと、後から「去年のあの書類はどこかな？」と探すときも、迷わず見つけられるようになります。</p>
+                    
+                    <div class="article-image article-image--window">
+                        <img src="img/guide-windows-folder.jpg" alt="フォルダ階層構成のイメージ図：大分類から小分類への流れ">
+                        <p class="small-text">▲ 左（大きな分類）から右（その中身）へ、箱の中に入っていくイメージで整理します</p>
+                    </div>
+
+                    <h2>ファイル名の付け方</h2>
+                    <p>ファイルに名前を付ける時、ついつい「最新」「完成版」といった名前を付けていませんか？ 実は、ファイル名は「中身を開かなくても、誰が見ても内容がわかる」ように付けるのが仕事の鉄則です。</p>
+
+                    <div class="naming-comparison">
+                        <!-- ケース1 -->
+                        <div class="naming-card naming-card--bad">
+                            <span class="naming-badge">NG</span>
+                            <div class="naming-content">
+                                <span class="naming-example">新しいファイル / 見積書</span>
+                                <span class="naming-reason">「何の？」「いつの？」が分からず、結局すべて開いて確認する羽目になります。</span>
+                            </div>
+                        </div>
+
+                        <div class="naming-card naming-card--good">
+                            <span class="naming-badge">おすすめ</span>
+                            <div class="naming-content">
+                                <span class="naming-example">20240725_A社_見積書.xlsx</span>
+                                <span class="naming-reason">日付・相手・内容が揃っていれば、検索もしやすく、並び順も綺麗になります。</span>
+                            </div>
+                        </div>
+
+                        <hr style="border: none; border-top: 1px dashed #e2e8f0; margin: 10px 0;">
+
+                        <!-- ケース2 -->
+                        <div class="naming-card naming-card--bad">
+                            <span class="naming-badge">NG</span>
+                            <div class="naming-content">
+                                <span class="naming-example">報告書_最終 / 報告書_本当に最終</span>
+                                <span class="naming-reason">修正が入るたびに名前が混乱し、どれが本物の最新データか分からなくなります。</span>
+                            </div>
+                        </div>
+
+                        <div class="naming-card naming-card--good">
+                            <span class="naming-badge">おすすめ</span>
+                            <div class="naming-content">
+                                <span class="naming-example">報告書_v1.docx / 報告書_v2.docx</span>
+                                <span class="naming-reason">「v1（バージョン1）」のように数字を増やせば、歴史が分かりやすく管理できます。</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="instructor-advice">
+                        <b>💡 講師のアドバイス：日付は「20240725」形式で</b><br>
+                        日付を「7月25日」と書くのではなく、西暦から8桁の数字で書くのがコツです。こうすると、パソコンが古い順・新しい順に完璧に並べ替えてくれます。
+                    </div>
+
+                    <h2>デスクトップを倉庫にしない</h2>
+                    <p>デスクトップはあくまで<strong>「作業する机の上」</strong>です。現実のデスクの上が去年の資料で埋まっていたら、新しい仕事はできませんね。</p>
+                    
+                    <p>アイコンが増えすぎると目的のファイルを探しにくくなるだけでなく、環境によっては表示や同期に時間がかかることもあります。作業が終わったらドキュメント（引き出し）に片付ける。この習慣をつけるだけで、パソコン作業のストレスは劇的に減ります。</p>
+
+                    <div class="article-image article-image--window">
+                        <img src="img/guide-windows-desktop-compare.png" alt="散らかったデスクトップと整理されたデスクトップの比較">
+                        <p class="small-text">▲ デスクトップを毎日リセットするのが「仕事の効率化」への近道です</p>
+                    </div>
+
+                    <h2>削除したファイルはまず「ゴミ箱」へ</h2>
+                    <p>パソコンを使い始めるときに知っておきたいのが、削除の仕組みです。「消したら二度と戻らない」と思って緊張してしまう方もいますが、Windowsには安全装置があります。</p>
+                    
+                    <p>削除したファイルは通常、すぐには完全に消えず、一度<strong>「ゴミ箱」</strong>という特別なフォルダに移動します。間違えて消してしまった場合でも、ゴミ箱を開いて「元に戻す」操作をすれば、元の場所へ帰ります。</p>
+                    
+                    <div class="info-note-box" style="border-left-color: #ff4757; background-color: #fffafa;">
+                        <strong class="note-title" style="color: #ff4757;">⚠️ ゴミ箱の注意点</strong>
+                        <p>ゴミ箱を「空にする」という操作をすると、中のファイルは復元できなくなります。また、USBメモリ上のファイルを削除した場合は、ゴミ箱を通らずにそのまま消えてしまうことがあるため注意が必要です。</p>
+                    </div>
+
+                    <h2>困ったときは検索機能も使える</h2>
+                    <p>どれだけ丁寧に整理していても、迷うことはあります。そんな時はエクスプローラー（フォルダを開いた画面）の右上にある<strong>「検索ボックス」</strong>を使いましょう。</p>
+                    <p>ファイル名のすべてを覚えていなくても、名前の一部を入力するだけで、パソコン内から一瞬で探し出してくれます。ただし、これは予備手段と考え、基本の整理を優先しましょう。</p>
+
+                    <div class="article-image article-image--window">
+                        <img src="img/guide-windows-search.png" alt="エクスプローラー右上の検索ボックスの使用イメージ">
+                        <p class="small-text">▲ ファイル名の一部を入力するだけで、検索が開始されます</p>
+                    </div>
+
+                    <h2>バックアップも忘れずに</h2>
+                    <p>パソコンは機械ですので、ある日突然壊れることがあります。大切な書類を失うことは、仕事では大きなトラブルに繋がります。大切なデータは<strong>「2箇所以上に保存する」</strong>バックアップの考え方を持ちましょう。</p>
+
+                    <div class="info-note-box">
+                        <strong class="note-title">複数の場所へ保存する習慣</strong>
+                        <p>USBメモリは持ち運びに便利ですが、紛失や故障の可能性もあります。USBだけに保存するのではなく、パソコン本体やOneDriveなど複数の場所へ保存する習慣をつけましょう。</p>
+                    </div>
+
+                    <h2>仕事では「整理整頓」そのものが評価される</h2>
+                    <p>事務職の現場で、「仕事が早い」と評価される人の共通点は、<strong>「探し物をしている時間が短いこと」</strong>です。</p>
+                    <p>上司から「昨日の見積書ある？」と聞かれた時、すぐに取り出せる人は仕事の信頼が高まります。</p>
+                    <p>逆に、探す時間が長くなると「どこに保存したか分かりにくいのかな」と思われてしまうことがあります。だからこそ、ファイル管理はあなたの仕事をよりスムーズにする大切なスキルなのです。</p>
+
+                    <div class="summary-box">
+                        <h2 class="section-title--summary">ファイル整理のポイントまとめ</h2>
+                        <ul>
+                            <li><strong>「ドキュメント」の中にフォルダを作る</strong>：生活や仕事に合わせた大きな「箱」を用意しましょう。</li>
+                            <li><strong>名前の先頭に「日付」を入れる</strong>：20240725_報告書 のように付けるだけで、並び順が完璧になります。</li>
+                            <li><strong>削除しても一度は「ゴミ箱」に入る</strong>：間違えて消してもゴミ箱から戻せます。空にする前には確認を。</li>
+                            <li><strong>大切なデータは2箇所以上に保存</strong>：USBメモリの紛失やパソコンの故障に備えましょう。</li>
+                        </ul>
+                    </div>
+
+                    <!-- === 記事末尾ナビ：4つの動線を確保した拡張仕様 (v20.7.26.Next4) === -->
+                    <div class="article-footer-nav">
+                        <p class="article-footer-nav__text">ファイル管理ができたら、次はタイピングやWordの練習へ進みましょう</p>
+                        <div class="summary-nav">
+                            <!-- 1. 次のメインステップ：Word -->
+                            <a href="hub-word.html" class="btn-main">Word基礎へ</a>
+                            <!-- 2. 並行スキル：タイピング -->
+                            <a href="hub-typing.html" class="summary-btn">タイピング練習へ</a>
+                            <!-- 3. カテゴリハブ：Windows -->
+                            <a href="hub-windows.html" class="summary-btn">Windowsガイドへ</a>
+                            <!-- 4. ホーム -->
+                            <a href="index.html" class="summary-btn">ホームへ戻る</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            <div class="footer-links">
+                <a href="privacy.html">プライバシーポリシー</a>
+                <a href="contact.html">お問い合わせ</a>
+                <a href="about.html">運営者情報</a>
+            </div>
+            <p>&copy; 2026 ぱそトレ！ Produced by miitype - All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <!-- ページトップへ戻るボタン -->
+    <a href="#" id="back-to-top" class="back-to-top">↑</a>
+
+    <!-- 共通ロジック -->
+    <script src="js/main.js"></script>
+</body>
+</html>

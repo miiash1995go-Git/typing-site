@@ -3,312 +3,495 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ぱそトレ！｜パソコン・AI・就職・転職のスキル向上サイト</title>
-    <meta name="description" content="現役パソコン講師・インストラクターが監修。タイピングの基礎から最新AI活用術、就職・転職までサポートする総合学習サイト。">
+    <title>ぱそトレ！｜パソコン初心者が仕事で使える力を身につける学習ポータル</title>
+    <meta name="description" content="現役パソコン講師が監修。タイピングの基礎からWindows、Word、Excel、そして就職活動や実務で役立つ最新の生成AI活用術まで。初心者が「自分を伝える力」と「仕事を進める力」を身につけるための総合学習サイト。">
     <link rel="canonical" href="https://miitype.com/">
     <link rel="icon" href="favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;800&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6634013670088700"
-     crossorigin="anonymous"></script>
-     
-<!-- 管理者除外スクリプト：ここから追加 -->
-<script>
-    if (localStorage.getItem('pasotore_admin') === 'true') {
-        // あなたのGA4測定ID「G-KWS4RPPBVV」を指定して無効化
-        window['ga-disable-G-KWS4RPPBVV'] = true;
-        console.log("【ぱそトレ！管理者モード】GA4計測は現在オフになっています。");
-    }
-</script>
-<!-- 管理者除外スクリプト：ここまで -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;800&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KWS4RPPBVV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-KWS4RPPBVV');
-</script>
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/portal-shared.css">
+    <!-- 1. アドセンス（自動広告：全ページ共通規格） -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6634013670088700" crossorigin="anonymous"></script>
+     
+    <!-- 2. 管理者除外スクリプト（最優先実行） -->
+    <script>
+        if (localStorage.getItem('pasotore_admin') === 'true') {
+            window['ga-disable-G-KWS4RPPBVV'] = true;
+            console.log("【ぱそトレ！管理者モード】GA4計測は現在オフになっています。");
+        }
+    </script>
+
+    <!-- 3. Google tag (gtag.js) - GA4 測定ID：G-KWS4RPPBVV -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KWS4RPPBVV"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-KWS4RPPBVV');
+    </script>
+
+    <!-- 4. CSS資産（正典：資産化された共有スタイル） -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-shared.css">
 </head>
+
 <body class="portal-page">
     <div id="app">
+ <!-- 統合ヘッダー：最新8カテゴリ ＆ 3カラムセンターロゴ構造 -->
+        <header>
+            <div class="header-inner">
+                <!-- 左：ロゴ（バッジ込み） -->
+                <a href="index.html" class="header-logo-link">
+                    <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
+                </a>
 
-<header>
-	<nav class="nav-menu">
-            <a href="index.html" class="active">ホーム</a>
-            <a href="play.html">タイピング</a>
-            <a href="ai-tools.html">AI活用</a>
-            <a href="career.html">就職・転職</a>
-            <a href="glossary.html">用語集</a>
-            <a href="guide.html">学習ガイド</a>
-            <a href="column.html">ぱそトレ！コラム</a>
-            <a href="contact.html">お問い合わせ</a>
-	</nav>
-	<div class="logo">
-		<div class="logo-spacer"></div> <!-- 左の重り -->
-		<div class="logo-center">
-        <a href="index.html">
-		<img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
-        </a>
-	</div>
-<div class="logo-right"></div> <!-- 右の重り（空） -->
-    </div>
-    <div class="ad-container-top">
-        <a href="guide.html" class="ad-placeholder-link">
-            <span class="ad-tag">注目</span> 【はじめての方へ】パソコン学習の進め方・おすすめロードマップを公開中 ＞
-        </a>
-    </div>
-</header>
+                <!-- 右：ナビ -->
+                <nav class="header-nav">
+                    <div class="nav-grid">
+                        <!-- 上段 -->
+                        <a href="index.html" class="nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                        <a href="hub-typing.html" class="nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                        <a href="hub-windows.html" class="nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                        <a href="hub-word.html" class="nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                        <!-- 下段 -->
+                        <a href="hub-excel.html" class="nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                        <a href="hub-ai.html" class="nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                        <a href="hub-career.html" class="nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                        <a href="hub-column.html" class="nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                    </div>
+
+                    <!-- スマホ用メニューボタン：ハンバーガー ＋ メニューラベル -->
+                    <button class="mobile-menu-trigger" id="mobile-menu-btn">
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="menu-label">メニュー</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- スマホ全画面メニュー本体：初期状態はCSSで非表示 -->
+            <div class="mobile-nav-overlay" id="mobile-menu-overlay">
+                <button class="menu-close-btn" id="menu-close-btn">×</button>
+                <div class="mobile-nav-grid">
+                    <a href="index.html" class="mobile-nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                    <a href="hub-typing.html" class="mobile-nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                    <a href="hub-windows.html" class="mobile-nav-item"><img src="img/icon-windows.png" class="nav-icon"><span>Windows</span></a>
+                    <a href="hub-word.html" class="mobile-nav-item"><img src="img/icon-word.png" class="nav-icon"><span>Word</span></a>
+                    <a href="hub-excel.html" class="mobile-nav-item"><img src="img/icon-excel.png" class="nav-icon"><span>Excel</span></a>
+                    <a href="hub-ai.html" class="mobile-nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                    <a href="hub-career.html" class="mobile-nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                    <a href="hub-column.html" class="mobile-nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                </div>
+            </div>
+        </header>
 
         <main class="portal-main">
-            <!-- 広告エリア④：ヒーロー前（横長・審査前は初心者ガイド導線） -->
+            
+        <!-- ① ヒーローセクション：1024px物理座標固定モデル (v20.7.22.85) -->
+            <section class="index-hero">
+                <!-- プリセット済み画像（hero-base01.png） -->
+                <img src="img/hero-base01.png" class="hero-base-img" alt="ぱそトレ！">
 
-            <!-- 1. ヒーローセクション (維持) -->
-            <section class="hero-section">
-                <h1>「わからない」を「仕事の力」に。<br>パソコン・AI・就職・転職。一歩ずつ、指先から。</h1>
-                <p>パソコンスキルが自信に変わる。基礎から現場の実務まで、<br>現役講師があなたの新しい一歩をしっかりサポートします。</p>
-                <div class="hero-btns" style="margin-top: 45px;">
-                    <a href="play.html" class="btn-main">タイピング練習を始める</a>
+                <!-- アクションエリア：1024pxの画像キャンバスに対し px で物理配置 -->
+                <div class="index-hero__action-area">
+                    <a href="play.html" class="hero-cta-btn">
+                        <span class="hero-cta-btn__icon">⌨</span>
+                        <span class="hero-cta-btn__text">タイピング練習を始める</span>
+                        <span class="hero-cta-btn__arrow">→</span>
+                    </a>
+                    
+                    <div class="hero-sub-guide">
+                        <a href="hub-typing.html" class="hero-sub-link">
+                            <span class="hero-sub-link__main">タイピングの基本から学ぶ →</span>
+                        </a>
+                    </div>
                 </div>
             </section>
 
-            <!-- 2. あなたの「これから」を支える学び ＋ 広告エリア① (4枚) -->
+<!-- ② サイトの目的：ひと言で伝える -->
+            <section class="section-container" style="margin-top: 80px;">
+                <div class="static-page" style="max-width: 960px; text-align: center; padding: 40px;">
+                    <h2 style="font-size: 1.5rem; font-weight: 900; margin-bottom: 25px; border:none; padding:0; display:block;">
+                        ぱそトレ！は、パソコン初心者が「できる」を積み重ね、就職と仕事につなげる学習サイトです。
+                    </h2>
+                    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <span style="font-size: 0.9rem; font-weight: 800; color: #2c3e50;"><span style="color:var(--accent); margin-right:5px;">✔</span>現役講師が監修</span>
+                        <span style="font-size: 0.9rem; font-weight: 800; color: #2c3e50;"><span style="color:var(--accent); margin-right:5px;">✔</span>初心者がつまずくポイントを解説</span>
+                        <span style="font-size: 0.9rem; font-weight: 800; color: #2c3e50;"><span style="color:var(--accent); margin-right:5px;">✔</span>実務で使えるスキルが身につく</span>
+                        <span style="font-size: 0.9rem; font-weight: 800; color: #2c3e50;"><span style="color:var(--accent); margin-right:5px;">✔</span>就職・転職・仕事で役立つAI活用</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ③ ぱそトレ！で　「できる」ようになること（最終完成版） -->
             <section class="section-container">
-                <h2 class="section-title">あなたの「これから」を支える大切な学び</h2>
-<div class="category-grid grid-4">
-                    <!-- 1. タイピング練習 -->
-                    <a href="play.html" class="category-card">
-                        <div class="cat-icon">
-                            <img src="img/icon-typing.png" alt="タイピング練習" class="cat-icon-img">
+                <h2 class="section-title" style="margin-bottom: 10px; border-bottom-style: none;">ぱそトレ！で　「できる」ようになること</h2>
+                <p style="text-align: left; font-size: 1rem; font-weight: 700; color: #64748b; margin-top: 0px; margin-right: 0px; margin-bottom: 40px; margin-left: 0px; line-height: 1.6;">
+                    パソコンの基本から、就職・転職活動、就職後の実務まで。あなたの「できる」を広げます。
+                </p>
+
+                <div class="map-container" style="display: flex; gap: 15px; align-items: stretch;">
+                    
+                    <!-- STEP 1：Blue -->
+                    <div class="map-step-card" style="border-top-color: #2563EB; background-color: #EFF6FF;">
+                        <div class="step-header">
+                            <span class="step-num-badge" style="background-color: #2563EB;">01</span>
+                            <span class="step-label-text" style="color: #2563EB;">STEP 1</span>
                         </div>
-                        <h3>タイピング練習</h3>
-                        <p>実務で使う言葉を打ちながら、操作の基本を習得。</p>
+                        <img src="img/dekiru01.png" class="step-illust" alt="">
+                        <div class="step-title-area">
+                            <h3>パソコンの基本を習得</h3>
+                            <p class="step-main-desc">すべての土台となるスキルを習得します。</p>
+                        </div>
+                        <ul class="step-benefit-list">
+                            <li class="step-benefit-item"><div class="item-left"><img src="img/icon-typing.png" style="width:18px;"><span>タイピング</span></div><span class="item-right">文字入力の基本</span></li>
+                            <li class="step-benefit-item"><div class="item-left"><img src="img/icon-windows.png" style="width:18px;"><span>Windows</span></div><span class="item-right">操作の基本</span></li>
+                            <li class="step-benefit-item"><div class="item-left"><img src="img/icon-word.png" style="width:18px;"><span>Word</span></div><span class="item-right">文書作成の基本</span></li>
+                            <li class="step-benefit-item"><div class="item-left"><img src="img/icon-excel.png" style="width:18px;"><span>Excel</span></div><span class="item-right">表計算の基本</span></li>
+                        </ul>
+                        <div class="step-cta-container">
+                            <a href="hub-typing.html" class="step-cta-btn" style="border-color: #2563EB; color: #2563EB;">基本を身につける ＞</a>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2：Orange -->
+                    <div class="map-step-card" style="border-top-color: #F97316; background-color: #FFF7ED;">
+                        <div class="step-header">
+                            <span class="step-num-badge" style="background-color: #F97316;">02</span>
+                            <span class="step-label-text" style="color: #F97316;">STEP 2</span>
+                        </div>
+                        <img src="img/dekiru02.png" class="step-illust" alt="">
+                        <div class="step-title-area">
+                            <h3>就職・転職に活かす</h3>
+                            <p class="step-main-desc">身につけたスキルを評価につなげます。</p>
+                        </div>
+                        <ul class="step-benefit-list">
+                            <li class="step-benefit-item"><div class="item-left"><img src="img/icon-typing.png" style="width:18px; filter:grayscale(1);"><span>タイピングテスト対策</span></div><span class="item-right">スコアアップ</span></li>
+                            <li class="step-benefit-item"><div class="item-left"><img src="img/icon-career.png" style="width:18px;"><span>履歴書・職務経歴書</span></div><span class="item-right">書き方のポイント</span></li>
+                            <li class="step-benefit-item"><div class="item-left"><img src="img/icon-ai.png" style="width:18px; filter:grayscale(1);"><span>企業研究・自己PR</span></div><span class="item-right">伝え方のコツ</span></li>
+                        </ul>
+                        <div class="step-cta-container">
+                            <a href="hub-career.html" class="step-cta-btn" style="border-color: #F97316; color: #F97316;">就職・転職に備える ＞</a>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3：Green -->
+                    <div class="map-step-card" style="border-top-color: #16A34A; background-color: #ECFDF5;">
+                        <div class="step-header">
+                            <span class="step-num-badge" style="background-color: #16A34A;">03</span>
+                            <span class="step-label-text" style="color: #16A34A;">STEP 3</span>
+                        </div>
+                        <img src="img/dekiru03.png" class="step-illust" alt="">
+                        <div class="step-title-area">
+                            <h3>仕事・現場で活用</h3>
+                            <p class="step-main-desc">実務で使える力を、さらに伸ばします。</p>
+                        </div>
+                        <ul class="step-benefit-list">
+                            <li class="step-benefit-item"><div class="item-left"><span>✉️</span><span>メール作成・返信</span></div><span class="item-right">ビジネス基本</span></li>
+                            <li class="step-benefit-item"><div class="item-left"><img src="img/icon-word.png" style="width:18px;"><span>Word実務活用</span></div><span class="item-right">資料作成</span></li>
+                            <li class="step-benefit-item"><div class="item-left"><img src="img/icon-excel.png" style="width:18px;"><span>Excel実務活用</span></div><span class="item-right">効率化</span></li>
+                        </ul>
+                        <div class="step-cta-container">
+                            <a href="hub-ai.html" class="step-cta-btn" style="border-color: #16A34A; color: #16A34A;">仕事で活用する ＞</a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+                <!-- AI二面性ナビゲーション：AIの2つの用途を明確に定義 -->
+                <div class="static-page" style="margin-top:0; border: 2px solid #d1e3f8;">
+                    <div style="text-align:center; margin-bottom:30px;">
+                        <h3 style="font-size: 1.3rem; font-weight:900; color:var(--accent); margin-top:0px; margin-right:0px; margin-bottom:10px; margin-left:0px; border-style:none; padding-top:0px; padding-right:0px; padding-bottom:0px; padding-left:0px; display:block;">
+                            AIは、仕事を始める前も、始めた後も使える道具です
+                        </h3>
+                        <p style="font-size: 0.95rem; font-weight:800; color:#4b5563; line-height:1.6; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px;">
+                            就職・転職活動では「自分を伝えるため」に。<br>
+                            仕事では「仕事を進めるため」に。
+                        </p>
+                    </div>
+
+                    <div class="ai-dual-role-box" style="box-shadow:none; border-top-style:none; border-right-style:none; border-bottom-style:none; border-left-style:none; padding-top:0px; padding-right:0px; padding-bottom:0px; padding-left:0px;">
+                        
+                        <!-- 左：就職・転職 × AI -->
+                        <div class="ai-role-side career-side" style="padding-top:20px; padding-right:20px; padding-bottom:20px; padding-left:20px; border-top-left-radius:15px; border-top-right-radius:15px; border-bottom-right-radius:15px; border-bottom-left-radius:15px; border-top-width:1px; border-right-width:1px; border-bottom-width:1px; border-left-width:1px; border-top-style:solid; border-right-style:solid; border-bottom-style:solid; border-left-style:solid;">
+                            <h4>就職・転職 × AI</h4>
+                            <p>自分を伝えるためのAI</p>
+                            <ul>
+                                <li>・履歴書・職務経歴書の整理</li>
+                                <li>・自己PRの文章作成・添削</li>
+                                <li>・応募先の企業研究・分析</li>
+                                <li>・面接対策・質問の想定準備</li>
+                            </ul>
+                            <a href="ai-tools.html#career" class="ai-role-btn career-btn">就職・転職にAIを使う</a>
+                        </div>
+
+                        <!-- 中央：点線とアイコン -->
+                        <div class="ai-role-center-wrapper">
+                            <div class="ai-role-center-icon">
+                                <img src="img/icon-ai.png" alt="" style="width: 45px; height: auto; display: block;">
+                            </div>
+                            <p class="ai-role-center-text">目的に合わせて<br>使い分ける</p>
+                        </div>
+
+                        <!-- 右：仕事・実務 × AI -->
+                        <div class="ai-role-side work-side" style="padding-top:20px; padding-right:20px; padding-bottom:20px; padding-left:20px; border-top-left-radius:15px; border-top-right-radius:15px; border-bottom-right-radius:15px; border-bottom-left-radius:15px; border-top-width:1px; border-right-width:1px; border-bottom-width:1px; border-left-width:1px; border-top-style:solid; border-right-style:solid; border-bottom-style:solid; border-left-style:solid;">
+                            <h4>仕事・実務 × AI</h4>
+                            <p>仕事を進めるためのAI</p>
+                            <ul>
+                                <li>・丁寧なメール・文章作成</li>
+                                <li>・Word文書の構成・校正</li>
+                                <li>・Excel関数・表作成の相談</li>
+                                <li>・操作方法やエラーの相談</li>
+                            </ul>
+                            <a href="ai-tools.html#writing" class="ai-role-btn work-btn">仕事にAIを使う</a>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+<hr class="section-divider">
+            <!-- ④ 目的別クイックアクセス（メッセージ刷新版） -->
+            <section id="purpose" class="section-container">
+                <h2 class="section-title" style="margin-bottom: 5px; border-bottom-style: none;">こんなことで困っていませんか？</h2>
+                <p style="text-align: left; font-size: 0.95rem; font-weight: 800; color: #94a3b8; margin-top: 0px; margin-right: 0px; margin-bottom: 25px; margin-left: 0px;">
+                    あなたの今の悩みから、必要な学習を探せます。
+                </p>
+                <div class="quick-custom-grid">
+                    <!-- 上段 -->
+                    <a href="hub-typing.html" class="q-card q-card--typing">
+                        <span class="q-title">文字入力が苦手</span>
+                        <span class="q-sub">タイピングから始めたい <span class="q-arrow">→</span></span>
                     </a>
-                    <!-- 2. AI活用 -->
-                    <a href="ai-tools.html" class="category-card">
-                        <div class="cat-icon">
-                            <img src="img/icon-ai.png" alt="AI活用" class="cat-icon-img">
-                        </div>
-                        <h3>AI活用</h3>
-                        <p>ChatGPTなどを仕事の助手にする方法を初心者向けに解説。</p>
+                    <a href="hub-windows.html" class="q-card q-card--windows">
+                        <span class="q-title">パソコンの操作がわからない</span>
+                        <span class="q-sub">Windowsの基本を知りたい <span class="q-arrow">→</span></span>
                     </a>
-                    <!-- 3. 就職・転職 -->
-                    <a href="career.html" class="category-card">
-                        <div class="cat-icon">
-                            <img src="img/icon-career.png" alt="就職・転職" class="cat-icon-img">
-                        </div>
-                        <h3>就職・転職</h3>
-                        <p>PCスキルを「通る」書類や面接の力に変えるアドバイス。</p>
+
+                    <!-- 中段：目玉（最大・ワイド） -->
+                    <a href="hub-word.html" class="q-card q-card--wide q-card--office">
+                        <span class="q-title" style="font-size: 1.25rem;">WordやExcelを使えるようになりたい</span>
+                        <span class="q-sub" style="font-size: 0.95rem;">仕事PCスキルを基礎から順番に学びたい <span class="q-arrow">→</span></span>
                     </a>
-                    <!-- 4. 学習ガイド（広告・プロモ枠） -->
-                    <div class="category-card ad-promo-card">
-                        <div class="ad-tag-label">おすすめ</div>
-                        <div class="cat-icon">
-                            <img src="img/icon-guide.png" alt="学習ガイド" class="cat-icon-img">
-                        </div>
-                        <h3>学習ガイド</h3>
-                        <p>何から学べばいい？迷ったらこちらの初心者ガイドへ。</p>
-                        <a href="guide.html" class="cat-link">→ 詳しく見る</a>
-                    </div>
+
+                    <!-- 下段 -->
+                    <a href="hub-career.html" class="q-card q-card--career">
+                        <span class="q-title">就職・転職が不安</span>
+                        <span class="q-sub">面接・テスト・書類対策 <span class="q-arrow">→</span></span>
+                    </a>
+                    <a href="hub-ai.html" class="q-card q-card--ai">
+                        <span class="q-title">AIを使ってみたい</span>
+                        <span class="q-sub">就職・仕事に活用したい <span class="q-arrow">→</span></span>
+                    </a>
                 </div>
             </section>
-
-            <!-- 3. 学習ロードマップ (ご提示いただいた正典コード) -->
-            <section class="section-container roadmap-section">
-                <h2 class="section-title">何から学べばいい？おすすめ学習ステップ</h2>
-                <div class="roadmap-container">
-                    <div class="roadmap-step">
-                        <div class="step-num">STEP 1</div>
-                        <h4>タイピング</h4>
-                        <p>基礎体力をつける</p>
-                    </div>
-                    <div class="roadmap-arrow">▶</div>
-                    <div class="roadmap-step">
-                        <div class="step-num">STEP 2</div>
-                        <h4>パソコン基礎</h4>
-                        <p>Windowsの仕組み</p>
-                    </div>
-                    <div class="roadmap-arrow">▶</div>
-                    <div class="roadmap-step">
-                        <div class="step-num">STEP 3</div>
-                        <h4>Word・Excel</h4>
-                        <p>PC業務の必須スキル</p>
-                    </div>
-                    <div class="roadmap-arrow">▶</div>
-                    <div class="roadmap-step">
-                        <div class="step-num">STEP 4</div>
-                        <h4>AI活用</h4>
-                        <p>業務効率を劇的向上</p>
-                    </div>
-                    <div class="roadmap-arrow">▶</div>
-                    <div class="roadmap-step">
-                        <div class="step-num">STEP 5</div>
-                        <h4>就職・転職</h4>
-                        <p>理想のキャリアへ</p>
-                    </div>
+<hr class="section-divider">
+            <!-- ⑤ ぱそトレ！の7つのカテゴリー（左揃え・統一デザイン版） -->
+            <section class="section-container">
+                <!-- タイトル：左揃えに変更し、icon-impact.png で装飾 -->
+                <h2 class="section-title" style="text-align: left; border-bottom-style: none; margin-top: 0px; margin-right: 0px; margin-bottom: 15px; margin-left: 0px; display: flex; align-items: center; gap: 10px;">
+                    <img src="img/icon-impact.png" style="height: 40px; flex-shrink: 0;" alt="">
+                    <span>ぱそトレ！の7つのカテゴリー</span>
+                    <img src="img/icon-impact.png" style="height: 40px; transform: scaleX(-1); flex-shrink: 0;" alt="">
+                </h2>
+                <!-- サブタイトル：左揃えに変更 -->
+                <p style="text-align: left; font-size: 1rem; font-weight: 700; color: #64748b; margin-top: 0px; margin-right: 0px; margin-bottom: 30px; margin-left: 0px; line-height: 1.6;">
+                    パソコンの基本から、就職・転職、実際の仕事で役立つ知識まで。目的に合わせて、必要な情報を見つけられます。
+                </p>
+                
+                <!-- カテゴリーボタンナビゲーション：視認性重視（枠線強化）版 -->
+                <div class="cat-nav-container">
+                    <a href="hub-typing.html" class="cat-nav-btn" style="border-color: #2563EB; background-color: #EFF6FF;">
+                        <img src="img/icon-typing.png" class="cat-nav-icon" alt="">
+                        <span class="cat-nav-text" style="color: #2c3e50;">タイピング</span>
+                    </a>
+                    <a href="hub-windows.html" class="cat-nav-btn" style="border-color: #38BDF8; background-color: #F0F9FF;">
+                        <img src="img/icon-windows.png" class="cat-nav-icon" alt="">
+                        <span class="cat-nav-text" style="color: #2c3e50;">Windows</span>
+                    </a>
+                    <a href="hub-word.html" class="cat-nav-btn" style="border-color: #1D4ED8; background-color: #EEF2FF;">
+                        <img src="img/icon-word.png" class="cat-nav-icon" alt="">
+                        <span class="cat-nav-text" style="color: #2c3e50;">Word</span>
+                    </a>
+                    <a href="hub-excel.html" class="cat-nav-btn" style="border-color: #16A34A; background-color: #ECFDF5;">
+                        <img src="img/icon-excel.png" class="cat-nav-icon" alt="">
+                        <span class="cat-nav-text" style="color: #2c3e50;">Excel</span>
+                    </a>
+                    <a href="hub-ai.html" class="cat-nav-btn" style="border-color: #14B8A6; background-color: #ECFEFF;">
+                        <img src="img/icon-ai.png" class="cat-nav-icon" alt="">
+                        <span class="cat-nav-text" style="color: #2c3e50;">生成AI</span>
+                    </a>
+                    <a href="hub-career.html" class="cat-nav-btn" style="border-color: #F97316; background-color: #FFF7ED;">
+                        <img src="img/icon-career.png" class="cat-nav-icon" alt="">
+                        <span class="cat-nav-text" style="color: #2c3e50;">就職・転職</span>
+                    </a>
+                    <a href="hub-column.html" class="cat-nav-btn" style="border-color: #8B5CF6; background-color: #F5F3FF;">
+                        <img src="img/icon-genba.png" class="cat-nav-icon" alt="">
+                        <span class="cat-nav-text" style="color: #2c3e50;">現場コラム</span>
+                    </a>
                 </div>
             </section>
+<hr class="section-divider">
+            <!-- ⑥ 人気コンテンツ（GA4アクセス実数値反映版） -->
+            <section class="section-container">
+                <h2 class="section-title" style="margin-bottom: 5px; border-bottom-style: none;">人気コンテンツ</h2>
+                <p style="text-align: left; font-size: 0.95rem; font-weight: 800; color: #94a3b8; margin-top: 0px; margin-right: 0px; margin-bottom: 25px; margin-left: 0px;">ぱそトレ！で、今よく読まれている記事</p>
 
-            <!-- AdSense: 呼吸 (90px) -->
-            <div class="ad-container-mid" style="margin: 40px 0;"></div>
+                <div class="ranking-container">
+                    <!-- 左：No.1（GA4：22PV / 平均3分03秒） -->
+                    <a href="column-interview.html" class="ranking-featured">
+                        <span class="rank-badge-big">01</span>
+                        <span class="rank-featured-label">RANKING No.1</span>
+                        <h3 class="rank-featured-title">面接・タイピングテスト対策<br>採用基準と対策法について</h3>
+                        <div class="rank-featured-tags">
+                            <span class="news-tag tag-typing">タイピング</span>
+                            <span class="news-tag tag-career">就職対策</span>
+                        </div>
+                        <div class="rec-btn-hint" style="margin-top: auto; padding-top: 20px;">記事を読む <span>→</span></div>
+                    </a>
 
-
-<!-- 4. ぱそトレ！が選ばれる理由（カードを廃止し、スッキリしたリスト形式へ） -->
-            <section class="section-container value-proposition-section">
-                <h2 class="section-title">ぱそトレ！が選ばれる理由</h2>
-                <div class="benefit-list">
-                    <div class="benefit-item">
-                        <div class="benefit-icon">🔰</div>
-                        <div class="benefit-text">
-                            <h4>初心者向けに解説</h4>
-                            <p>専門用語を極力使わず、誰でもあきらめずに学べる内容に特化しています。</p>
-                        </div>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-icon">👨‍🏫</div>
-                        <div class="benefit-text">
-                            <h4>現役講師が監修</h4>
-                            <p>数多くの初心者を教えてきた現役パソコン講師が、迷いやすいポイントをカバー。</p>
-                        </div>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-icon">💡</div>
-                        <div class="benefit-text">
-                            <h4>最新AIまで網羅</h4>
-                            <p>タイピングの基礎だけでなく、時代の最先端であるAI活用術も習得可能です。</p>
-                        </div>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-icon">💼</div>
-                        <div class="benefit-text">
-                            <h4>実践的な実務内容</h4>
-                            <p>教科書上の知識ではなく、実際の事務現場で即座に役立つ内容を厳選しています。</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 5. おすすめコンテンツ ＋ 広告エリア② (4枚) -->
-            <section class="section-container recommended-wrapper">
-                <div class="recommended-box">
-                    <h2 class="section-title">おすすめコンテンツ</h2>
-                    <div class="category-grid grid-4">
-                        <a href="play.html" class="category-card rec-card">
-                            <h3>ぱそトレ！タイピング</h3>
-                            <p>仕事でよく使う言葉を練習しながらスキルを身につけます。</p>
-                            <div class="rec-btn-hint">練習をはじめる <span>→</span></div>
+                    <!-- 右：No.2 - 5 リスト（GA4実測順） -->
+                    <div class="ranking-side-list">
+                        <!-- No.2（Row 5：就職・転職を成功させるステップ） -->
+                        <a href="career.html" class="rank-side-item">
+                            <span class="rank-num-small">02</span>
+                            <span class="rank-side-title">就職・転職を成功させるステップ</span>
                         </a>
-                        <a href="glossary.html" class="category-card rec-card">
-                            <h3>実務用語集</h3>
-                            <p>パソコン・AI・就職活動で使われる用語をわかりやすく解説。</p>
-                            <div class="rec-btn-hint">用語を調べる <span>→</span></div>
+                        <!-- No.3（Row 9：事務職の現場で本当に求められる3つの力） -->
+                        <a href="column-pc-skills.html" class="rank-side-item">
+                            <span class="rank-num-small">03</span>
+                            <span class="rank-side-title">事務職の現場で本当に求められる3つの力</span>
                         </a>
-                        <a href="column.html" class="category-card rec-card">
-                            <h3>現場コラム</h3>
-                            <p>現役パソコン講師による、学習や仕事に役立つコラム記事。</p>
-                            <div class="rec-btn-hint">記事を読む <span>→</span></div>
+                        <!-- No.4（Row 6：ぱそトレ式タイピング練習のコツ） -->
+                        <a href="guide-typing.html" class="rank-side-item">
+                            <span class="rank-num-small">04</span>
+                            <span class="rank-side-title">現役講師が教えるタイピング練習のコツ</span>
                         </a>
-                        <!-- 広告エリア②：審査前プロモカード -->
-                        <div class="category-card rec-card ad-promo-card">
-                            <div class="ad-tag-label">注目</div>
-                            <h3 style="font-size:1rem;">職務経歴書を<br>AIで作るコツ</h3>
-                            <p>初心者向けプロンプトの見本を公開中。</p>
-                            <a href="column-chatgpt-basics.html" class="rec-btn-hint">記事を読む <span>→</span></a>
-                        </div>
+                        <!-- No.5（Row 8：初心者向けAI活用ガイド） -->
+                        <a href="ai-tools.html" class="rank-side-item">
+                            <span class="rank-num-small">05</span>
+                            <span class="rank-side-title">パソコン初心者向けAI活用ガイド</span>
+                        </a>
                     </div>
                 </div>
             </section>
+<hr class="section-divider">
+            <!-- ⑦ 最新情報：Newsセクション（サブタイトル追加版） -->
+            <section class="index-news-section">
+                <h2 class="section-title" style="margin-bottom: 5px; border-bottom-style: none;">News</h2>
+                <p style="text-align: left; font-size: 0.95rem; font-weight: 800; color: #94a3b8; margin-top: 0px; margin-right: 0px; margin-bottom: 25px; margin-left: 0px;">
+                    新しい練習メニューの追加や、学習に役立つ大切なお知らせ
+                </p>
+                <div class="news-list">
+                    <div class="news-scroll-container">
+                        <div class="news-item">
+                            <div class="news-meta">
+                                <span class="news-date">2026.07.30</span>
+                                <span class="news-tag tag-notice">お知らせ</span>
+                            </div>
+                            <div class="news-content">
+                                <span class="news-text"><span class="news-sep">｜</span>「ぱそトレ！」公式サイトを全面リニューアル。実務特化型の学習サイトへと進化しました</span>
+                            </div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-meta">
+                                <span class="news-date">2026.07.30</span>
+                                <span class="news-tag tag-career">就職対策</span>
+                            </div>
+                            <div class="news-content">
+                                <a href="column-typing-speed.html" class="news-text"><span class="news-sep">｜</span>現場コラム：タイピング速度の意外な落とし穴と、実務での評価基準を公開しました</a>
+                            </div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-meta">
+                                <span class="news-date">2026.07.19</span>
+                                <span class="news-tag tag-ai">生成AI</span>
+                            </div>
+                            <div class="news-content">
+                                <a href="ai-tools.html" class="news-text"><span class="news-sep">｜</span>AI活用ガイドを「就職活動」と「就職後の仕事」のどちらでも使えるように更新</a>
+                            </div>
+                        </div>
 
-            <!-- 広告エリア③：横長 (News手前) -->
-            <div class="ad-container-mid-banner">
-                <div class="ad-placeholder-leaderboard">
-                    <span class="ad-tag">PICK UP</span> <a href="play.html">【総合判定】あなたのタイピング技能をA〜Legendランクで診断！ ＞</a>
+                        <div class="news-item">
+                            <div class="news-meta">
+                                <span class="news-date">2026.07.17</span>
+                                <span class="news-tag tag-column">現場コラム</span>
+                            </div>
+                            <div class="news-content">
+                                <a href="hub-column.html" class="news-text"><span class="news-sep">｜</span>現場コラム：事務職の仕事で本当に必要なスキルについての記事を公開中</a>
+                            </div>
+                        </div>
+
+                        <div class="news-item">
+                            <div class="news-meta">
+                                <span class="news-date">2026.07.12</span>
+                                <span class="news-tag tag-typing">タイピング</span>
+                            </div>
+                            <div class="news-content">
+                                <a href="play.html" class="news-text"><span class="news-sep">｜</span>タイピング練習に、初めての方向けの「ローマ字の基本」コースを追加しました</a>
+                            </div>
+                        </div>
+
+                        <div class="news-item">
+                            <div class="news-meta">
+                                <span class="news-date">2026.07.08</span>
+                                <span class="news-tag tag-excel">Excel</span>
+                            </div>
+                            <div class="news-content">
+                                <a href="guide-excel-basics.html" class="news-text"><span class="news-sep">｜</span>「実際に仕事で困らないためのExcel講座」がすべて読めるようになりました</a>
+                            </div>
+                        </div>
+
+                        <div class="news-item">
+                            <div class="news-meta">
+                                <span class="news-date">2026.07.03</span>
+                                <span class="news-tag tag-word">Word</span>
+                            </div>
+                            <div class="news-content">
+                                <a href="guide-word-basics.html" class="news-text"><span class="news-sep">｜</span>「実際に仕事で困らないためのWord講座」を新しく公開しました</a>
+                            </div>
+                        </div>
+
+                        <div class="news-item">
+                            <div class="news-meta">
+                                <span class="news-date">2026.06.15</span>
+                                <span class="news-tag tag-notice">お知らせ</span>
+                            </div>
+                            <div class="news-content">
+                                <span class="news-text"><span class="news-sep">｜</span>パソコン初心者のための学習サイト「ぱそトレ！」がオープンしました</span>
+                            </div>
+                        </div>
+
+                    </div> <!-- news-scroll-container 終了 -->
                 </div>
-            </div>
-
-<!-- === [v19.9.175] Newsセクション：メディアスタイル刷新版 === -->
-<section class="index-news-section">
-    <h2 class="section-title">News</h2>
-    <div class="news-list">
-<!-- 7/8 ローマ字練習 分割追加 -->
-        <div class="news-item new-release">
-            <div class="news-meta">
-                <span class="news-date">2026.07.08</span>
-                <span class="news-tag tag-update">機能アップデート</span>
-            </div>
-            <div class="news-content">
-                <a href="play.html">初心者向けローマ字練習「基本」「変則」を追加しました</a>
-            </div>
-        </div>
-        <!-- 7/3 Excel追加 -->
-        <div class="news-item new-release">
-            <div class="news-meta">
-                <span class="news-date">2026.07.03</span>
-                <span class="news-tag tag-update">学習ガイド更新</span>
-            </div>
-            <div class="news-content">
-                <a href="guide-excel-basics.html">Excelの基礎｜仕事で困らない表計算 を公開しました</a>
-            </div>
-        </div>
-
-        <!-- 6/30 Word追加 -->
-        <div class="news-item">
-            <div class="news-meta">
-                <span class="news-date">2026.06.30</span>
-                <span class="news-tag tag-update">学習ガイド更新</span>
-            </div>
-            <div class="news-content">
-                <a href="guide-word-basics.html">Wordの基礎｜仕事で困らない文書作成 を公開しました</a>
-            </div>
-        </div>
-
-        <!-- 6/24 Windows追加 -->
-        <div class="news-item">
-            <div class="news-meta">
-                <span class="news-date">2026.06.24</span>
-                <span class="news-tag tag-update">学習ガイド更新</span>
-            </div>
-            <div class="news-content">
-                <a href="guide-windows-basics.html">Windowsの基礎｜仕事で困らない基本操作 を公開しました</a>
-            </div>
-        </div>
-
-        <!-- 過去ログ -->
-        <div class="news-item">
-            <div class="news-meta">
-                <span class="news-date">2026.06.15</span>
-                <span class="news-tag tag-column">新着コラム</span>
-            </div>
-            <div class="news-content">
-                <a href="column-chatgpt-basics.html">ChatGPT活用ガイド（プロンプトの基本）を公開</a>
-            </div>
-        </div>
-    </div>
-</section>
+            </section>
+<hr class="section-divider">
+            <!-- ⑧ ぱそトレ！が大切にしていること（768px最適化版） -->
+            <section class="section-container" style="margin-top: 50px; margin-bottom: 50px;">
+                <img src="img/3steppasotore.jpg" alt="ぱそトレ！が選ばれる3つの理由" style="width: 100%; max-width: 768px; height: auto; display: block; margin-left: auto; margin-right: auto; border-radius: 30px; box-shadow: 0px 15px 40px rgba(0,0,0,0.08); border: 1px solid #eef2f6;">
+            </section>
 
         </main>
-
-<!-- === [v19.9.150 AdSense対策] サイト理念セクション：手紙風デザイン === -->
+<hr class="section-divider">
+        <!-- ⑨ 理念セクション：手紙風デザイン -->
         <section class="index-message-section">
             <div class="message-card letter-style">
                 <h2 class="message-title">📖 はじめてのパソコン学習を、もっと身近に。</h2>
                 <div class="message-body letter-lines">
                     <p>パソコンを学び始めると、「何から勉強すればいいの？」「WordやExcelは覚えたけれど、本当に仕事で使えるのかな？」と不安になる方は少なくありません。</p>
-                    <p>私も現役講師として、これまで多くの初心者の方と接してきました。その中で感じるのは、パソコンは「知識を覚えること」よりも、「実際に使ってみること」が何より大切だということです。</p>
-                    <p>タイピングを少し練習してみる。Wordで簡単な文書を作ってみる。Excelで家計簿を作ってみる。分からないことは調べたり、AIを活用して解決してみる。こうした小さな経験の積み重ねが、自信につながり、仕事や日常生活でも役立つ力になります。</p>
-                    <p>このサイトは、タイピング練習だけを目的としたサイトではありません。</p>
-                    <p>パソコン初心者の方が安心して学べるように、タイピングの練習はもちろん、Word・Excelの基礎知識、事務職で役立つ実務の考え方、AIの活用方法など、「仕事で使える力」を少しずつ身につけられる内容を発信しています。</p>
-                    <p>特別な才能や知識は必要ありません。大切なのは、昨日より今日、今日より明日と、一歩ずつできることを増やしていくことです。</p>
-                    <p>「パソコンは苦手だから…」と諦めるのではなく、「まずはやってみよう」と思えるきっかけになること。</p>
-                    <p>「できない」を責めるのではなく、「できることを一つずつ増やしていく」。そんな学びを応援する場所として、これからも役立つ情報を発信していきます。</p>
-                    <p>そして、このサイトが、ご自宅での学習や復習、資格取得や就職・転職に向けた準備など、さまざまな場面で皆さまの学びを支える存在になれたら嬉しく思います。</p>
+                    <p>私も現役講師として感じるのは、パソコンは「知識を覚えること」よりも、「実際に使ってみること」が何より大切だということです。</p>
+                    <p>パソコンを学ぶことは、できることを一つずつ増やしていくこと。「できない」を責めるのではなく、一歩ずつ進む学びを、ぱそトレ！は全力で応援します。</p>
+                    <p>まずは指先から、一歩始めてみましょう。その小さな積み重ねが、いつかあなたの確かな自信に変わるはずです。</p>
+                </div>
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="play.html" class="btn-main">まずは指先から始めてみる</a>
                 </div>
             </div>
         </section>
-        <!-- === [v19.9.150 AdSense対策] サイト理念セクション：ここまで === -->
 
+        <!-- 共通フッター -->
         <footer>
             <div class="footer-links">
                 <a href="privacy.html">プライバシーポリシー</a>
@@ -318,8 +501,11 @@
             <p>&copy; 2026 ぱそトレ！ Produced by miitype - All Rights Reserved.</p>
         </footer>
     </div>
+
     <!-- ページトップへ戻るボタン (v19.9.203 統一規格) -->
     <a href="#" id="back-to-top" class="back-to-top">↑</a>
+
+    <!-- 共通ロジックの読み込み -->
     <script src="js/main.js"></script>
 </body>
 </html>
