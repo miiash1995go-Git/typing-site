@@ -46,141 +46,297 @@ body.focus-mode #app {
 }
 
 
-/* --- 2. スタート画面：カテゴリ選択カード --- */
-
+/* ============================================================
+   カテゴリ選択カード：絶対収容 ＆ 1画面対応モデル (v20.7.26.Final)
+   ------------------------------------------------------------
+   すべての要素を白いカード内に閉じ込め、ノートPCでも収まるように
+   垂直方向の余白を極限まで最適化する。
+   ============================================================ */
 .card {
-    background: white;
-    padding: 15px 30px !important;
-    border-radius: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    background-color: #ffffff !important;
+    padding-top: 20px !important;
+    padding-right: 30px !important;
+    padding-bottom: 25px !important;
+    padding-left: 30px !important;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.05);
     text-align: center;
     width: 920px;
+    height: auto !important;
+    min-height: min-content !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+    margin-top: 0px;
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: auto;
+    /* 修正：クリックを確実に通すための設定 */
+    position: relative !important;
+    z-index: 10 !important;
+    pointer-events: auto !important;
 }
 
+/* --- 1. カテゴリ選択エリア：4カラム等幅統治 --- */
 .btn-group-container {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    width: 100%;
-    margin-bottom: 10px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin-top: 5px !important;
+    margin-bottom: 0px !important;
+    position: relative !important;
+    z-index: 1 !important;
 }
 
 .category-group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 12px;
-    border: 1px solid #eee;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    padding-top: 10px !important;
+    padding-right: 10px !important;
+    padding-bottom: 10px !important;
+    padding-left: 10px !important;
+    background-color: #f8f9fa !important;
+    border-top-left-radius: 15px !important;
+    border-top-right-radius: 15px !important;
+    border-bottom-right-radius: 15px !important;
+    border-bottom-left-radius: 15px !important;
+    border-top-width: 1px !important;
+    border-top-style: solid !important;
+    border-top-color: #eeeeee !important;
+    border-right-width: 1px !important;
+    border-right-style: solid !important;
+    border-right-color: #eeeeee !important;
+    border-bottom-width: 1px !important;
+    border-bottom-style: solid !important;
+    border-bottom-color: #eeeeee !important;
+    border-left-width: 1px !important;
+    border-left-style: solid !important;
+    border-left-color: #eeeeee !important;
+    position: relative !important;
+    z-index: 5 !important;
 }
 
-.group-label {
-    font-size: 0.8rem;
-    color: #7f8c8d;
-    font-weight: 800;
-    margin-bottom: 4px;
-    display: block;
-}
-
+/* --- 2. ボタン共通デザイン ＆ クリック保証 --- */
 .btn-category {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    background: white;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
+    width: 100% !important;
+    background-color: #ffffff;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-style: solid;
+    border-color: #dddddd;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    font-weight: 800;
     font-size: 0.85rem;
-    color: var(--primary);
-    transition: all 0.2s;
-}
-
-.btn-category:hover:not(.active) {
-    border-color: var(--accent);
-    background: #f0f7ff;
-    color: var(--accent);
-    transform: translateY(-1px);
-}
-
-.btn-category.active {
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent);
-}
-
-/* 総合判定ボタン専用（特別なオレンジ） */
-.btn-total {
-    height: 100%;
-    font-size: 1.1rem !important;
-    background: white;
-    color: var(--primary);
-    border: 1px solid #ddd !important;
-    transition: all 0.2s;
-}
-
-.btn-total:hover:not(.active) {
-    background: #fff5e6 !important;
-    border-color: #f39c12 !important;
-    color: #f39c12 !important;
-}
-
-.btn-total.active {
-    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important;
-    color: white !important;
-    border: none !important;
-}
-
-/* コントロール行（ベストスコア・開始ボタン・設定） */
-.controls-master-row {
+    color: #2c3e50;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    margin-top: 12px;
-    padding: 0 15px;
+    justify-content: center;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 20 !important;
+    transition: all 0.2s ease;
+    box-sizing: border-box !important;
+}
+
+/* 高さ調整（垂直同期） */
+.category-group:not(.special) .btn-category {
+    height: 40px !important;
+}
+.btn-category.btn-test,
+.btn-category.btn-total {
+    height: 86px !important;
+    font-size: 1rem !important;
+    line-height: 1.4 !important;
+}
+
+/* ホバー反応 */
+.btn-category:hover:not(.active) {
+    border-top-color: #3498db !important;
+    border-right-color: #3498db !important;
+    border-bottom-color: #3498db !important;
+    border-left-color: #3498db !important;
+    background-color: #f0f7ff !important;
+}
+
+/* --- 3. 点灯色（Active）の物理ロック --- */
+.btn-category.active {
+    background-color: #3498db !important;
+    color: #ffffff !important;
+    border-top-color: #2980b9 !important;
+    border-right-color: #2980b9 !important;
+    border-bottom-color: #2980b9 !important;
+    border-left-color: #2980b9 !important;
+}
+.btn-category.btn-test.active {
+    background-image: linear-gradient(135deg, #1e3a8a 0%, #1a365d 100%) !important;
+    background-color: #1e3a8a !important;
+    color: #ffffff !important;
+    border-top-style: none !important;
+    border-right-style: none !important;
+    border-bottom-style: none !important;
+    border-left-style: none !important;
+}
+.btn-category.btn-total.active {
+    background-image: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important;
+    background-color: #f39c12 !important;
+    color: #ffffff !important;
+    border-top-style: none !important;
+    border-right-style: none !important;
+    border-bottom-style: none !important;
+    border-left-style: none !important;
+}
+
+/* --- 4. 下部コントロール行：左・中・右の一直線統治 --- */
+.controls-master-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    margin-top: 20px !important;
+    padding-top: 0px;
+    padding-right: 10px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    box-sizing: border-box !important;
+    position: relative !important;
+    z-index: 30 !important;
 }
 
 .compact-best {
-    margin: 0 !important;
-    min-width: 160px;
-    text-align: left;
-}
-
-.compact-settings {
-    margin: 0 !important;
+    flex: 0 0 200px !important;
+    text-align: left !important;
+    background-color: #f8f9fa !important;
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    border: 1px solid #eeeeee;
     display: flex;
-    gap: 8px;
-    min-width: 220px;
-    justify-content: flex-end;
+    align-items: center;
+}
+.best-label {
+    font-size: 0.75rem;
+    color: #7f8c8d;
+    font-weight: 800;
+    margin-right: 8px;
+}
+.best-value {
+    font-size: 1.2rem;
+    color: #3498db;
+    font-weight: 900;
+}
+/* 単位専用：数値より小さく、落ち着いたグレーに設定 */
+.best-unit {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    font-weight: 800;
+    margin-left: 4px;
 }
 
-.btn-main.compact-start {
-    padding: 10px 45px !important;
-    font-size: 1.15rem !important;
-    margin: 0 !important;
-    box-shadow: 0 4px 0 #1a252f !important;
-    flex-shrink: 0;
+#start-btn {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    padding-top: 12px !important;
+    padding-right: 50px !important;
+    padding-bottom: 12px !important;
+    padding-left: 50px !important;
+    font-size: 1.2rem !important;
+    border-top-left-radius: 40px !important;
+    border-top-right-radius: 40px !important;
+    border-bottom-right-radius: 40px !important;
+    border-bottom-left-radius: 40px !important;
+    background-color: #2c3e50 !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    border: none !important;
+    box-shadow: 0px 4px 0px #1a252f !important;
+    cursor: pointer !important;
+    z-index: 50 !important;
+    white-space: nowrap !important;
+    transition-property: transform, box-shadow !important;
+    transition-duration: 0.1s !important;
 }
 
+/* 練習開始ボタン：クリック時の物理沈み込み演出 */
+#start-btn:active {
+    transform: translate(-50%, calc(-50% + 2px)) !important;
+    box-shadow: 0px 2px 0px #1a252f !important;
+}
 
+.compact-settings { flex: 0 0 240px !important; display: flex; gap: 8px; justify-content: flex-end; }
+.btn-toggle { background-color: #ffffff; border: 2px solid #dcdde1; padding: 6px 12px; border-radius: 10px; cursor: pointer; font-weight: 800; min-width: 110px; }
+.btn-toggle.active { background-color: #3498db; color: #ffffff; border-color: #3498db; }
+
+/* プレイ中のテスト情報オーバーレイ ＆ ミスエフェクト */
+.test-info-overlay { position: absolute; top: -50px; right: 0px; display: flex; gap: 30px; font-family: 'Roboto Mono', monospace; font-weight: 800; font-size: 0.95rem; z-index: 100; }
+.test-info-item { background-color: rgba(255,255,255,0.9); padding: 5px 12px; border-radius: 6px; border: 1px solid #eeeeee; }
+.timer-warning { color: #f97316; font-weight: 900; }
+.timer-danger { color: #ef4444; font-weight: 900; }
+
+#typing-container.damage-effect { background-color: #ffdce0 !important; border-top-color: #ffadb5 !important; border-right-color: #ffadb5 !important; border-bottom-color: #ffadb5 !important; border-left-color: #ffadb5 !important; transition: none !important; }
 /* ============================================================
    目の疲れ軽減：視覚的ストレス・コントロール (v19.9.62)
+   ------------------------------------------------------------
+   ミス時の刺激を抑え、集中力を維持するためのプロパティ統治。
    ============================================================ */
 
 /* 1. タイピングボックス：ミス時に色が戻る動きを持たせる */
 body.game-body .typing-display {
     background-color: #fcfcfc !important;
-    border: 1px solid #e0e6ed !important;
-    /* ミス時のピンクから、0.6秒かけて「じわ〜っ」と白に戻る */
-    transition: background-color 0.6s ease-out, border-color 0.6s ease-out;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 1px !important;
+    border-top-style: solid !important;
+    border-right-style: solid !important;
+    border-bottom-style: solid !important;
+    border-left-style: solid !important;
+    border-top-color: #e0e6ed !important;
+    border-right-color: #e0e6ed !important;
+    border-bottom-color: #e0e6ed !important;
+    border-left-color: #e0e6ed !important;
+    /* ミス時のピンクから、0.6秒かけて「じわ〜っ」と白に戻る演出 */
+    transition-property: background-color, border-color !important;
+    transition-duration: 0.6s !important;
+    transition-timing-function: ease-out !important;
 }
 
-/* 2. キーボード：常に目に優しい白で固定（ミス時も変化させない） */
+/* 2. キーボード：常に目に優しい白で固定 */
 body.game-body #keyboard-container {
     background-color: #fcfcfc !important;
-    border: 1px solid #e0e6ed !important;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 1px !important;
+    border-top-style: solid !important;
+    border-right-style: solid !important;
+    border-bottom-style: solid !important;
+    border-left-style: solid !important;
+    border-top-color: #e0e6ed !important;
+    border-right-color: #e0e6ed !important;
+    border-bottom-color: #e0e6ed !important;
+    border-left-color: #e0e6ed !important;
 }
 
 /* --- 3. タイピング表示エリア (120px圧縮版) --- */
@@ -873,4 +1029,37 @@ body.game-body .summary-btn:hover {
     background-color: #3498db !important;
     color: #ffffff !important;
     transform: translateY(-2px) !important;
+}
+/* --- 5分間テスト・総合力ボタン 最終統治 (v20.7.30.Update) --- */
+
+/* 実力判定エリア：他のカテゴリグループと物理高さを完全同期 (v20.7.30.PerfectFit) */
+.category-group.special {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+    display: flex;
+    flex-direction: column;
+    /* 他のグループと同じ 6px の隙間に統一 */
+    gap: 6px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    background-color: #f8f9fa;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: #eeeeee;
+    border-right-color: #eeeeee;
+    border-bottom-color: #eeeeee;
+    border-left-color: #eeeeee;
 }

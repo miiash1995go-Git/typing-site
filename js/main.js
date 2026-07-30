@@ -42,6 +42,10 @@ const ROMAJI_TABLE = {
     'うぃ':['wi'], 'うぇ':['we'], 'うぉ':['wo'],
     'てぃ':['thi'], 'でぃ':['dhi'],
     'っ':['ttu'], 'ー':['-'], '-':['-'], ' ':[' '],
+    '、': [',','、'], '。': ['.','。'],
+    '！': ['!','！'], '？': ['?','？'],
+    '0':['0'], '1':['1'], '2':['2'], '3':['3'], '4':['4'], '5':['5'], '6':['6'], '7':['7'], '8':['8'], '9':['9'],
+    '０':['0'], '１':['1'], '２':['2'], '３':['3'], '４':['4'], '５':['5'], '６':['6'], '７':['7'], '８':['8'], '９':['9'],
     'ぁ':['xa','la'], 'ぃ':['xi','li'], 'ぅ':['xu','lu'], 'ぇ':['xe','le'], 'ぉ':['xo','lo']
 };
 
@@ -68,6 +72,9 @@ class TypingApp {
         
         this.lastQuestionIndex = -1;
         this.isTransitioning = false;
+        this.isTestMode = false;      // 5分間テストモード判定フラグ
+        this.testTimerId = null;      // タイマー管理用
+        this.testCharactersTyped = 0; // 確定した日本語文字数
 
         // 【修正】コンパクト化に伴い、基準数値を微調整
         this.LEFT_PADDING = 40; // 50から40へ
@@ -97,9 +104,9 @@ class TypingApp {
         if (!category) return false;
         try {
             let loadedData = [];
-            if (category.file === "all") {
+if (category.file === "all") {
                 const fetchTasks = this.manifest.categories
-                    .filter(c => c.file !== "all")
+                    .filter(c => c.file !== "all" && c.id !== "roman_pure" && c.id !== "roman_complex" && c.id !== "test_5min")
                     .map(c => fetch(`./data/typing/${c.file}`).then(r => r.json()));
                 const results = await Promise.all(fetchTasks);
                 loadedData = results.flatMap(d => d.questions);
@@ -179,6 +186,14 @@ handleResize() {
         if (startBtn) {
             startBtn.addEventListener('click', async () => {
                 startBtn.disabled = true;
+                
+                // 5分間テストモード選択時は、専用模擬試験ページへリダイレクト
+                if (this.currentCategoryId === 'test_5min') {
+                    window.location.href = 'test.html';
+                    return; // 以下のロード処理は行わない
+                }
+
+                this.isTestMode = false;
                 const success = await this.loadQuestions(this.currentCategoryId);
 if (success) { 
                     // [追加] Googleに開始を報告
@@ -218,7 +233,17 @@ if (success) {
         const best = this.bestScores[this.currentCategoryId] || 0;
         const el = document.getElementById('best-score-display');
         if(el) {
-            el.innerHTML = `<span class="best-label">自己ベスト</span><span class="best-value">${best}</span>`;
+            // カテゴリに応じて表示単位を切り分け
+            var unitText = "スコア"; 
+            if (this.currentCategoryId === 'test_5min') {
+                unitText = "文字";
+            }
+            
+            // 数値と単位に個別のタグを割り当てて視認性を向上
+            el.innerHTML = 
+                '<span class="best-label">自己ベスト</span>' +
+                '<span class="best-value">' + best + '</span>' +
+                '<span class="best-unit">' + unitText + '</span>';
         }
     }
 
@@ -279,13 +304,26 @@ if (success) {
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.nextQuestion();
         this.updateLoop();
+
+        // プレイ画面右上の情報表示（オーバーレイ）の制御
+        const overlay = document.getElementById('test-info-overlay');
+        if (this.isTestMode) {
+            if (overlay) overlay.classList.remove('hidden');
+            this.testCharactersTyped = 0;
+            this.startTestTimer();
+        } else {
+            if (overlay) overlay.classList.add('hidden');
+        }
     }
 
     nextQuestion() {
-        const elapsed = performance.now() - this.startTime;
-        if (this.totalTypedCount >= this.targetLimit || (this.startTime && elapsed > this.timeLimitMs)) { 
-            this.endGame(); 
-            return; 
+        // テストモード時は制限時間のみで終了するため、通常の320文字制限は無視する
+        if (!this.isTestMode) {
+            const elapsed = performance.now() - this.startTime;
+            if (this.totalTypedCount >= this.targetLimit || (this.startTime && elapsed > this.timeLimitMs)) { 
+                this.endGame(); 
+                return; 
+            }
         }
         if (!this.currentQuestions || this.currentQuestions.length === 0) return;
         let nextIdx;
@@ -316,6 +354,11 @@ if (success) {
 
     prepareNextChar() {
         if (this.kanaList.length === 0) {
+            if (this.isTestMode) {
+                // 文を完了した時点で、表示されている「漢字（日本語）」の文字数を加算
+                const kanji = document.getElementById('display-kanji').innerText;
+                this.testCharactersTyped += kanji.length;
+            }
             this.refreshDisplay();
             this.isTransitioning = true;
             this.highlightKey(null);
@@ -383,20 +426,47 @@ if (success) {
         if (this.state !== "PLAYING" || this.isTransitioning) return;
         this.lastInputTime = performance.now();
         const key = e.key.toLowerCase();
+
+        // 1. 現在の文字（モーラ）の選択肢と照合
         let matches = this.pendingRomajiOptions.filter(o => o.startsWith(this.currentRomajiStr + key));
+
         if (matches.length > 0) {
-            this.currentRomajiStr += key; this.typedFullRomaji += key;
+            // 正解入力
+            this.currentRomajiStr += key;
+            this.typedFullRomaji += key;
             this.totalTypedCount++;
             this.pendingRomajiOptions = matches;
             if(this.soundEnabled) this.playSound(600, 0.05);
-            if (this.pendingRomajiOptions.includes(this.currentRomajiStr)) this.prepareNextChar();
-            else this.refreshDisplay();
+
+            // 文字が「完全に完了」したか判定
+            // 「n」が正解でも、まだ「nn」という長い選択肢が残っている場合は遷移を待機する（重要）
+            const hasLongerOption = this.pendingRomajiOptions.some(o => o.length > this.currentRomajiStr.length);
+            
+            if (this.pendingRomajiOptions.includes(this.currentRomajiStr) && !hasLongerOption) {
+                this.prepareNextChar();
+            } else {
+                this.refreshDisplay();
+            }
         } else {
-            this.totalMissedCount++;
-            this.logMiss(this.guideRemainRomaji[0]);
-            if(this.soundEnabled) this.playSound(200, 0.1);
-            const container = document.getElementById('typing-container');
-            if (container) { container.classList.add('damage-effect'); setTimeout(() => container.classList.remove('damage-effect'), 50); }
+            // 現在の文字には不適合。
+            // しかし、現在の入力ですでに文字が成立している（例：ん＝n）場合、
+            // そのキーが「次の文字」の開始として正解なら、自動遷移して処理する
+            if (this.pendingRomajiOptions.includes(this.currentRomajiStr)) {
+                this.prepareNextChar();
+                // 遷移後の新しい文字に対して、同じキーを再度評価する（再帰処理）
+                this.handleKeyDown(e);
+                return;
+            } else {
+                // 本当のミス入力
+                this.totalMissedCount++;
+                this.logMiss(this.guideRemainRomaji[0]);
+                if(this.soundEnabled) this.playSound(200, 0.1);
+                const container = document.getElementById('typing-container');
+                if (container) {
+                    container.classList.add('damage-effect');
+                    setTimeout(() => container.classList.remove('damage-effect'), 50);
+                }
+            }
         }
         this.updateStats();
     }
@@ -435,6 +505,9 @@ if (success) {
 /* --- main.js：採点アルゴリズムとランクテーブルの刷新 --- */
 
     endGame(reason = "") {
+        // タイマーが動いていれば停止
+        if (this.testTimerId) clearInterval(this.testTimerId);
+        
         this.state = "RESULT";
         document.body.classList.remove('focus-mode');
         document.getElementById('game-screen').classList.add('hidden');
@@ -470,6 +543,35 @@ if (success) {
             const rank = this.getRank(score);
             
             if (resScore) resScore.innerText = score; 
+
+            // テストモード時はリザルト画面の情報を書き換える
+            if (this.isTestMode) {
+                const testRank = this.getTestRank(this.testCharactersTyped);
+                document.getElementById('result-title').innerText = "5分間タイピングテスト結果";
+                
+                // スコア欄に入力文字数を表示し、ラベルを変更
+                resScore.innerText = this.testCharactersTyped;
+                const scoreLabel = document.querySelector('.res-grid-row:nth-child(1) .res-label');
+                if (scoreLabel) scoreLabel.innerText = "入力文字数";
+
+                // ランク表示の更新
+                if (resRank) {
+                    resRank.innerText = testRank;
+                    resRank.style.fontSize = testRank.length > 2 ? "5rem" : "7rem";
+                }
+
+                // コメントを表示
+                const commentEl = document.querySelector('.rank-display-area p');
+                if (commentEl) commentEl.innerText = this.getTestComment(testRank);
+
+                // テストに不要な項目（CPM等の統計）を一時的に隠す
+                document.querySelectorAll('.res-grid-row:nth-child(2), .res-grid-row:nth-child(3)').forEach(el => el.style.display = 'none');
+            } else {
+                // 通常モードなら表示を戻す
+                const scoreLabel = document.querySelector('.res-grid-row:nth-child(1) .res-label');
+                if (scoreLabel) scoreLabel.innerText = "スコア";
+                document.querySelectorAll('.res-grid-row:nth-child(2), .res-grid-row:nth-child(3)').forEach(el => el.style.display = 'flex');
+            }
 
 // [最新版：GA4詳細分析ロジック] 
             // カテゴリIDから日本語のカテゴリ名を取得（例：windows -> Windows操作）
@@ -579,40 +681,255 @@ if (typeof gtag === 'function') {
         });
     }
 
-    playSound(f, d) {
-        if (!this.audioCtx) return;
-        const osc = this.audioCtx.createOscillator(); const gain = this.audioCtx.createGain();
-        osc.connect(gain); gain.connect(this.audioCtx.destination);
-        osc.frequency.value = f; gain.gain.setValueAtTime(0.05, this.audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + d);
-        osc.start(); osc.stop(this.audioCtx.currentTime + d);
+    startTestTimer() {
+        let timeLeft = 300; // 5分間
+        this.updateTestUI(timeLeft);
+        this.testTimerId = setInterval(() => {
+            timeLeft--;
+            this.updateTestUI(timeLeft);
+            if (timeLeft <= 0) {
+                clearInterval(this.testTimerId);
+                this.endGame();
+            }
+        }, 1000);
     }
-}
-const app = new TypingApp();
+
+    updateTestUI(sec) {
+        const min = Math.floor(sec / 60);
+        const s = sec % 60;
+        const timerEl = document.getElementById('test-timer');
+        const charEl = document.getElementById('test-char-count');
+        
+        if (timerEl) {
+            timerEl.innerText = `${min.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            timerEl.classList.remove('timer-warning', 'timer-danger');
+            if (sec < 30) timerEl.classList.add('timer-danger');
+            else if (sec < 60) timerEl.classList.add('timer-warning');
+        }
+        if (charEl) charEl.innerText = this.testCharactersTyped;
+    }
+
+    getTestRank(s) {
+        if(s >= 1400) return "Legend";
+        if(s >= 1200) return "Master";
+        if(s >= 1100) return "S+";
+        if(s >= 1000) return "S";
+        if(s >= 950)  return "A+";
+        if(s >= 900)  return "A";
+        if(s >= 850)  return "A-";
+        if(s >= 800)  return "B+";
+        if(s >= 750)  return "B"; // 基準値
+        if(s >= 700)  return "B-";
+        if(s >= 650)  return "C+";
+        if(s >= 600)  return "C";
+        if(s >= 550)  return "C-";
+        if(s >= 450)  return "D+";
+        if(s >= 350)  return "D";
+        if(s >= 250)  return "D-";
+        return "E";
+    }
+
+    getTestComment(rank) {
+        const comments = {
+            "Legend": "驚異的な速度です！もはや教えることは何もありません。プロとして自信を持ってください！",
+            "Master": "卓越した技術をお持ちです。どのような実務でも圧倒的なスピードで完遂できるレベルです。",
+            "S+": "素晴らしい！実務の壁を悠々と超えています。正確性を維持できれば最強の相棒です。",
+            "S": "実務トップクラスの速度です。あなたのタイピング力は就職・転職で大きな武器になります。",
+            "A+": "非常にスムーズな打鍵です。即戦力として周囲から頼られる実力が十分に備わっています。",
+            "A": "合格ラインです！実務で困ることはありません。さらに上を目指して楽しみましょう。",
+            "A-": "安定感がありますね。正確な入力を続ければ、速度はさらに自然と伸びていきます。",
+            "B+": "一般的な事務職で十分通用する速度です。この調子で自信を持って仕事に取り組みましょう！",
+            "B": "実務の基本レベルです！ここから一歩ずつ、さらに「できる」を増やしていきましょう。",
+            "B-": "基礎がしっかりと身についています。焦らずリズムを大切にすることで、さらに良くなります。",
+            "C+": "前向きに頑張っていますね。まずは正確率100%を目指すことで、結果的に速度も上がります。",
+            "C": "着実に成長しています！毎日の5分間の積み重ねが、未来のあなたの自信を作ります。",
+            "C-": "ホームポジションを意識できていますね。焦らず、自分に優しいペースで進みましょう。",
+            "D+": "最初の一歩をクリアしました！「できた」を大切に。繰り返し練習を楽しみましょう。",
+            "D": "まずはキーの場所を指に覚えさせましょう。ゆっくりで大丈夫。一歩一歩が大切です。",
+            "D-": "挑戦したことが素晴らしいです！まずは短い言葉から、正確に打つ喜びを感じてください。",
+            "E": "大丈夫、ここから始まります。まずはローマ字の基本から、ゆっくり一緒に歩みましょう！"
+        };
+        return comments[rank] || "お疲れ様でした！次回の挑戦も応援しています。";
+    }
+} // ← 【重要】消えていたこの「クラスを閉じるカッコ」が全ての不具合の原因でした
 
 /* ============================================================
-   共通機能：ページトップへ戻るボタンの制御 (v19.9.203 統一規格)
+   共通機能：ナビゲーション・パンくず統治システム (v20.7.26.Fixed_Final)
    ============================================================ */
-window.addEventListener('scroll', () => {
-    const pageTopBtn = document.getElementById('back-to-top');
-    if (pageTopBtn) {
-        // 300px以上スクロールしたら表示
-        if (window.scrollY > 300) {
-            pageTopBtn.classList.add('visible');
-        } else {
-            pageTopBtn.classList.remove('visible');
-        }
-    }
-});
+(function() {
+    var app = new TypingApp();
 
-// スムーズスクロールの実装（HTML側の a href="#" への対応）
-document.addEventListener('click', (e) => {
-    const target = e.target.closest('#back-to-top');
-    if (target) {
-        e.preventDefault();
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+    function initNavigation() {
+        console.log("【ぱそトレ！】ナビゲーション・パンくずを起動します。");
+
+        // 1. 現在のURLからページ名を特定
+        var url = window.location.href.toLowerCase();
+        var page = url.substring(url.lastIndexOf('/') + 1).split('?')[0].split('#')[0];
+        if (page === "" || page.indexOf('.') === -1) { page = "index.html"; }
+
+        // 2. カテゴリ判定マッピング
+        // ※ column を最上位に配置することで、ファイル名に他のキーワードが含まれていても「現場コラム」を優先判定させる
+        var mapping = {
+            'column':  ['column'],
+            'windows': ['windows', 'pc-selection', 'folder'],
+            'word':    ['word'],
+            'excel':   ['excel'],
+            'ai':      ['ai', 'chatgpt', 'tools'],
+            'typing':  ['typing', 'play', 'basics'],
+            'career':  ['career', 'interview', 'cv']
+        };
+
+        var names = {
+            'windows': 'Windows基礎',
+            'word':    'Word基礎',
+            'excel':   'Excel基礎',
+            'ai':      '生成AI活用',
+            'typing':  'タイピング練習',
+            'career':  '就職・転職',
+            'column':  '現場コラム'
+        };
+
+        // 3. 現在のカテゴリキーを特定
+        var currentCat = "";
+        for (var key in mapping) {
+            var keywords = mapping[key];
+            for (var i = 0; i < keywords.length; i = i + 1) {
+                if (page.indexOf(keywords[i]) !== -1) {
+                    currentCat = key;
+                    break;
+                }
+            }
+            if (currentCat) break;
+        }
+
+        // 4. ヘッダーナビの現在地を点灯（Active化）
+        var links = document.querySelectorAll('.nav-item, .mobile-nav-item');
+        for (var l = 0; l < links.length; l = l + 1) {
+            var item = links[l];
+            var href = (item.getAttribute('href') || "").toLowerCase();
+            item.classList.remove('active');
+            
+            if (currentCat !== "" && href.indexOf(currentCat) !== -1) {
+                item.classList.add('active');
+            } else if (page === 'index.html' && (href === 'index.html' || href === './')) {
+                item.classList.add('active');
+            }
+        }
+
+        // 5. 動的パンくずの生成
+        var bBox = document.getElementById('dynamic-breadcrumb');
+        if (bBox && page !== 'index.html') {
+            var bHtml = '<a href="index.html">ホーム</a>';
+            if (currentCat !== "" && names[currentCat]) {
+                bHtml += '<span class="breadcrumb-separator">＞</span>';
+                if (page.indexOf('hub-') !== -1) {
+                    bHtml += '<span>' + names[currentCat] + '</span>';
+                } else {
+                    bHtml += '<a href="hub-' + currentCat + '.html">' + names[currentCat] + '</a>';
+                    bHtml += '<span class="breadcrumb-separator">＞</span>';
+                }
+            }
+            bBox.innerHTML = bHtml;
+        }
+
+        // 6. スマホメニュー
+        var mBtn = document.getElementById('mobile-menu-btn');
+        var mOver = document.getElementById('mobile-menu-overlay');
+        var mClose = document.getElementById('menu-close-btn');
+        if (mBtn && mOver) {
+            mBtn.onclick = function(e) { e.preventDefault(); mOver.classList.add('is-open'); document.body.style.overflow = 'hidden'; };
+            if (mClose) mClose.onclick = function() { mOver.classList.remove('is-open'); document.body.style.overflow = ''; };
+            mOver.onclick = function(e) { if(e.target === mOver) { mOver.classList.remove('is-open'); document.body.style.overflow = ''; } };
+        }
+
+        // 7. コラムフィルタ（拡張：リモートトリガー対応版）
+        var tags = document.querySelectorAll('.hub-tag');
+        var arts = document.querySelectorAll('.hub-article-item[data-category]');
+        var remoteBtns = document.querySelectorAll('[data-remote-filter]');
+
+        if (tags.length > 0) {
+            // 共通のフィルタ実行関数
+            var applyFilter = function(filterValue) {
+                // 1. 下部タグボタンの表示を切り替え
+                tags.forEach(function(t) {
+                    if (t.getAttribute('data-filter') === filterValue) {
+                        t.classList.add('active');
+                    } else {
+                        t.classList.remove('active');
+                    }
+                });
+
+                // 2. 記事の表示/非表示を切り替え
+                arts.forEach(function(a) {
+                    if (filterValue === 'all' || a.getAttribute('data-category') === filterValue) {
+                        a.style.display = 'block';
+                    } else {
+                        a.style.display = 'none';
+                    }
+                });
+            };
+
+            // 下部のタグボタン自体のクリックイベント
+            tags.forEach(function(btn) {
+                btn.onclick = function() {
+                    var f = btn.getAttribute('data-filter');
+                    applyFilter(f);
+                };
+            });
+
+            // テーマ別大きなボタン（リモートトリガー）のクリックイベント
+            remoteBtns.forEach(function(rBtn) {
+                rBtn.onclick = function() {
+                    var f = rBtn.getAttribute('data-remote-filter');
+                    // 絞り込み実行
+                    applyFilter(f);
+                    // 記事一覧エリアの開始点までスムーズスクロール
+                    var target = document.getElementById('column-article-grid');
+                    if (target) {
+                        // 1024px統治下での視認性を考慮し、少し手前で止める
+                        var offset = target.getBoundingClientRect().top + window.pageYOffset - 180;
+                        window.scrollTo({
+                            top: offset,
+                            behavior: 'smooth'
+                        });
+                    }
+                };
+            });
+        }
+
+        // 8. 画像拡大モーダル
+        var zOver = document.createElement('div');
+        zOver.className = 'image-zoom-overlay';
+        zOver.innerHTML = '<img class="image-zoom-content" src="" alt="拡大画像">';
+        document.body.appendChild(zOver);
+        document.querySelectorAll('.article-image img').forEach(function(img) {
+            img.onclick = function() {
+                zOver.querySelector('img').src = this.src;
+                zOver.classList.add('is-active');
+                document.body.style.overflow = 'hidden';
+            };
         });
+        zOver.onclick = function() { zOver.classList.remove('is-active'); document.body.style.overflow = ''; };
+    }
+
+    // DOMの読み込み完了を待って実行
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initNavigation);
+    } else {
+        initNavigation();
+    }
+})();
+
+/* --- ページトップ制御 --- */
+window.onscroll = function() {
+    var bBtn = document.getElementById('back-to-top');
+    if (bBtn) {
+        if (window.pageYOffset > 300) { bBtn.classList.add('visible'); }
+        else { bBtn.classList.remove('visible'); }
+    }
+};
+document.addEventListener('click', function(e) {
+    if (e.target.closest('#back-to-top')) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 });

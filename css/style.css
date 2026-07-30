@@ -59,202 +59,318 @@ body.portal-page #app {
     max-width: 1000px; 
 }
 
-header { 
+/* ============================================================
+   新生ヒーロー：2重表示・余白を物理排除した最終確定モデル (v20.7.22.15)
+   ============================================================ */
+.index-hero {
+    max-width: 1024px;
     width: 100%;
-    margin-bottom: 20px;
-    border: none;
-}
-
-header .logo {
-    /* 修正：ここも透明に。これでタイピング画面の白い帯が消えます */
+    margin-top: 0px;
+    margin-right: auto;
+    margin-bottom: 50px;
+    margin-left: auto;
+    position: relative; /* 文字を重ねる基準 */
+    /* ★重要：過去の背景設定をすべてリセット（2重表示を根絶） */
+    background: none !important; 
+    background-image: none !important;
     background-color: transparent !important;
+    line-height: 0;    /* 画像下の隙間を0にする */
+    font-size: 0;      /* インライン要素の隙間を消す */
+    overflow: hidden;
+}
+
+/* 土台の画像：比率を100%守り、エリアの「高さ」を自動決定させる */
+.hero-base-img {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 10px 0;
+    height: auto;
+    display: block; 
+    margin: 0;
+    padding: 0;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
 }
 
-/* --- 1. グローバルナビゲーション：チップ型デザイン (v19.9.123 密度死守モデル) --- */
-/* サイズを一切変えず、背景色と影のコントラストで"押せる質感"を強化しました */
-
-.nav-menu {
+/* メッセージエリア：画像の上に載る透明なレイヤー */
+.index-hero__content {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    /* 文字サイズと行間をここで正常化 */
+    font-size: 1rem;
+    line-height: 1.6;
     display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 6%; /* 上端からの位置 */
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+/* バッジとタイトル：左側のノートブックを避ける基準位置 */
+.index-hero__badge,
+.index-hero__title {
+    margin-left: 6%;
+}
+
+.index-hero__badge {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
     gap: 8px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 10px;
-    margin-right: 0px;
-    margin-bottom: 15px;
-    margin-left: 0px;
-}
-
-.nav-menu a {
-    color: #4b5563; 
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 700;
-    /* 【ファクトチェック済】1画面収容を壊さないよう、元のサイズ(8px 18px)を厳守 */
-    padding-top: 8px;
-    padding-right: 18px;
-    padding-bottom: 8px;
-    padding-left: 18px;
-    /* 【改善】背景を白にし、ごく薄い影を付けてグレー背景から浮かび上がらせる */
-    background-color: #ffffff; 
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-style: solid;
-    border-color: #dfe4ea;
-    border-top-left-radius: 40px; /* より洗練されたカプセル型へ */
+    background-color: rgba(255, 255, 255, 0.9);
+    padding-top: 5px;
+    padding-right: 15px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    border-top-left-radius: 40px;
     border-top-right-radius: 40px;
     border-bottom-right-radius: 40px;
     border-bottom-left-radius: 40px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04); 
-    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-    display: inline-block;
+    border: 1px solid #3498db;
+    margin-bottom: 12px;
+}
+.index-hero__badge-text { font-size: 0.8rem; font-weight: 800; color: #3498db; }
+
+/* タイトル：2.1remまで絞り、絶対に2行で収めます */
+.index-hero__title {
+    font-size: 2.1rem !important;
+    font-weight: 900;
+    line-height: 1.3;
+    color: #2c3e50;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 15px;
+    margin-left: 6%;
+}
+.index-hero__title span.accent { color: #2563EB; }
+
+/* ★重要：サブタイトル・ボタン・リンクをさらに右へ（メモ帳を完璧に回避） */
+.index-hero__description,
+.hero-cta-btn,
+.hero-sub-guide {
+    margin-left: 30%; /* 24%から30%へ拡大：白い谷間の中心に配置 */
 }
 
-/* ホバー時の色変化：サイズに影響を与えず、座標と影だけでインパクトを出す */
-header .nav-menu a:hover {
-    color: #ffffff;
-    background-color: var(--accent);
-    border-top-color: var(--accent);
-    border-right-color: var(--accent);
-    border-bottom-color: var(--accent);
-    border-left-color: var(--accent);
-    transform: translateY(-2px); /* 上に跳ねる視覚効果 */
-    box-shadow: 0 6px 12px rgba(52, 152, 219, 0.2);
+.index-hero__description {
+    font-size: 1rem;
+    line-height: 1.7;
+    font-weight: 700;
+    color: #4b5563;
+    margin-bottom: 25px;
 }
 
-/* 現在地（active）の表示設定 */
-header .nav-menu a.active {
-    background-color: var(--primary);
-    color: #ffffff;
-    border-top-color: var(--primary);
-    border-right-color: var(--primary);
-    border-bottom-color: var(--primary);
-    border-left-color: var(--primary);
-    box-shadow: none;
-}
-
-/* --- 2. ロゴ・ヘッダーエリア：絶対センター保持デザイン --- */
-header .logo {
-    display: flex;
+.hero-cta-btn {
+    display: inline-flex;
+    align-self: flex-start;
     align-items: center;
-    width: 100%;
-    max-width: 1000px;
-    margin-top: 5px;
-    margin-right: auto;
-    margin-bottom: 10px;
-    margin-left: auto;
+    justify-content: center;
+    gap: 10px;
+    background-color: #1a365d;
+    color: #ffffff !important;
+    padding-top: 12px;
+    padding-right: 30px;
+    padding-bottom: 12px;
+    padding-left: 25px;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
     text-decoration: none;
+    font-size: 1rem;
+    font-weight: 900;
+    box-shadow: 0px 8px 20px rgba(26, 54, 93, 0.2);
 }
 
-.logo-spacer { flex: 1; }
-.logo-center { flex: 0 0 auto; display: flex; justify-content: center; }
-.logo-right { flex: 1; display: flex; align-items: center; justify-content: flex-start; }
+.hero-sub-guide {
+    margin-top: 15px;
+}
+.hero-sub-link {
+    display: inline-block;
+    text-decoration: none;
+    color: #38BDF8;
+    font-weight: 900;
+    font-size: 0.85rem;
+    white-space: nowrap; /* 1行死守 */
+}
 
+@media (max-width: 768px) {
+    .index-hero__content {
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%; height: auto;
+        padding: 25px 15px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .index-hero__badge, .index-hero__title, .index-hero__description, .hero-cta-btn, .hero-sub-guide {
+        margin-left: 0 !important;
+        align-self: center;
+    }
+}
+
+/* 共通インナー：常に横並びを絶対死守 */
+.header-inner {
+    max-width: 1024px;
+    margin-right: auto;
+    margin-left: auto;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* --- 条件別オーバーライド：play画面（game-body）の余白確保 --- */
+
+body.game-body header { 
+    margin-bottom: 40px !important; /* 10pxから40pxへ拡大：ヘッダーとツールの間に空気を入れます */
+}
+body.game-body .header-inner { 
+    padding-top: 5px !important; 
+    padding-bottom: 5px !important; 
+}
+body.game-body .header-logo-img { 
+    height: 55px !important; 
+}
+body.game-body #app { 
+    padding-top: 10px;
+}
+
+/* ロゴエリア */
+.header-logo-link {
+    flex-shrink: 0;
+    text-decoration-line: none;
+}
 .header-logo-img {
     height: 60px;
     width: auto;
     display: block;
 }
 
-.logo-subtext {
-    color: var(--accent);
-    font-size: 1.1rem;
-    font-weight: 800;
+/* ナビゲーションエリア */
+.header-nav {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.nav-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px 10px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    background-color: #ffffff;
+    padding-top: 6px;
+    padding-right: 12px;
+    padding-bottom: 6px;
+    padding-left: 8px;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+    border-bottom-left-radius: 40px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
     border-left-width: 2px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
     border-left-style: solid;
-    border-left-color: #dddddd;
-    margin-left: 20px;
-    padding-left: 20px;
-    line-height: 1.2;
-    white-space: nowrap;
-}
-
-/* --- 1. タイピング画面専用（game-body）：物理的に高さを死守しつつ極限まで圧縮 (v19.9.200 正典) --- */
-body.game-body #app header .ad-container-top {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 1000px;
-    height: 90px; /* 広告の高さを確保 */
-    margin-top: 2px !important; /* ノートPCでのボタン見切れを防止するため極限まで圧縮 */
-    margin-right: auto !important;
-    margin-bottom: 2px !important;
-    margin-left: auto !important;
-    background-color: transparent;
-    border-top-style: none;
-    border-right-style: none;
-    border-bottom-style: none;
-    border-left-style: none;
+    border-top-color: #e2e8f0;
+    border-right-color: #e2e8f0;
+    border-bottom-color: #e2e8f0;
+    border-left-color: #e2e8f0;
+    text-decoration-line: none;
+    color: #2c3e50;
+    font-size: 0.8rem;
+    font-weight: 900;
+    box-shadow: 0px 3px 0px #dfe4ea;
+    transition-property: all;
+    transition-duration: 0.2s;
+    min-width: 110px;
     box-sizing: border-box;
 }
 
-/* --- 2. 読みものページ専用（portal-page）：遷移時のガタつきを防止する90px固定空間 (v19.9.201) --- */
-body.portal-page #app header .ad-container-top {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 1000px;
-    height: 90px; /* 広告枠の高さを90pxで予約 */
-    margin-top: 15px;
-    margin-right: auto;
-    margin-bottom: 25px; /* 下部コンテンツとの呼吸を確保 */
-    margin-left: auto;
-    background-color: transparent;
-    border-top-style: none;
-    border-right-style: none;
-    border-bottom-style: none;
-    border-left-style: none;
-    box-sizing: border-box;
+.nav-item:hover {
+    border-top-color: #3498db;
+    border-right-color: #3498db;
+    border-bottom-color: #3498db;
+    border-left-color: #3498db;
+    transform: translateY(1px);
+    box-shadow: 0px 2px 0px #3498db;
+    background-color: #f0f7ff;
 }
 
-/* タイピング練習画面のコンパクトさは既存の記述で別途保護 (style.css 147行目付近を維持) */
+.nav-item.active {
+    background-color: #1a365d;
+    color: #ffffff;
+    border-top-color: #1a365d;
+    border-right-color: #1a365d;
+    border-bottom-color: #1a365d;
+    border-left-color: #1a365d;
+    box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.3);
+    transform: translateY(1px);
+}
 
-/* --- 4. タイピング画面（game-body）専用：1画面に収めるための強制圧縮 --- */
-body.game-body #app { padding-top: 5px !important; }
-body.game-body .nav-menu { margin: 5px 0 5px 0 !important; }
-body.game-body header .logo { margin: 0 auto !important; }
-body.game-body .ad-container-top { height: 90px !important; margin: 2px auto !important; } /* 練習画面は高さを保ちつつ極限圧縮 */
 
-/* --- 3. スマホ表示：構造の最適化（詳細度による上書き） --- */
+.mobile-nav-item.active {
+    background-color: #f0f7ff;
+    border-top-color: #2563EB;
+    border-right-color: #2563EB;
+    border-bottom-color: #2563EB;
+    border-left-color: #2563EB;
+    color: #2563EB;
+}
+
+.nav-icon {
+    width: 18px; /* 22pxから18pxへ */
+    height: 18px;
+    flex-shrink: 0;
+}
+
+/* スマホ用メニューボタン */
+.mobile-menu-trigger { display: none; }
+
+/* --- 3. スマホ表示：構造の最適化 --- */
 @media (max-width: 768px) {
-    /* ナビゲーションのスマホ向け圧縮 */
-    body.portal-page .nav-menu { margin-top: 5px; margin-bottom: 10px; gap: 6px; }
-    body.portal-page .nav-menu a { 
-        padding-top: 6px; padding-right: 12px; padding-bottom: 6px; padding-left: 12px; 
-        font-size: 0.8rem; 
-    }
-
-    /* 3カラムロゴのスマホ向けリセット：縦並びで中央へ */
-    body.portal-page header .logo {
+    body { overflow-x: hidden; } /* 横揺れ物理封殺 */
+    
+    .header-inner { padding: 10px 15px; }
+    .header-logo-img { height: 55px !important; }
+    
+    .nav-grid { display: none; }
+    
+    .mobile-menu-trigger {
+        display: flex;
         flex-direction: column;
+        align-items: center;
         justify-content: center;
-        gap: 8px;
-        margin-top: 10px;
-        margin-bottom: 15px;
+        gap: 4px;
+        background-color: #1a365d;
+        color: #ffffff;
+        border-radius: 12px;
+        width: 60px;
+        height: 60px;
+        border: none;
+        cursor: pointer;
     }
-    
-    body.portal-page .logo-spacer { display: none; }
-    body.portal-page .logo-right { flex: 0 0 auto; margin-left: 0; }
-    
-    body.portal-page .logo-subtext {
-        font-size: 0.95rem;
-        border-left-style: none;
-        margin-left: 0;
-        padding-left: 0;
-        text-align: center;
-    }
-    
-    body.portal-page .header-logo-img { height: 45px; }
-
-    /* 横揺れを物理的に禁止 */
-    body { overflow-x: hidden; }
+    .hamburger-bar { width: 25px; height: 3px; background-color: #ffffff; border-radius: 2px; }
+    .menu-label { font-size: 0.65rem; font-weight: 900; }
 }
 
 /* --- サイト全体の基本構造 --- */
@@ -293,8 +409,122 @@ main {
 }
 
 
-/* --- 6. ポータル & 読み物ページ：全盛期デザイン復元 --- */
-.portal-page .hero-section { text-align: center; padding: 60px 20px; background: linear-gradient(135deg, #1a365d 0%, #2980b9 100%); color: white; border-radius: 30px; margin-bottom: 80px; width: 100%; }
+/* ============================================================
+   ヒーローエリア：ボタン位置固定 ＆ リンク位置復旧モデル (v20.7.22.115)
+   ------------------------------------------------------------
+   ・ボタン位置は【左端から85px】で完全固定（二度といじらない）。
+   ・リンク文字の開始位置のみ、以前の良好な位置（右へ80pxオフセット）へ復旧。
+   ============================================================ */
+.index-hero {
+    max-width: 1024px;
+    width: 1024px; 
+    height: auto;
+    margin-top: 30px;
+    margin-right: auto;
+    margin-bottom: 50px;
+    margin-left: auto;
+    position: relative;
+    background-color: transparent;
+    display: block;
+}
+
+.hero-base-img {
+    width: 1024px;
+    height: auto;
+    display: block;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+
+/* アクションエリア：85px地点に絶対固定（ボタンの開始線） */
+.index-hero__action-area {
+    position: absolute;
+    top: 335px;
+    left: 85px; 
+    display: block; 
+    width: auto;
+    z-index: 100;
+}
+
+/* メインボタン：物理仕様を完全維持 */
+.hero-cta-btn {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    background-color: #1a365d;
+    color: #ffffff !important;
+    padding-top: 18px;
+    padding-right: 50px;
+    padding-bottom: 18px;
+    padding-left: 40px;
+    border-top-left-radius: 60px;
+    border-top-right-radius: 60px;
+    border-bottom-right-radius: 60px;
+    border-bottom-left-radius: 60px;
+    text-decoration: none;
+    font-size: 1.15rem !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    min-width: 340px;
+    box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.hero-cta-btn:hover {
+    background-color: #2563EB;
+}
+
+/* 下部リンク：良好だった「右へ80px」の位置へ差し戻し */
+.hero-sub-guide {
+    margin-top: 25px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 120px; /* 以前の良好なオフセット値を復旧 */
+    padding-left: 0px;
+    text-align: left;
+}
+
+.hero-sub-link {
+    display: inline-block;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.hero-sub-link__main {
+    font-size: 1.05rem;
+    color: #38BDF8;
+    font-weight: 900;
+    line-height: 1.5;
+}
+
+/* 1024px以下のレスポンシブ（左端からの比率を維持） */
+@media (max-width: 1024px) {
+    .index-hero { width: 100%; }
+    .hero-base-img { width: 100%; }
+    .index-hero__action-area {
+        left: 8.3%;
+        top: 65%;
+    }
+}
+
+/* スマホ表示：物理キーボードがない環境のためタイピング導線をカット */
+@media (max-width: 768px) {
+    .index-hero__action-area {
+        display: none !important;
+    }
+    .index-hero {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+
+
+
 .portal-page .category-grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 30px !important; width: 100% !important; margin-top: 40px; }
 .portal-page .category-card { 
     background: white; padding: 40px 25px; border-radius: 25px; text-align: center; 
@@ -378,11 +608,6 @@ body .back-to-top:hover {
     body.portal-page .category-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
     .nav-menu a { font-size: 0.75rem; padding: 3px 5px; }
 }
-
-.breadcrumb { margin-bottom: 25px; font-size: 0.85rem; color: #666; display: flex; gap: 8px; align-items: center; }
-.breadcrumb a { color: var(--accent); text-decoration: none; transition: 0.2s; }
-.breadcrumb a:hover { text-decoration: underline; }
-.breadcrumb-separator { color: #ccc; font-size: 0.7rem; }
 
 .controls-row-wrapper { display: flex; align-items: center; justify-content: center; gap: 20px; margin: 5px 0 15px 0 !important; flex-wrap: wrap; }
 #best-score-display { margin: 0 !important; padding: 6px 20px; background: #f8f9fa; border-radius: 30px; border: 1px solid #eee; }
@@ -1214,8 +1439,6 @@ body.portal-page .content-body table.setup-table td {
     align-items: center;
     justify-content: flex-start;
     gap: 15px;
-    /* 【改善】タグの長文化に対応するため、240pxから280pxへ拡張 */
-    min-width: 280px;
     margin-top: 0px;
     margin-right: 20px; /* 本文との間に決定的な「呼吸」を確保 */
     margin-bottom: 0px;
@@ -1280,4 +1503,115 @@ body.portal-page .content-body table.setup-table td {
         padding-right: 20px;
         padding-left: 20px;
     }
+}
+/* ============================================================
+   スマホ全画面メニュー：1画面収容・コンパクトモデル (v20.7.21.10)
+   ============================================================ */
+/* スマホメニュー：サイトとの一体感を高めるオーバーレイ (v20.7.21.14) */
+/* ============================================================
+   スマホメニュー：右スライド式・ドロワーモデル (v20.7.21.15)
+   ============================================================ */
+.mobile-nav-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    /* 左側（元の画面）をハッキリ見せるための暗幕（うっすら黒） */
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    z-index: 99999;
+    display: flex;
+    justify-content: flex-end; /* 右側に引き出しを寄せる */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-nav-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* メニュー本体（白い引き出し部分） */
+/* メニュー本体（白い引き出し部分）：縦伸びを防止し上端に整列 (v20.7.21.16) */
+.mobile-nav-grid {
+    background-color: #f1f3f5;
+    width: 280px;
+    height: 100%;
+    padding: 70px 15px 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    /* ★重要：ボタンが縦に伸びるのを防ぎ、上から順に並べる */
+    align-content: start; 
+    box-shadow: -5px 0px 15px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow-y: auto;
+}
+
+.mobile-nav-overlay.is-open .mobile-nav-grid {
+    transform: translateX(0);
+}
+
+/* 閉じるボタン */
+.menu-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 2.2rem;
+    color: #2c3e50;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 100001;
+    padding: 5px;
+}
+
+/* スマホメニュー専用ボタン：ちょうど良いタイル状に調整 */
+.mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    /* 縦長感を抑えるためのパディング設定 */
+    padding-top: 18px;
+    padding-bottom: 18px;
+    background-color: #ffffff;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-style: solid;
+    border-top-color: #e2e8f0;
+    border-right-color: #e2e8f0;
+    border-bottom-color: #e2e8f0;
+    border-left-color: #e2e8f0;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    text-decoration-line: none;
+    color: #2c3e50 !important;
+    font-weight: 900;
+    font-size: 0.8rem;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+}
+
+/* 現在地表示 */
+.mobile-nav-item.active {
+    background-color: #f0f7ff !important;
+    border-top-color: #2563EB !important;
+    border-right-color: #2563EB !important;
+    border-bottom-color: #2563EB !important;
+    border-left-color: #2563EB !important;
+    color: #2563EB !important;
+}
+
+.mobile-nav-item .nav-icon {
+    width: 26px; /* 少しだけ大きくしてバランス調整 */
+    height: 26px;
 }
