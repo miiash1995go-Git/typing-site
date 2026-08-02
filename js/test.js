@@ -1,13 +1,12 @@
 /**
- * ぱそトレ！ 5分間タイピングテスト 試験エンジン (v20.7.29.Final_Fixed)
+ * ぱそトレ！ 5分間タイピングテスト 試験エンジン (v20.8.02.Final)
  * ------------------------------------------------------------
- * 【実装済み機能】
- * 1. ハイブリッド・インプット（変換中可視化）
- * 2. 前方一致・部分受理ロジック
- * 3. 確定済み文字のBackspace修正（逆流処理）
- * 4. 5カテゴリ出題管理（連続出題禁止 ＆ 自動トリム）
- * 5. 精密ランク判定（19段階）＆ 1行アドバイス
- * 6. エラー時ダメージエフェクト
+ * 【統合済み機能】
+ * 1. 2行表示・0.3秒後装填スライドラグ（最新UI）
+ * 2. ハイブリッドIME入力（変換中可視化）
+ * 3. 前方一致・部分受理ロジック ＆ 逆流修正（Backspace戻し）
+ * 4. GA4連携 ＆ 自己ベスト保存 ＆ 19段階ランク判定
+ * 5. エラー時ダメージエフェクト（赤フラッシュ）
  * ============================================================
  */
 
@@ -15,11 +14,13 @@ class TypingExam {
     constructor() {
         this.questionPool = {};     // カテゴリ分けされた全問題
         this.lastCategoryId = null; // 直前の出題カテゴリID
+        this.currentText = '';      // 現在の入力対象（1行目）
+        this.nextText = '';         // 次の待機対象（2行目）
         this.currentIndex = 0;
         this.totalChars = 0;
         this.missCount = 0;
         this.startTime = null;
-        this.timeLeft = 300; // 5分
+        this.timeLeft = 300;        // 5分
         this.timerId = null;
         this.isStarted = false;
         this.isTransitioning = false;
@@ -37,7 +38,7 @@ class TypingExam {
     }
 
     async init() {
-        // ページ読み込み時、描画を待ってからコンテンツ最上部へスクロール
+        // ページ読み込み時の自動スクロール
         window.addEventListener('load', () => {
             const wrapper = document.querySelector('.test-main-wrapper');
             if (wrapper) {
@@ -47,13 +48,13 @@ class TypingExam {
             }
         });
 
-        // 【修正】データの読み込み成否に関わらず、Escキー（戻る操作）を即座に有効化
+        // Escキーによる中断・戻り
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 if (this.isStarted) {
                     this.endExam(true);
                 } else {
-                    window.location.href = 'play.html';
+                    window.location.href = './play.html';
                 }
             }
         });
@@ -61,10 +62,8 @@ class TypingExam {
         try {
             const res = await fetch('./data/typing/test_5min.json');
             const data = await res.json();
-            // カテゴリごとにデータを保持
             this.questionPool = data.categories;
             
-            // ボタンイベントの確実な割り当て
             const startBtn = document.getElementById('test-start-btn');
             if (startBtn) {
                 startBtn.onclick = () => this.startExam();
@@ -79,38 +78,69 @@ class TypingExam {
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('game-screen').classList.remove('hidden');
         
-        // カウントダウン中はまだ「開始（isStarted）」としない
         this.isStarted = false;
-        this.renderNextQuestion();
-        
         let count = 5;
-        // サンプルエリアの1行目に収まるサイズ（1.55rem）でカウントダウンを表示
-        this.sampleBox.innerHTML = `<div style="font-size: 1.55rem; font-weight: 900; color: #2563eb; text-align: center;">テスト開始まで：${count}</div>`;
+
+        // カウントダウン表示（中央配置）
+        this.sampleBox.innerHTML = `<div style="font-size: 1.55rem; font-weight: 900; color: #2563eb; text-align: center; line-height: 110px;">テスト開始まで：${count}</div>`;
         
         const countdownTimer = setInterval(() => {
             count--;
             if (count > 0) {
-                this.sampleBox.innerHTML = `<div style="font-size: 1.55rem; font-weight: 900; color: #2563eb; text-align: center;">テスト開始まで：${count}</div>`;
+                this.sampleBox.innerHTML = `<div style="font-size: 1.55rem; font-weight: 900; color: #2563eb; text-align: center; line-height: 110px;">テスト開始まで：${count}</div>`;
             } else {
                 clearInterval(countdownTimer);
-                // 試験開始の確定
                 this.isStarted = true;
                 this.startTime = Date.now();
+                this.renderNextQuestion(); // ここで2行構造を生成
                 this.startTimer();
                 this.focusInput();
-                // サンプル文を正しい表示（グレーなしの初期状態）に戻す
-                this.updateDisplays();
+            }
+        }, 1000);
+    }startExam() {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+        
+        this.isStarted = false;
+        let count = 5;
+
+        // 【改良】カウントダウン開始と同時にフォーカスを奪取し、空振りを防ぐ
+        this.focusInput();
+
+        // 【改良】リマインド文を追加。line-heightを調整して中央寄せを維持
+        const getCountdownHtml = (c) => `
+            <div style="text-align: center; padding-top: 10px;">
+                <div style="font-size: 2.2rem; font-weight: 900; color: #2563eb; margin-bottom: 5px;">${c}</div>
+                <div style="font-size: 0.9rem; font-weight: 800; color: #64748b;">日本語入力を「オン」にしてお待ちください</div>
+            </div>
+        `;
+        this.sampleBox.innerHTML = getCountdownHtml(count);
+        
+        const countdownTimer = setInterval(() => {
+            count--;
+            if (count > 0) {
+                this.sampleBox.innerHTML = getCountdownHtml(count);
+                // 待機中もフォーカスを維持（ユーザーがよそ見クリックしても戻す）
+                this.focusInput();
+            } else {
+                clearInterval(countdownTimer);
+                this.isStarted = true;
+                this.startTime = Date.now();
+                
+                // 【改良】1文字目のゴミ入力をクリアしてから開始
+                this.realInput.value = '';
+                
+                this.renderNextQuestion();
+                this.startTimer();
+                this.focusInput();
             }
         }, 1000);
     }
 
-
-    // カテゴリの重複を避けつつ、データ末尾の空白を除去して選出
     pickNextQuestion() {
         const catIds = Object.keys(this.questionPool);
         if (catIds.length === 0) return { kanji: "エラー：データがありません", kana: "" };
 
-        // 直前のカテゴリID以外から抽選（初回は全カテゴリ対象）
         const availableCats = this.lastCategoryId 
             ? catIds.filter(id => id !== this.lastCategoryId) 
             : catIds;
@@ -119,7 +149,6 @@ class TypingExam {
         const pool = this.questionPool[selectedCatId];
         const rawQuestion = pool[Math.floor(Math.random() * pool.length)];
         
-        // データ末尾の不要な空白（半角スペース等）を自動削除して、判定不全を防止
         const sanitizedQuestion = {
             kanji: rawQuestion.kanji.trim(),
             kana: rawQuestion.kana.trim()
@@ -130,13 +159,20 @@ class TypingExam {
     }
 
     renderNextQuestion() {
-        const q = this.pickNextQuestion();
-        this.currentText = q.kanji;
+        // 初回のみ2つ分ロード
+        if (!this.currentText) {
+            this.currentText = this.pickNextQuestion().kanji;
+            this.nextText = this.pickNextQuestion().kanji;
+        }
+
+        // 2行表示構造の構築
+        this.sampleBox.innerHTML = `
+            <div id="sample-inner" class="sample-inner-stack">
+                <div id="line-current" class="sample-line"></div>
+                <div id="line-next" class="sample-line sample-line--next">${this.nextText}</div>
+            </div>
+        `;
         
-        // 1. サンプルエリア：お手本を表示
-        this.sampleBox.innerHTML = `<span>${this.currentText}</span>`;
-        
-        // 2. 入力エリア：完全にリセット
         this.progress = 0;
         this.inputContent = ''; 
         this.composingText = '';
@@ -145,42 +181,40 @@ class TypingExam {
     }
 
     updateDisplays() {
-        // ① サンプルエリア：確定済みはグレー、未入力は黒
-        const done = this.currentText.substring(0, this.progress);
-        const remain = this.currentText.substring(this.progress);
-        this.sampleBox.innerHTML = `<span class="char-done">${done}</span><span>${remain}</span>`;
+        // ① サンプルエリア：1行目(line-current)のみを更新対象にする
+        const lineCurrent = document.getElementById('line-current');
+        if (lineCurrent) {
+            const done = this.currentText.substring(0, this.progress);
+            const remain = this.currentText.substring(this.progress);
+            lineCurrent.innerHTML = `<span class="char-done">${done}</span><span>${remain}</span>`;
+        }
 
-        // ② 入力エリア：確定済み文字 ＋ キャレットのみ表示
+        // ② 入力エリア：確定済み文字 ＋ 青いキャレットを表示
         let inputHtml = `<span class="char-confirmed">${this.inputContent}</span>`;
         inputHtml += `<span class="char-current-caret"></span>`;
         this.visualText.innerHTML = inputHtml;
 
-        // IME候補窓を青いキャレットの位置にミリ単位で同期
+        // IME候補窓の位置同期
         const caret = this.visualText.querySelector('.char-current-caret');
         if (caret && this.realInput) {
             this.realInput.style.left = caret.offsetLeft + 'px';
             this.realInput.style.top = caret.offsetTop + 'px';
-            
-            // 右端（約920px）までの残り幅を計算し、IME窓の突き抜けを防止
             const remainingWidth = 920 - caret.offsetLeft;
             this.realInput.style.width = Math.max(remainingWidth, 100) + 'px';
         }
     }
 
     setupInputEvents() {
-        // ボックス内クリックでフォーカスを戻す
         document.addEventListener('click', () => { 
             if(this.isStarted && !this.isTransitioning) this.focusInput(); 
         });
         
-        // 2. 入力欄自体の監視（IME非変換時の特殊キー処理）
         this.realInput.addEventListener('keydown', (e) => {
             if (this.isStarted && !this.isComposing) {
-                // Escでの中断
                 if (e.key === 'Escape') {
                     this.endExam(true);
                 }
-                // Backspace：確定済みエリアへの修正（逆流）
+                // Backspace逆流修正（デグレード防止）
                 else if (e.key === 'Backspace' && this.realInput.value === '') {
                     if (this.progress > 0) {
                         this.progress--;
@@ -193,7 +227,6 @@ class TypingExam {
             }
         });
 
-        // 3. ハイブリッドIME制御（変換中のみ実体を可視化）
         this.realInput.addEventListener('compositionstart', () => { 
             this.isComposing = true; 
             this.realInput.style.opacity = '1'; 
@@ -228,7 +261,6 @@ class TypingExam {
         let matchedAny = false;
         let hasError = false;
 
-        // 【前方一致・部分受理方式】
         for (let i = 0; i < committedStr.length; i++) {
             const char = committedStr[i];
             const targetChar = this.currentText[this.progress];
@@ -251,11 +283,25 @@ class TypingExam {
             document.getElementById('test-char-count').innerText = this.totalChars;
             if (this.progress >= this.currentText.length) {
                 this.isTransitioning = true;
+                
+                // 完了時：ラグを 300ms -> 150ms に短縮し、即座に次弾を装填
                 setTimeout(() => {
-                    this.renderNextQuestion();
-                    this.isTransitioning = false;
-                    this.focusInput();
-                }, 600); // 次の文章まで1秒待機
+                    const stack = document.getElementById('sample-inner');
+                    if (stack) {
+                        stack.classList.add('is-sliding');
+                    }
+
+                    // CSS遷移(0.2s)に合わせて 200ms 後にデータを入れ替える
+                    setTimeout(() => {
+                        this.currentText = this.nextText;
+                        this.nextText = this.pickNextQuestion().kanji;
+                        
+                        this.renderNextQuestion();
+                        this.isTransitioning = false;
+                        this.focusInput();
+                    }, 200);
+
+                }, 150); 
             }
         }
         this.updateDisplays();
@@ -310,19 +356,18 @@ class TypingExam {
             document.getElementById('res-cpm').innerText = cpm;
             document.getElementById('res-comment').innerText = this.getComment(rank);
 
-            // 【Googleアナリティクス連携】
-            // このレポート専用の名前（5分間タイピングテスト）でデータを送信します
+            // GA4送信
             if (typeof gtag === 'function') {
                 gtag('event', 'typing_complete', {
-                    'category_name': '5分間タイピングテスト', // レポートで仕分けるための名前
-                    'rank': rank,                    // レポートの「判定ランク」列に表示
-                    'score': this.totalChars,             // レポートの「スコア」列に文字数を表示
-                    'accuracy': parseFloat(accuracy),      // 正確率
-                    'cpm': cpm                             // 打鍵速度
+                    'category_name': '5分間タイピングテスト',
+                    'rank': rank,
+                    'score': this.totalChars,
+                    'accuracy': parseFloat(accuracy),
+                    'cpm': cpm
                 });
             }
 
-            // 【自己ベスト保存】
+            // 自己ベスト保存
             const storageKey = 'pasotore_best';
             const bestScores = JSON.parse(localStorage.getItem(storageKey)) || {};
             if (!bestScores['test_5min'] || this.totalChars > bestScores['test_5min']) {
@@ -335,23 +380,23 @@ class TypingExam {
     calculateRank(chars) {
         if (chars >= 900) return "Legend";
         if (chars >= 800) return "Master";
-        if (chars >= 700)  return "SSS";
-        if (chars >= 650)  return "SS";
-        if (chars >= 600)  return "S";
-        if (chars >= 570)  return "A+";
-        if (chars >= 530)  return "A";
-        if (chars >= 500)  return "A-";
-        if (chars >= 460)  return "B+";
-        if (chars >= 430)  return "B";
-        if (chars >= 400)  return "B-";
-        if (chars >= 360)  return "C+";
-        if (chars >= 330)  return "C";
-        if (chars >= 300)  return "C-";
-        if (chars >= 250)  return "D+";
-        if (chars >= 200)  return "D";
-        if (chars >= 150)  return "D-";
-        if (chars >= 100)  return "E+";
-        if (chars >= 50)   return "E";
+        if (chars >= 700) return "SSS";
+        if (chars >= 650) return "SS";
+        if (chars >= 600) return "S";
+        if (chars >= 570) return "A+";
+        if (chars >= 530) return "A";
+        if (chars >= 500) return "A-";
+        if (chars >= 460) return "B+";
+        if (chars >= 430) return "B";
+        if (chars >= 400) return "B-";
+        if (chars >= 360) return "C+";
+        if (chars >= 330) return "C";
+        if (chars >= 300) return "C-";
+        if (chars >= 250) return "D+";
+        if (chars >= 200) return "D";
+        if (chars >= 150) return "D-";
+        if (chars >= 100) return "E+";
+        if (chars >= 50)  return "E";
         return "E-";
     }
 
