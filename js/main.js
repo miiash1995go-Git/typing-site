@@ -87,6 +87,7 @@ class TypingApp {
         window.addEventListener('pageshow', (event) => {
             if (event.persisted) {
                 this.state = "START";
+                document.body.classList.remove('focus-mode');
                 this.isTransitioning = false;
                 const startBtn = document.getElementById('start-btn');
                 if (startBtn) startBtn.disabled = false;
@@ -96,6 +97,9 @@ class TypingApp {
 
     async init() {
         try {
+            // 物理的お掃除の徹底：キャッシュやリダイレクト時の暗転残留を強制排除
+            document.body.classList.remove('focus-mode');
+            
             this.renderKeyboard();
             this.updateSettingsBtnDisplay();
             this.setupEventListeners();
