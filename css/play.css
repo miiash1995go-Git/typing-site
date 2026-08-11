@@ -267,28 +267,42 @@ body.focus-mode #app {
     border-bottom-right-radius: 40px !important;
     border-bottom-left-radius: 40px !important;
     background-color: #2c3e50 !important;
-    color: #ffffff !important;
+    color: #ffffff !important; /* 文字色を白に固定 */
+    text-decoration-line: none !important; /* 下線を強制排除 */
     font-weight: 800 !important;
-    border: none !important;
+    border-top-style: none !important;
+    border-right-style: none !important;
+    border-bottom-style: none !important;
+    border-left-style: none !important;
     box-shadow: 0px 4px 0px #1a252f !important;
     cursor: pointer !important;
     z-index: 50 !important;
     white-space: nowrap !important;
+    display: inline-flex !important; /* aタグでもサイズを保てるように設定 */
+    align-items: center !important;
+    justify-content: center !important;
     transition-property: transform, box-shadow, background-color !important;
-    transition-duration: 0.2s !important;
+    transition-duration: 0.1s !important;
 }
 
-/* マウスホバー：浮き上がりと色の変化 */
-#start-btn:hover:not(:disabled) {
+#start-btn:hover {
     background-color: #34495e !important;
-    transform: translate(-50%, calc(-50% - 3px)) !important;
-    box-shadow: 0px 7px 0px #1a252f !important;
+    transform: translate(-50%, calc(-50% - 2px)) !important;
+    box-shadow: 0px 6px 0px #1a252f !important;
 }
 
-/* 練習開始ボタン：クリック時の物理沈み込み演出 */
+/* ハブページのaタグ同様、指が触れた瞬間にストンと落ちる設定 */
 #start-btn:active {
-    transform: translate(-50%, calc(-50% + 2px)) !important;
-    box-shadow: 0px 2px 0px #1a252f !important;
+    transform: translate(-50%, calc(-50% + 3px)) !important;
+    box-shadow: 0px 1px 0px #1a252f !important;
+    transition-property: none !important;
+}
+
+/* 無効化状態の擬似定義（ボタンが押されている最中などの連打防止用） */
+#start-btn.is-disabled {
+    opacity: 0.5 !important;
+    pointer-events: none !important;
+    cursor: default !important;
 }
 
 .compact-settings { flex: 0 0 240px !important; display: flex; gap: 8px; justify-content: flex-end; }
@@ -1069,4 +1083,57 @@ body.game-body .summary-btn:hover {
     border-right-color: #eeeeee;
     border-bottom-color: #eeeeee;
     border-left-color: #eeeeee;
+}
+
+/* ============================================================
+   テンキー専用レイアウト (v20.8.10.Compact)
+   ============================================================ */
+#keyboard-container.tenkey-mode {
+    width: 180px !important; /* 約2/3サイズに縮小 */
+    margin-left: auto !important;
+    margin-right: 40px !important;
+    padding: 12px !important; /* 通常キーボードと統一 */
+    display: grid !important;
+    /* 通常キーと同じ36pxのグリッドに変更 */
+    grid-template-columns: repeat(4, 36px);
+    grid-template-rows: repeat(5, 36px);
+    gap: 4px !important; /* 通常キーボードと統一 */
+    background-color: #f1f2f6;
+    border-radius: 18px;
+    justify-content: center;
+}
+
+/* 共通キー設定の初期化 */
+#keyboard-container.tenkey-mode .tk-key {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box !important;
+    font-size: 0.85rem !important; /* 文字サイズを通常キーに合わせる */
+}
+
+/* 特殊キーの結合（スパン）定義 */
+#k-plus {
+    grid-area: 2 / 4 / 4 / 5;
+}
+
+#k-enter {
+    grid-area: 4 / 4 / 6 / 5;
+}
+
+#k-0 {
+    grid-area: 5 / 1 / 6 / 3;
+}
+
+/* 空白セルの非表示 */
+.tk-empty {
+    visibility: hidden;
+}
+
+/* テンキーモード時は既存のrow設定を無効化 */
+#keyboard-container.tenkey-mode .keyboard-row {
+    display: none !important;
 }

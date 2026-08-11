@@ -75,7 +75,12 @@ class TypingApp {
         this.isTransitioning = false;
         this.isTestMode = false;      // 5分間テストモード判定フラグ
         this.testTimerId = null;      // タイマー管理用
-        this.testCharactersTyped = 0; // 確定した日本語文字数
+        this.testCharactersTyped = 0; 
+        
+        // --- テンキー出題管理用 ---
+        this.tenkeyData = null;           // JSONから読み込んだ全カテゴリ
+        this.tenkeyCategoryIndex = 0;    // 現在のカテゴリ位置
+        this.tenkeyQuestionInCatCount = 0; // そのカテゴリで何問目か (0 or 1)
 
         // 【修正】コンパクト化に伴い、基準数値を微調整
         this.LEFT_PADDING = 40; // 50から40へ
@@ -90,7 +95,7 @@ class TypingApp {
                 document.body.classList.remove('focus-mode');
                 this.isTransitioning = false;
                 const startBtn = document.getElementById('start-btn');
-                if (startBtn) startBtn.disabled = false;
+                if (startBtn) startBtn.classList.remove('is-disabled');
             }
         });
     }
@@ -137,7 +142,16 @@ if (category.file === "all") {
                 const res = await fetch(`./data/typing/${category.file}`);
                 if (!res.ok) throw new Error("File not found");
                 const data = await res.json();
-                loadedData = data.questions;
+                
+                // テンキーの場合は構造が異なるため tenkeyData に保持
+                if (categoryId === 'tenkey') {
+                    this.tenkeyData = data.categories;
+                    loadedData = data.categories[0].items; // 初期候補として最初のカテゴリを入れる
+                    this.tenkeyCategoryIndex = 0;
+                    this.tenkeyQuestionInCatCount = 0;
+                } else {
+                    loadedData = data.questions;
+                }
             }
             this.currentQuestions = loadedData;
             return loadedData && loadedData.length > 0;
@@ -183,8 +197,11 @@ handleResize() {
                 btn.classList.add('active');
                 this.currentCategoryId = btn.dataset.cat;
 
-                // 【新規】ローマ字基礎カテゴリのみ軽量化（200文字/3分）
-                if (this.currentCategoryId === 'roman_pure' || this.currentCategoryId === 'roman_complex') {
+                // カテゴリ別の制限設定
+                if (this.currentCategoryId === 'tenkey') {
+                    this.targetLimit = 200; // テンキーは200文字
+                    this.timeLimitMs = 180000;
+                } else if (this.currentCategoryId === 'roman_pure' || this.currentCategoryId === 'roman_complex') {
                     this.targetLimit = 200;
                     this.timeLimitMs = 180000;
                 } else {
@@ -192,6 +209,7 @@ handleResize() {
                     this.timeLimitMs = 240000;
                 }
 
+                this.renderKeyboard(); // カテゴリ変更に合わせてキーボード再描画
                 this.updateBestScoreDisplay();
             });
         });
@@ -218,13 +236,14 @@ handleResize() {
         const startBtn = document.getElementById('start-btn');
         if (startBtn) {
             startBtn.addEventListener('click', async () => {
-                // 5分間テストの場合は無効化せずにリダイレクト（バック時に固まるのを防ぐ）
+                // 5分間テストの場合は即座にリダイレクト
                 if (this.currentCategoryId === 'test_5min') {
                     window.location.href = 'test.html';
                     return;
                 }
 
-                startBtn.disabled = true;
+                // aタグには .disabled がないため、CSSクラスでクリックを封じる
+                startBtn.classList.add('is-disabled');
                 this.state = "START"; 
                 this.isTransitioning = false; 
 
@@ -237,7 +256,7 @@ if (success) {
                     }
                     this.prepareReady(); 
                 }
-                startBtn.disabled = false;
+                startBtn.classList.remove('is-disabled');
             });
         }
 
@@ -352,7 +371,7 @@ if (success) {
     }
 
     nextQuestion() {
-        // テストモード時は制限時間のみで終了するため、通常の320文字制限は無視する
+        // 1. 終了判定（テストモード以外）
         if (!this.isTestMode) {
             const elapsed = performance.now() - this.startTime;
             if (this.totalTypedCount >= this.targetLimit || (this.startTime && elapsed > this.timeLimitMs)) { 
@@ -360,21 +379,60 @@ if (success) {
                 return; 
             }
         }
-        if (!this.currentQuestions || this.currentQuestions.length === 0) return;
-        let nextIdx;
-        const totalQ = this.currentQuestions.length;
-        if (totalQ > 1) {
-            do { nextIdx = Math.floor(Math.random() * totalQ); } while (nextIdx === this.lastQuestionIndex);
-        } else { nextIdx = 0; }
-        this.lastQuestionIndex = nextIdx;
-        const nextQ = this.currentQuestions[nextIdx];
-        this.kanaList = this.splitKana(nextQ.kana);
-        this.typedFullRomaji = ""; this.currentRomajiStr = "";
-        const kanjiEl = document.getElementById('display-kanji');
-        const kanaEl = document.getElementById('display-kana');
-        if (kanjiEl) kanjiEl.innerText = nextQ.kanji;
-        if (kanaEl) kanaEl.innerText = nextQ.kana;
-        this.prepareNextChar();
+
+        // 2. テンキー専用の順次出題ロジック
+        if (this.currentCategoryId === 'tenkey' && this.tenkeyData) {
+            const currentCat = this.tenkeyData[this.tenkeyCategoryIndex];
+            
+            // カテゴリ内のアイテムからランダムに1問選択（直前と同じ問題は避ける）
+            let selectedItem;
+            do {
+                selectedItem = currentCat.items[Math.floor(Math.random() * currentCat.items.length)];
+            } while (currentCat.items.length > 1 && selectedItem.value === this.lastTenkeyText);
+            
+            this.lastTenkeyText = selectedItem.value;
+            const text = selectedItem.value;
+
+            // 文字分割と初期化
+            this.kanaList = this.splitKana(text);
+            this.typedFullRomaji = ""; 
+            this.currentRomajiStr = "";
+            
+            // 表示の更新（かなエリアにはカテゴリ名を表示）
+            const kanjiEl = document.getElementById('display-kanji');
+            const kanaEl = document.getElementById('display-kana');
+            if (kanjiEl) kanjiEl.innerText = text;
+            if (kanaEl) kanaEl.innerText = currentCat.name; 
+
+            // カウント進捗とカテゴリ切り替え判定（2問ごとに次へ）
+            this.tenkeyQuestionInCatCount++;
+            if (this.tenkeyQuestionInCatCount >= 2) {
+                this.tenkeyQuestionInCatCount = 0;
+                this.tenkeyCategoryIndex++;
+                if (this.tenkeyCategoryIndex >= this.tenkeyData.length) {
+                    this.tenkeyCategoryIndex = 0; // 全カテゴリ終わったら最初に戻る
+                }
+            }
+            this.prepareNextChar();
+
+        } else {
+            // 3. 通常のタイピングロジック
+            if (!this.currentQuestions || this.currentQuestions.length === 0) return;
+            let nextIdx;
+            const totalQ = this.currentQuestions.length;
+            if (totalQ > 1) {
+                do { nextIdx = Math.floor(Math.random() * totalQ); } while (nextIdx === this.lastQuestionIndex);
+            } else { nextIdx = 0; }
+            this.lastQuestionIndex = nextIdx;
+            const nextQ = this.currentQuestions[nextIdx];
+            this.kanaList = this.splitKana(nextQ.kana);
+            this.typedFullRomaji = ""; this.currentRomajiStr = "";
+            const kanjiEl = document.getElementById('display-kanji');
+            const kanaEl = document.getElementById('display-kana');
+            if (kanjiEl) kanjiEl.innerText = nextQ.kanji;
+            if (kanaEl) kanaEl.innerText = nextQ.kana;
+            this.prepareNextChar();
+        }
     }
 
     splitKana(kana) {
@@ -510,8 +568,19 @@ if (success) {
         document.querySelectorAll('.key').forEach(k => k.classList.remove('highlight'));
         if (!char) return;
         let id = char.toLowerCase();
+        
+        // 通常キーボード用マッピング
         if (id === ' ') id = 'space';
         if (id === '\\') id = 'backslash';
+
+        // テンキー用マッピング（記号とIDを一致させる）
+        if (id === '/') id = 'divide';
+        if (id === '*') id = 'multiply';
+        if (id === '-') id = 'minus';
+        if (id === '+') id = 'plus';
+        if (id === '.') id = 'decimal';
+        if (id === 'ent') id = 'enter';
+
         const el = document.getElementById(`k-${id}`);
         if (el) el.classList.add('highlight');
     }
@@ -671,53 +740,110 @@ if (typeof gtag === 'function') {
 /* --- main.js：getRankメソッドを以下に差し替え（ユーザー指定基準） --- */
 
     /**
-     * getRank: ユーザー指定の「200=A- / 160=B- / 100=C- / 51=D-」を厳守した基準
+     * getRank: カテゴリに応じて「ものさし」を切り替える
      */
     getRank(s) {
-        if(s >= 500) return "Legend"; // 天井（ほぼ到達不能な名誉職）
-        if(s >= 400) return "Master"; // 超人（タイピング特化の人）
+        // 200文字制限の軽量モード（テンキー・ローマ字基礎）は専用の閾値を使用
+        if (this.currentCategoryId === 'tenkey' || this.currentCategoryId === 'roman_pure' || this.currentCategoryId === 'roman_complex') {
+            return this.getShortModeRank(s);
+        }
+
+        // 通常モード（320文字制限）の基準
+        if(s >= 500) return "Legend";
+        if(s >= 400) return "Master";
         if(s >= 350) return "SSS"; 
         if(s >= 325) return "SS"; 
-        if(s >= 300) return "S";      // 300 CPM & 高正確率の壁
-        if(s >= 260) return "A+";     // ★今回の276点はこの「A+」になります
+        if(s >= 300) return "S";
+        if(s >= 260) return "A+";
         if(s >= 230) return "A"; 
-        if(s >= 200) return "A-";     // 【指定】200以上
+        if(s >= 200) return "A-";
         if(s >= 185) return "B+"; 
         if(s >= 170) return "B"; 
-        if(s >= 160) return "B-";     // 【指定】160以上
+        if(s >= 160) return "B-";
         if(s >= 140) return "C+"; 
         if(s >= 120) return "C"; 
-        if(s >= 100) return "C-";     // 【指定】100以上
+        if(s >= 100) return "C-";
         if(s >= 85)  return "D+"; 
         if(s >= 65)  return "D"; 
-        if(s >= 51)  return "D-";     // 【指定】51以上
+        if(s >= 51)  return "D-";
         if(s >= 30)  return "E+"; 
         if(s >= 10)  return "E"; 
         return "E-";
     }
+
+    /**
+     * getShortModeRank: テンキー・ローマ字基礎専用（通常モードの約75%のスコアで同等評価）
+     */
+    getShortModeRank(s) {
+        if(s >= 375) return "Legend";
+        if(s >= 300) return "Master";
+        if(s >= 260) return "SSS";
+        if(s >= 240) return "SS";
+        if(s >= 220) return "S";      // テンキーで220点なら通常300点相当の腕前
+        if(s >= 195) return "A+";
+        if(s >= 170) return "A";
+        if(s >= 150) return "A-";     // テンキーでの合格目安
+        if(s >= 135) return "B+";
+        if(s >= 125) return "B";
+        if(s >= 115) return "B-";
+        if(s >= 105) return "C+";
+        if(s >= 90)  return "C";
+        if(s >= 75)  return "C-";
+        if(s >= 60)  return "D+";
+        if(s >= 45)  return "D";
+        if(s >= 35)  return "D-";
+        if(s >= 20)  return "E+";
+        if(s >= 7)   return "E";
+        return "E-";
+    }
     renderKeyboard() {
-        const layout = [["1","2","3","4","5","6","7","8","9","0","-","^"],["Q","W","E","R","T","Y","U","I","O","P","@"],["A","S","D","F","G","H","J","K","L",";",":","]"],["Shift","Z","X","C","V","B","N","M",",",".","/","\\","Shift"],["Space"]];
-        const fingerMap = {"1":"lp","Q":"lp","A":"lp","Z":"lp","Shift":"lp","2":"lr","W":"lr","S":"lr","X":"lr","3":"lm","E":"lm","D":"lm","C":"lm","4":"li","5":"li","R":"li","T":"li","F":"li","G":"li","V":"li","B":"li","6":"ri","7":"ri","Y":"ri","U":"ri","H":"ri","J":"ri","N":"ri","M":"ri","8":"rm","I":"rm","K":"rm",",":"rm","9":"rr","O":"rr","L":"rr",".":"rr","0":"rp","-":"rp","^":"rp","P":"rp","@":"rp",";":"rp",":":"rp","]":"rp","/":"rp","\\":"rp"};
         const container = document.getElementById('keyboard-container');
         if(!container) return;
         container.innerHTML = "";
-        layout.forEach((row, i) => {
-            const rowEl = document.createElement('div'); rowEl.className = `keyboard-row row-${i}`;
-            row.forEach((key, j) => {
-                const kEl = document.createElement('div'); kEl.className = 'key';
-                if(key === "Space") kEl.classList.add('space');
-                if(key === "Shift") kEl.classList.add('wide-shift');
-                if (this.keyboardColorEnabled && fingerMap[key]) kEl.classList.add(`f-${fingerMap[key]}`);
-                kEl.innerText = key;
-                let id = key.toLowerCase();
-                if (key === "Space") id = "space";
-                if (key === "\\") id = "backslash";
-                if (key === "Shift") id = (j === 0) ? "shift-l" : "shift-r";
+
+        if (this.currentCategoryId === 'tenkey') {
+            // テンキー配列のレンダリング（Grid制御用にフラットな構造に変更）
+            container.classList.add('tenkey-mode');
+            // レイアウト定義：[表示文字, ID名, クラス名]
+            const tkKeys = [
+                ["", "empty", "tk-empty"], ["/", "divide", ""], ["*", "multiply", ""], ["-", "minus", ""],
+                ["7", "7", ""], ["8", "8", ""], ["9", "9", ""], ["+", "plus", "tk-tall"],
+                ["4", "4", ""], ["5", "5", ""], ["6", "6", ""],
+                ["1", "1", ""], ["2", "2", ""], ["3", "3", ""], ["Ent", "enter", "tk-tall"],
+                ["0", "0", "tk-wide"], [".", "decimal", ""]
+            ];
+            
+            tkKeys.forEach(([label, id, extraClass]) => {
+                const kEl = document.createElement('div');
+                kEl.className = `key tk-key ${extraClass}`;
+                kEl.innerText = label;
                 kEl.id = `k-${id}`;
-                rowEl.appendChild(kEl);
+                container.appendChild(kEl);
             });
-            container.appendChild(rowEl);
-        });
+        } else {
+            // 通常QWERTY配列のレンダリング
+            container.classList.remove('tenkey-mode');
+            const layout = [["1","2","3","4","5","6","7","8","9","0","-","^"],["Q","W","E","R","T","Y","U","I","O","P","@"],["A","S","D","F","G","H","J","K","L",";",":","]"],["Shift","Z","X","C","V","B","N","M",",",".","/","\\","Shift"],["Space"]];
+            const fingerMap = {"1":"lp","Q":"lp","A":"lp","Z":"lp","Shift":"lp","2":"lr","W":"lr","S":"lr","X":"lr","3":"lm","E":"lm","D":"lm","C":"lm","4":"li","5":"li","R":"li","T":"li","F":"li","G":"li","V":"li","B":"li","6":"ri","7":"ri","Y":"ri","U":"ri","H":"ri","J":"ri","N":"ri","M":"ri","8":"rm","I":"rm","K":"rm",",":"rm","9":"rr","O":"rr","L":"rr",".":"rr","0":"rp","-":"rp","^":"rp","P":"rp","@":"rp",";":"rp",":":"rp","]":"rp","/":"rp","\\":"rp"};
+            
+            layout.forEach((row, i) => {
+                const rowEl = document.createElement('div'); rowEl.className = `keyboard-row row-${i}`;
+                row.forEach((key, j) => {
+                    const kEl = document.createElement('div'); kEl.className = 'key';
+                    if(key === "Space") kEl.classList.add('space');
+                    if(key === "Shift") kEl.classList.add('wide-shift');
+                    if (this.keyboardColorEnabled && fingerMap[key]) kEl.classList.add(`f-${fingerMap[key]}`);
+                    kEl.innerText = key;
+                    let id = key.toLowerCase();
+                    if (key === "Space") id = "space";
+                    if (key === "\\") id = "backslash";
+                    if (key === "Shift") id = (j === 0) ? "shift-l" : "shift-r";
+                    kEl.id = `k-${id}`;
+                    rowEl.appendChild(kEl);
+                });
+                container.appendChild(rowEl);
+            });
+        }
     }
 
     startTestTimer() {
@@ -936,21 +1062,38 @@ if (typeof gtag === 'function') {
             });
         }
 
-        // 8. News 1件目の自動転記ロジック（index.html専用）
+        // 8. News 最新2件の自動転記ロジック（v20.8.11：日付・白抜き対応）
         var announceBox = document.getElementById('new-article-announce');
-        var firstNews = document.querySelector('.news-scroll-container .news-item');
-        if (announceBox && firstNews) {
-            var newsLink = firstNews.querySelector('.news-text');
-            if (newsLink) {
-                var linkHref = newsLink.getAttribute('href') || '#';
-                var linkText = newsLink.textContent.replace('｜', '').trim();
+        var newsItems = document.querySelectorAll('.news-scroll-container .news-item');
+        
+        if (announceBox && newsItems.length > 0) {
+            var htmlContent = '';
+            // 最大2件分ループ
+            for (var i = 0; i < Math.min(newsItems.length, 2); i++) {
+                var item = newsItems[i];
+                var dateStr = item.querySelector('.news-date').textContent;
+                var newsLink = item.querySelector('.news-text');
                 
-                announceBox.innerHTML = '<a href="' + linkHref + '">' +
-                                        '<span class="new-badge-label">New!</span>' +
-                                        '<span>' + linkText + '</span>' +
-                                        '</a>';
-                announceBox.classList.remove('hidden');
+                if (newsLink) {
+                    var linkHref = newsLink.getAttribute('href') || '#';
+                    var linkText = newsLink.textContent.replace('｜', '').trim();
+                    
+                    // 1行目はNEWバッジ、2行目は位置合わせ用の透明スペーサーを出力
+                    var badgePart = (i === 0) 
+                        ? '<span class="new-badge-label">NEW</span>' 
+                        : '<span class="new-badge-spacer"></span>';
+
+                    htmlContent += '<div class="announce-row">' +
+                                   '<a href="' + linkHref + '">' +
+                                   badgePart +
+                                   '<span class="announce-date">' + dateStr + '</span>' +
+                                   '<span>' + linkText + '</span>' +
+                                   '</a>' +
+                                   '</div>';
+                }
             }
+            announceBox.innerHTML = htmlContent;
+            announceBox.classList.remove('hidden');
         }
 
 
