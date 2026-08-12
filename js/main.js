@@ -1115,7 +1115,7 @@ if (typeof gtag === 'function') {
         }
 
 
-        // 9. 画像拡大モーダル（番号を繰り下げ）
+        // 9. 画像拡大モーダル
         var zOver = document.createElement('div');
         zOver.className = 'image-zoom-overlay';
         zOver.innerHTML = '<img class="image-zoom-content" src="" alt="拡大画像">';
@@ -1128,15 +1128,89 @@ if (typeof gtag === 'function') {
             };
         });
         zOver.onclick = function() { zOver.classList.remove('is-active'); document.body.style.overflow = ''; };
-    }
 
-    // DOMの読み込み完了を待って実行
+        /* ============================================================
+           10. アルティメット索引生成エンジン (v20.8.12.Complete_Fix)
+           ------------------------------------------------------------
+           物理整合性：名前空間(n:)を物理的に無視し、DOMツリーから直接抽出
+           ============================================================ */
+        async function initSitemapIndex() {
+        const section = document.getElementById('dynamic-sitemap-index');
+        if (!section) return;
+
+        const listBody = document.getElementById('column-article-grid');
+        const initialCat = section.dataset.initial || 'all';
+        const categoryMap = {'typing':'タイピング','windows':'Windows','word':'Word','excel':'Excel','ai':'生成AI','career':'就職・転職','column':'現場コラム'};
+
+        try {
+            // Sitemapを単なるテキストファイルとして読み込む
+            const res = await fetch('./sitemap.xml');
+            if (!res.ok) throw new Error("Sitemap Load Failed");
+            const rawText = await res.text();
+
+            const articleData = [];
+            // <url> 〜 </url> のブロックを物理的に切り出す
+            const urlBlocks = rawText.match(/<url>([\s\S]*?)<\/url>/g);
+
+            if (urlBlocks) {
+                urlBlocks.forEach(block => {
+                    const loc = block.match(/<loc>(.*?)<\/loc>/)?.[1] || "";
+                    // 【物理修復】コメント <!-- [INDEX] タイトル | カテゴリ --> を正規表現で抽出
+                    const meta = block.match(/<!--\s*\[INDEX\]\s*(.*?)\s*\|\s*(.*?)\s*-->/);
+
+                    if (loc && meta) {
+                        articleData.push({
+                            url: loc.split('/').pop(), // ファイル名を取得
+                            title: meta[1].trim(),
+                            category: meta[2].trim()
+                        });
+                    }
+                });
+            }
+
+            function render(filter) {
+                if (!listBody) return;
+                listBody.innerHTML = "";
+                listBody.scrollTop = 0;
+
+                const filtered = articleData.filter(a => filter === 'all' || a.category === filter);
+                
+                if (filtered.length === 0) {
+                    listBody.innerHTML = '<div style="padding:40px; color:#94a3b8; text-align:center; font-weight:800;">該当する記事がありません</div>';
+                    return;
+                }
+
+                listBody.innerHTML = filtered.map(a => 
+                    '<a href="' + a.url + '" class="hub-index-row">' +
+                    '<div class="hub-index-meta"><span class="news-tag tag-' + a.category + '">' + (categoryMap[a.category] || a.category) + '</span></div>' +
+                    '<div class="hub-index-info"><h4>' + a.title + '</h4></div>' +
+                    '</a>'
+                ).join('');
+            }
+
+            section.onclick = function(e) {
+                const btn = e.target.closest('.hub-index-tab');
+                if (!btn) return;
+                e.preventDefault();
+                section.querySelectorAll('.hub-index-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                render(btn.getAttribute('data-filter'));
+            };
+
+            render(initialCat);
+
+        } catch (err) { console.error("Index System Error:", err); }
+    }
+        initSitemapIndex();
+    } // initNavigation の閉じカッコ
+
+    // --- 統合起動シーケンス ---
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initNavigation);
     } else {
         initNavigation();
     }
-})();
+})(); // IIFE の閉じカッコ
 
 /* --- ページトップ制御 --- */
 window.onscroll = function() {
