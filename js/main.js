@@ -951,23 +951,23 @@ if (typeof gtag === 'function') {
         if (page === "" || page.indexOf('.') === -1) { page = "index.html"; }
 
         // 2. カテゴリ判定マッピング
-        // ※ column を最上位に配置することで、ファイル名に他のキーワードが含まれていても「現場コラム」を優先判定させる
+        // 現場コラム(column)のキーワードに 'glossary' を追加し、用語集もコラム配下として統治する。
         var mapping = {
-            'column':  ['column'],
+            'career':  ['mos', 'reskill', 'typing-speed', 'career', 'interview', 'cv'],
+            'ai':      ['chatgpt', 'ai', 'tools'],
+            'column':  ['column', 'glossary'],
             'windows': ['windows', 'pc-selection', 'folder'],
             'word':    ['word'],
             'excel':   ['excel'],
-            'ai':      ['ai', 'chatgpt', 'tools'],
-            'typing':  ['typing', 'play', 'basics'],
-            'career':  ['career', 'interview', 'cv']
+            'typing':  ['typing', 'play', 'basics']
         };
 
         var names = {
-            'windows': 'Windows基礎',
-            'word':    'Word基礎',
-            'excel':   'Excel基礎',
-            'ai':      '生成AI活用',
-            'typing':  'タイピング練習',
+            'windows': 'Windows',
+            'word':    'Word',
+            'excel':   'Excel',
+            'ai':      '生成AI',
+            'typing':  'タイピング',
             'career':  '就職・転職',
             'column':  '現場コラム'
         };
