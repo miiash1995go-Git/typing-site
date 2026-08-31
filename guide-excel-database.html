@@ -77,6 +77,7 @@
                 <nav class="breadcrumb" id="dynamic-breadcrumb"></nav>
 
                 <h1 class="page-title">Excelで必要なデータをすぐに見つけるには？データベースとテーブルの使い方</h1>
+                <p class="page-subtitle">大量のデータから欲しい情報を一瞬で取り出す。実務を支える「情報の整理と管理」の基本を学びましょう。</p>
 
                 <div class="content-body">
                     <h2>仕事のデータは「探す」ことに時間がかかる</h2>
@@ -140,11 +141,11 @@
 
                     <h3>テーブルが敬遠される主な理由</h3>
                     <ul class="feature-list-vertical">
-                        <li class="feature-item-vertical">
+                        <li class="feature-item-vertical" style="background-color: #f8f9fa;">
                             <h4>操作感の違いや自動化への戸惑い</h4>
                             <p>テーブルにすると列全体がひとまとまりとして扱われます。勝手に色がついたり、数式が列全体に自動コピーされたりするため、不慣れなうちは「普通のセルと違う感じ」に戸惑うことがあります。</p>
                         </li>
-                        <li class="feature-item-vertical">
+                        <li class="feature-item-vertical" style="background-color: #f8f9fa;">
                             <h4>修正の自由度とセル結合の制限</h4>
                             <p>「この行だけ計算を少し変えたい」といった例外的な操作がしにくかったり、見た目を整えるための「セルの結合」ができなかったりします。そのため、レイアウト重視の書類作成とは相性が良くない側面があります。</p>
                         </li>
@@ -155,28 +156,39 @@
                     <h2>「データの目的」でテーブルを使い分ける</h2>
                     <p>どんなときにテーブルを使うべきか、その判断基準は<strong>「データの目的」</strong>にあります。名簿や売上リストのように、情報をどんどん蓄積していく役割なら、テーブルが最適です。</p>
 
-                    <table class="setup-table">
-                        <thead>
-                            <tr>
-                                <th class="col-item">向いているもの（管理用）</th>
-                                <th>向いていないもの（帳票用）</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th class="row-label">○ 顧客一覧・商品一覧</th>
-                                <td>△ 請求書・見積書</td>
-                            </tr>
-                            <tr>
-                                <th class="row-label">○ 売上データ・名簿</th>
-                                <td>△ 申請書・報告書</td>
-                            </tr>
-                            <tr>
-                                <th class="row-label">○ アンケート・CSVデータ</th>
-                                <td>△ デザイン重視の資料</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <!-- 
+                        物理仕様：index.htmlと同じ ai-dual-role-box ロジックを使用
+                        PC (1024px) : 左右並列 (flex-basis: 0%)
+                        スマホ (768px): 上下並列 (flex-direction: column) 
+                    -->
+                    <div class="ai-dual-role-box" style="margin-top: 30px; margin-bottom: 40px; gap: 20px;">
+                        
+                        <!-- 1. テーブルが向いているもの（Green / work-sideクラスを流用） -->
+                        <div class="ai-role-side work-side" style="padding-top: 30px; padding-right: 25px; padding-bottom: 30px; padding-left: 25px; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-style: solid; box-sizing: border-box;">
+                            <h4 style="border-bottom-style: none !important; margin-bottom: 25px;">テーブルに向いている</h4>
+                            <ul style="list-style-type: none; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;">
+                                <li style="font-weight: 900; color: #2c3e50; font-size: 1.15rem; border-bottom-width: 1px; border-bottom-style: dashed; border-bottom-color: #16a34a; padding-bottom: 10px; margin-bottom: 15px; line-height: 1.4;">○ 顧客一覧</li>
+                                <li style="font-weight: 900; color: #2c3e50; font-size: 1.15rem; border-bottom-width: 1px; border-bottom-style: dashed; border-bottom-color: #16a34a; padding-bottom: 10px; margin-bottom: 15px; line-height: 1.4;">○ 商品一覧</li>
+                                <li style="font-weight: 900; color: #2c3e50; font-size: 1.15rem; border-bottom-width: 1px; border-bottom-style: dashed; border-bottom-color: #16a34a; padding-bottom: 10px; margin-bottom: 15px; line-height: 1.4;">○ 売上データ</li>
+                                <li style="font-weight: 900; color: #2c3e50; font-size: 1.15rem; border-bottom-width: 1px; border-bottom-style: dashed; border-bottom-color: #16a34a; padding-bottom: 10px; margin-bottom: 15px; line-height: 1.4;">○ 名簿</li>
+                                <li style="font-weight: 900; color: #2c3e50; font-size: 1.15rem; padding-bottom: 5px; margin-bottom: 0px; line-height: 1.4;">○ CSVから取り込んだデータ</li>
+                            </ul>
+                        </div>
+
+                        <!-- 2. テーブルが向いていないもの（Orange / career-sideクラスを流用） -->
+                        <div class="ai-role-side career-side" style="padding-top: 30px; padding-right: 25px; padding-bottom: 30px; padding-left: 25px; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-style: solid; box-sizing: border-box;">
+                            <h4 style="border-bottom-style: none !important; margin-bottom: 25px;">テーブルに向いていない</h4>
+                            <ul style="list-style-type: none; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;">
+                                <li style="font-weight: 900; color: #2c3e50; font-size: 1.15rem; border-bottom-width: 1px; border-bottom-style: dashed; border-bottom-color: #f97316; padding-bottom: 10px; margin-bottom: 15px; line-height: 1.4;">△ 請求書</li>
+                                <li style="font-weight: 900; color: #2c3e50; font-size: 1.15rem; border-bottom-width: 1px; border-bottom-style: dashed; border-bottom-color: #f97316; padding-bottom: 10px; margin-bottom: 15px; line-height: 1.4;">△ 見積書</li>
+                                <li style="font-weight: 900; color: #2c3e50; font-size: 1.15rem; border-bottom-width: 1px; border-bottom-style: dashed; border-bottom-color: #f97316; padding-bottom: 10px; margin-bottom: 15px; line-height: 1.4;">△ 申請書</li>
+                                <li style="font-weight: 900; color: #2c3e50; font-size: 1.15rem; border-bottom-width: 1px; border-bottom-style: dashed; border-bottom-color: #f97316; padding-bottom: 10px; margin-bottom: 15px; line-height: 1.4;">△ 報告書</li>
+                                <li style="font-weight: 900; color: #2c3e50; font-size: 1.15rem; padding-bottom: 5px; margin-bottom: 0px; line-height: 1.4;">△ レイアウト重視の資料</li>
+                            </ul>
+                        </div>
+
+                    </div>
+
 
                     <h2>テーブルに変換するメリット</h2>
                     <p>「売上管理表」のようなデータ蓄積用の表は、テーブルにすると管理の手間が抑えられます。</p>
@@ -194,19 +206,52 @@
                     </div>
 
                     <h2>実務の作法：元データを壊さないための心がけ</h2>
-                    <p>データを加工する際に意識したいのが丁寧な仕事の進め方です。</p>
-                    <ul>
-                        <li><strong>「非表示」ではなく「フィルター」を：</strong> 特定の行を隠したい時に、右クリックで「非表示」にするのは避けましょう。後で他の人が見た時に、データが隠れていることに気づかず、計算ミスを招く恐れがあるためです。</li>
-                        <li><strong>バックアップを取る習慣：</strong> 大きな修正の前には、シートをコピーして「予備（バックアップ）」を作っておきましょう。すぐに元に戻せる安心感があれば、作業の正確性も向上します。</li>
-                    </ul>
+                    <p>Excelの操作に慣れてきたときこそ意識したい、丁寧な仕事の進め方を確認しましょう。</p>
 
-                    <h2>まとめ</h2>
-                    <p>Excelは、ただ文字や数字を記録するだけのものではありません。溜まったデータの中から、並べ替えやフィルターを使って「今知りたい答え」を取り出す使い方は、Excelの実務で非常によく活用される方法です。</p>
-                    <ul>
-                        <li><strong>データを管理する時</strong>は、管理に強い「テーブル」を活用する。</li>
-                        <li><strong>書類を作る時</strong>は、自由度の高い「普通のセル」で作成する。</li>
-                    </ul>
-                    <p>この使い分けができるようになれば、実務の正確性とスピードは自然と備わっていきます。答えを取り出す道具として、Excelを使いこなしていきましょう。</p>
+                    <div class="feature-list-vertical" style="margin-top: 30px; margin-bottom: 50px;">
+                        
+                        <!-- 作法 1 -->
+                        <div class="feature-item-vertical" style="background-color: #fcfdfe; border-left-width: 6px; border-left-style: solid; border-left-color: #3498db; padding-top: 25px; padding-right: 30px; padding-bottom: 25px; padding-left: 30px;">
+                            <h4 style="color: #2c3e50; font-weight: 900; margin-bottom: 15px; display: flex; align-items: center; gap: 12px;">
+                                <span style="background-color: #eef9ff; color: #3498db; width: 32px; height: 32px; border-top-left-radius: 50%; border-top-right-radius: 50%; border-bottom-right-radius: 50%; border-bottom-left-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">1</span>
+                                「非表示」ではなく「フィルター」を使う
+                            </h4>
+                            <p style="font-size: 1rem; color: #4b5563; line-height: 1.8; margin-top: 0px;">
+                                特定の行を隠したい時に、右クリックで「非表示」にするのは避けましょう。
+                                後で別の人がそのファイルを開いた時、データが隠れていることに気づかず、そのまま計算してミスを招く恐れがあるためです。
+                                <strong>「フィルター」</strong>を使えば、行番号が青くなるため、誰が見ても「今は一部を隠している状態である」ことが一目で伝わります。
+                            </p>
+                        </div>
+
+                        <!-- 作法 2 -->
+                        <div class="feature-item-vertical" style="background-color: #fcfdfe; border-left-width: 6px; border-left-style: solid; border-left-color: #3498db; padding-top: 25px; padding-right: 30px; padding-bottom: 25px; padding-left: 30px;">
+                            <h4 style="color: #2c3e50; font-weight: 900; margin-bottom: 15px; display: flex; align-items: center; gap: 12px;">
+                                <span style="background-color: #eef9ff; color: #3498db; width: 32px; height: 32px; border-top-left-radius: 50%; border-top-right-radius: 50%; border-bottom-right-radius: 50%; border-bottom-left-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">2</span>
+                                大きな修正の前には「予備」を作る習慣を
+                            </h4>
+                            <p style="font-size: 1rem; color: #4b5563; line-height: 1.8; margin-top: 0px;">
+                                並べ替えやテーブル変換など、表の構造を大きく変える操作の前には、シートを丸ごとコピーして<strong>「予備（バックアップ）」</strong>を作っておきましょう。
+                                万が一、意図しない結果になっても「すぐに元に戻せる」という安心感があることで、落ち着いて作業ができ、結果として入力の正確性も向上します。
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="summary-box">
+                        <h2 class="section-title--summary">まとめ｜Excelは「情報を活かす」ための道具</h2>
+                        <p>Excelは、ただ文字や数字を記録するためのソフトではありません。</p>
+                        <p>データを整理し、必要な情報を探し、計算・集計したり、比較・分析したり。さらに、表やグラフにして相手に分かりやすく伝えることもできます。</p>
+                        <p>今回紹介した<strong>並べ替え・フィルター・テーブル</strong>は、その中の一部にすぎません。</p>
+                        <p>大切なのは、機能を覚えることだけではなく、<strong>「このデータをどう整理すれば、仕事がしやすくなるか」</strong>を考えることです。</p>
+                        <p>蓄積するデータにはテーブル、見せるための書類には通常のセルを使うなど、目的に合わせて機能を使い分けることもExcelを上手に使うポイントです。</p>
+                        
+                        <p style="text-align: center; margin-top: 25px; font-weight: 800; color: #2c3e50; font-size: 1.1rem;">
+                            Excelを「入力する場所」から、<strong>「仕事を進めるための道具」へ。</strong>
+                        </p>
+                        <p style="text-align: center; margin-top: 5px; color: #4b5563;">
+                            そう考えると、Excelの活用範囲はもっと広がっていきます。
+                        </p>
+                    </div>
 
                     <div class="article-footer-nav">
                         <p class="article-footer-nav__text">データの扱い方を学んだら、次は指に実務用語を馴染ませましょう</p>
