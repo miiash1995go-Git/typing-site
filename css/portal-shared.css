@@ -199,6 +199,57 @@ body.portal-page .step-content p {
     line-height: 1.5; 
 }
 
+/* --- 5分間テスト攻略記事専用：完全絶縁型ブルー・フロー (v20.9.05.Isolated) --- */
+/* 他のページに影響を与えないよう、専用クラス (--s1〜--s5) がついている時だけ枠と丸の色を変える */
+
+/* 1. 枠線を2pxにし、丸の中を白にする設定（今回の専用クラスがついている親に対してのみ実行） */
+.roadmap-step-item--s1, .roadmap-step-item--s2, .roadmap-step-item--s3, .roadmap-step-item--s4, .roadmap-step-item--s5 {
+    border-top-width: 2px !important;
+    border-right-width: 2px !important;
+    border-bottom-width: 2px !important;
+    border-left-width: 2px !important;
+    border-style: solid !important;
+}
+
+.roadmap-step-item--s1 .step-number-badge, .roadmap-step-item--s2 .step-number-badge, .roadmap-step-item--s3 .step-number-badge, .roadmap-step-item--s4 .step-number-badge, .roadmap-step-item--s5 .step-number-badge {
+    background-color: #ffffff !important;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 1px !important;
+    border-style: solid !important;
+    border-top-color: #e2e8f0 !important;
+    border-right-color: #e2e8f0 !important;
+    border-bottom-color: #e2e8f0 !important;
+    border-left-color: #e2e8f0 !important;
+}
+
+/* 2. 各STEPの彩色（他ページへの漏れ出しを物理的に封殺） */
+/* STEP1: 準備（非常に薄い水色） */
+.roadmap-step-item--s1 { background-image: linear-gradient(90deg, #F0F9FF 0%, #FFFFFF 100%) !important; border-top-color: #BAE6FD !important; border-right-color: #BAE6FD !important; border-bottom-color: #BAE6FD !important; border-left-color: #BAE6FD !important; }
+.roadmap-step-item--s1::before { background-color: #7DD3FC !important; }
+.roadmap-step-item--s1 .num { color: #0EA5E9 !important; }
+
+/* STEP2: 基礎（明るい空色） */
+.roadmap-step-item--s2 { background-image: linear-gradient(90deg, #E0F2FE 0%, #FFFFFF 100%) !important; border-top-color: #7DD3FC !important; border-right-color: #7DD3FC !important; border-bottom-color: #7DD3FC !important; border-left-color: #7DD3FC !important; }
+.roadmap-step-item--s2::before { background-color: #38BDF8 !important; }
+.roadmap-step-item--s2 .num { color: #0284C7 !important; }
+
+/* STEP3: リズム（標準的な青） */
+.roadmap-step-item--s3 { background-image: linear-gradient(90deg, #EFF6FF 0%, #FFFFFF 100%) !important; border-top-color: #93C5FD !important; border-right-color: #93C5FD !important; border-bottom-color: #93C5FD !important; border-left-color: #93C5FD !important; }
+.roadmap-step-item--s3::before { background-color: #60A5FA !important; }
+.roadmap-step-item--s3 .num { color: #2563EB !important; }
+
+/* STEP4: 技能（少し深い仕事の青） */
+.roadmap-step-item--s4 { background-image: linear-gradient(90deg, #DBEAFE 0%, #FFFFFF 100%) !important; border-top-color: #60A5FA !important; border-right-color: #60A5FA !important; border-bottom-color: #60A5FA !important; border-left-color: #60A5FA !important; }
+.roadmap-step-item--s4::before { background-color: #2563EB !important; }
+.roadmap-step-item--s4 .num { color: #1D4ED8 !important; }
+
+/* STEP5: 到達（プロフェッショナルな濃紺） */
+.roadmap-step-item--s5 { background-image: linear-gradient(90deg, #EFF6FF 0%, #FFFFFF 100%) !important; border-top-color: #2563EB !important; border-right-color: #2563EB !important; border-bottom-color: #2563EB !important; border-left-color: #2563EB !important; }
+.roadmap-step-item--s5::before { background-color: #1E3A8A !important; }
+.roadmap-step-item--s5 .num { color: #1E3A8A !important; }
+
 /* ボタンサイズ */
 body.portal-page .step-action-btn {
     background-color: #f1f2f6;
