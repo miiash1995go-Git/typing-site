@@ -34,7 +34,8 @@ body.focus-mode {
 }
 
 body.focus-mode header,
-body.focus-mode footer {
+body.focus-mode footer,
+body.focus-mode .instructor-flex-container {
     opacity: 0.15;
     pointer-events: none;
     transition: 0.6s ease;
@@ -1137,4 +1138,106 @@ body.game-body .summary-btn:hover {
 /* テンキーモード時は既存のrow設定を無効化 */
 #keyboard-container.tenkey-mode .keyboard-row {
     display: none !important;
+}
+
+/* ============================================================
+   カテゴリ選択グループ：アクティブ連動カラーチェンジ (v20.9.18)
+   ============================================================ */
+
+/* 1. 基礎：薄い青 */
+.category-group.group-basic:has(.btn-category.active) {
+    background-color: #f0f7ff !important;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 1px !important;
+    border-top-style: solid !important;
+    border-right-style: solid !important;
+    border-bottom-style: solid !important;
+    border-left-style: solid !important;
+    border-top-color: #b9e6fc !important;
+    border-right-color: #b9e6fc !important;
+    border-bottom-color: #b9e6fc !important;
+    border-left-color: #b9e6fc !important;
+}
+
+/* 2. チャレンジ：薄い黄色（※将来用） */
+.category-group.group-challenge:has(.btn-category.active) {
+    background-color: #fffde7 !important;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 1px !important;
+    border-top-style: solid !important;
+    border-right-style: solid !important;
+    border-bottom-style: solid !important;
+    border-left-style: solid !important;
+    border-top-color: #ffe8cc !important;
+    border-right-color: #ffe8cc !important;
+    border-bottom-color: #ffe8cc !important;
+    border-left-color: #ffe8cc !important;
+}
+
+/* 3. 実務：薄い緑 */
+.category-group.group-practical:has(.btn-category.active) {
+    background-color: #f0fdf4 !important;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 1px !important;
+    border-top-style: solid !important;
+    border-right-style: solid !important;
+    border-bottom-style: solid !important;
+    border-left-style: solid !important;
+    border-top-color: #bbf7d0 !important;
+    border-right-color: #bbf7d0 !important;
+    border-bottom-color: #bbf7d0 !important;
+    border-left-color: #bbf7d0 !important;
+}
+
+/* 4. 実力判定：薄い赤（ピンク） */
+.category-group.group-special:has(.btn-category.active) {
+    background-color: #fff1f2 !important;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 1px !important;
+    border-top-style: solid !important;
+    border-right-style: solid !important;
+    border-bottom-style: solid !important;
+    border-left-style: solid !important;
+    border-top-color: #fecdd3 !important;
+    border-right-color: #fecdd3 !important;
+    border-bottom-color: #fecdd3 !important;
+    border-left-color: #fecdd3 !important;
+}
+
+/* ============================================================
+   汎用プレイ・ステータスバー（将来の拡張モード共通） (v20.10.StatusBar)
+   ============================================================ */
+.play-status-bar {
+    position: absolute;
+    top: -45px;
+    right: 0px;
+    display: flex;
+    gap: 20px;
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 800;
+    font-size: 0.95rem;
+    z-index: 100;
+}
+.play-status-bar.hidden {
+    display: none !important;
+}
+.play-status-item {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 5px 15px;
+    border-radius: 6px;
+    border: 1px solid #eeeeee;
+    color: #1e293b;
+}
+#play-timer-val {
+    color: #2563eb;
+    font-size: 1.1rem;
+    font-weight: 900;
 }

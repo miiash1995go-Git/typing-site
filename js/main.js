@@ -134,9 +134,9 @@ class TypingApp {
         try {
             let loadedData = [];
 if (category.file === "all") {
-                // 総合判定から、特殊構造の「ローマ字基礎」および「テンキー」「5分間テスト」を除外
+                // 総合判定から、特殊構造や未実装のチャレンジ枠を除外
                 const fetchTasks = this.manifest.categories
-                    .filter(c => c.file !== "all" && c.id !== "roman_pure" && c.id !== "roman_complex" && c.id !== "test_5min" && c.id !== "tenkey")
+                    .filter(c => c.file !== "all" && c.id !== "roman_pure" && c.id !== "roman_complex" && c.id !== "test_5min" && c.id !== "tenkey" && c.id !== "quest" && c.id !== "zero" && c.id !== "memory")
                     .map(c => fetch(`./data/typing/${c.file}`).then(r => r.json()));
                 const results = await Promise.all(fetchTasks);
                 loadedData = results.flatMap(d => d.questions);
@@ -206,6 +206,9 @@ handleResize() {
                 } else if (this.currentCategoryId === 'roman_pure' || this.currentCategoryId === 'roman_complex') {
                     this.targetLimit = 200;
                     this.timeLimitMs = 180000;
+                } else if (this.currentCategoryId === 'speed') {
+                    this.targetLimit = 99999; // 文字数制限なし（時間まで無制限に打てる）
+                    this.timeLimitMs = 120000; // 120秒（2分）
                 } else {
                     this.targetLimit = 320;
                     this.timeLimitMs = 240000;
@@ -363,14 +366,23 @@ if (success) {
         this.updateLoop();
 
         // プレイ画面右上の情報表示（オーバーレイ）の制御
-        const overlay = document.getElementById('test-info-overlay');
-        if (this.isTestMode) {
-            if (overlay) overlay.classList.remove('hidden');
-            this.testCharactersTyped = 0;
-            this.startTestTimer();
-        } else {
-            if (overlay) overlay.classList.add('hidden');
-        }
+      const overlay = document.getElementById('test-info-overlay');
+      const statusBar = document.getElementById('play-status-bar');
+      
+      if (this.currentCategoryId === 'speed') {
+          if (statusBar) statusBar.classList.remove('hidden');
+          if (overlay) overlay.classList.add('hidden');
+          this.startSpeedTimer();
+      } else if (this.isTestMode) {
+          if (statusBar) statusBar.classList.add('hidden');
+          if (overlay) overlay.classList.remove('hidden');
+          this.testCharactersTyped = 0;
+          this.startTestTimer();
+      } else {
+          if (statusBar) statusBar.classList.add('hidden');
+          if (overlay) overlay.classList.add('hidden');
+      }
+
     }
 
     nextQuestion() {
@@ -617,6 +629,10 @@ if (success) {
         this.isTransitioning = false;
         if (this.testTimerId) clearInterval(this.testTimerId);
         
+        // スピードモードで隠した要素を元に戻す
+        const charCountEl = document.getElementById('test-char-count')?.closest('.test-info-item');
+        if (charCountEl) charCountEl.style.display = 'flex';
+
         // 【最優先】まず暗転を解除し、スクロールをトップに戻して「見える」状態を確保する
         document.body.classList.remove('focus-mode');
         window.scrollTo(0, 0);
@@ -876,6 +892,27 @@ if (typeof gtag === 'function') {
             }
         }, 1000);
     }
+
+    startSpeedTimer() {
+      let timeLeft = 120; // スピードモードは120秒（2分）
+      const updateSpeedUI = (sec) => {
+          const min = Math.floor(sec / 60);
+          const s = sec % 60;
+          const valEl = document.getElementById('play-timer-val');
+          if (valEl) {
+              valEl.innerText = `${min.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+          }
+      };
+      updateSpeedUI(timeLeft);
+      this.testTimerId = setInterval(() => {
+          timeLeft--;
+          updateSpeedUI(timeLeft);
+          if (timeLeft <= 0) {
+              clearInterval(this.testTimerId);
+              this.endGame();
+          }
+      }, 1000);
+  }
 
     updateTestUI(sec) {
         const min = Math.floor(sec / 60);

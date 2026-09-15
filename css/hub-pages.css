@@ -888,3 +888,304 @@
         white-space: nowrap; /* スマホでも横スクロール仕様を維持 */
     }
 }
+
+/* ============================================================
+   汎用 4段階ステップボックスシステム (v20.9.18 共有コンポーネント)
+   ============================================================ */
+.hub-step-box {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 35px;
+    margin-left: 0px;
+    padding-top: 40px;
+    padding-right: 40px;
+    padding-bottom: 40px;
+    padding-left: 40px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+    box-sizing: border-box;
+}
+
+.hub-step-box--blue { background-color: #f0f7ff; }
+.hub-step-box--yellow { background-color: #fffde7; }
+.hub-step-box--green { background-color: #f0fdf4; }
+.hub-step-box--red { background-color: #fff1f2; }
+
+.hub-step-badge {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 900;
+    padding-top: 4px;
+    padding-right: 14px;
+    padding-bottom: 4px;
+    padding-left: 14px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 15px;
+    margin-left: 0px;
+    color: #ffffff;
+}
+
+.hub-step-badge--blue { background-color: #2563EB; }
+.hub-step-badge--yellow { background-color: #f59e0b; }
+.hub-step-badge--green { background-color: #16a34a; }
+.hub-step-badge--red { background-color: #ef4444; }
+
+@media (max-width: 768px) {
+    .hub-step-box {
+        padding-top: 25px;
+        padding-right: 20px;
+        padding-bottom: 25px;
+        padding-left: 20px;
+    }
+}
+
+
+
+/* ============================================================
+   ガイド付きカリキュラム風セクション＆コンパクトカードシステム (完全統合版)
+   ============================================================ */
+
+/* 1. セクション全体の薄いブルーグラデーション背景ラッパー */
+.curriculum-section-wrapper {
+    background-image: linear-gradient(135deg, #f4f8fb 0%, #edf4fc 100%);
+    margin-top: 30px;
+    margin-right: 0px;
+    margin-bottom: 50px;
+    margin-left: 0px;
+    padding-top: 40px;
+    padding-right: 35px;
+    padding-bottom: 45px;
+    padding-left: 35px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: #e2e8f0;
+    border-right-color: #e2e8f0;
+    border-bottom-color: #e2e8f0;
+    border-left-color: #e2e8f0;
+    box-sizing: border-box;
+}
+
+/* 2. 2カラムグリッド配置 */
+.curriculum-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 25px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+
+/* 3. コンパクトな白カード本体 */
+.curriculum-card {
+    background-color: #ffffff;
+    position: relative;
+    padding-top: 18px;
+    padding-right: 20px;
+    padding-bottom: 18px;
+    padding-left: 20px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 6px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: #edf2f7;
+    border-right-color: #edf2f7;
+    border-bottom-color: #edf2f7;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.02);
+    text-decoration-line: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition-property: transform, box-shadow;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    box-sizing: border-box;
+}
+
+.curriculum-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* 4. カテゴリ別アクセントカラー（左線） */
+.curriculum-card--typing  { border-left-color: #2563EB; }
+.curriculum-card--career  { border-left-color: #F97316; }
+.curriculum-card--word    { border-left-color: #1D4ED8; }
+.curriculum-card--excel   { border-left-color: #16A34A; }
+.curriculum-card--ai      { border-left-color: #14B8A6; }
+.curriculum-card--windows { border-left-color: #38BDF8; }
+.curriculum-card--column  { border-left-color: #c4b5fd; }
+
+/* 5. 背景の巨大ナンバリング文字 (01, 02...) */
+.curriculum-card__num {
+    position: absolute;
+    right: 12px;
+    top: -2px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 4.5rem;
+    font-weight: 900;
+    color: #f1f5f9;
+    z-index: 1;
+    pointer-events: none;
+    line-height: 1;
+}
+
+/* 6. カード内ヘッダー（アイコン・タイトル） */
+.curriculum-card__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 2;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 8px;
+    margin-left: 0px;
+}
+
+.curriculum-card__icon-wrap {
+    width: 38px;
+    height: 38px;
+    background-color: #f8fbfe;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-style: solid;
+    border-color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.curriculum-card__icon {
+    width: 20px;
+    height: auto;
+    display: block;
+}
+
+.curriculum-card__meta {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.curriculum-card__title {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: #2c3e50;
+    line-height: 1.3;
+    border-bottom-style: none !important;
+}
+
+/* 7. 説明文とフッターリンク */
+.curriculum-card__desc {
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.5;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 12px;
+    margin-left: 0px;
+    position: relative;
+    z-index: 2;
+    flex-grow: 1;
+}
+
+.curriculum-card__footer {
+    text-align: right;
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+}
+
+.curriculum-card__link {
+    font-size: 0.8rem;
+    font-weight: 900;
+    text-decoration-line: none;
+    transition-property: transform;
+    transition-duration: 0.2s;
+    display: inline-block;
+}
+
+.curriculum-card--typing  .curriculum-card__link { color: #2563EB; }
+.curriculum-card--career  .curriculum-card__link { color: #F97316; }
+.curriculum-card--word    .curriculum-card__link { color: #1D4ED8; }
+.curriculum-card--excel   .curriculum-card__link { color: #16A34A; }
+.curriculum-card--ai      .curriculum-card__link { color: #14B8A6; }
+.curriculum-card--windows .curriculum-card__link { color: #38BDF8; }
+.curriculum-card--column  .curriculum-card__link { color: #7c3aed; }
+
+.curriculum-card:hover .curriculum-card__link {
+    transform: translateX(4px);
+}
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+    .curriculum-section-wrapper {
+        padding-top: 25px;
+        padding-right: 15px;
+        padding-bottom: 25px;
+        padding-left: 15px;
+    }
+    .curriculum-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- ハブページ用 水平線区切り (v20.10.Divider) --- */
+.hub-divider {
+    margin-top: 40px;
+    margin-right: 0px;
+    margin-bottom: 40px;
+    margin-left: 0px;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: #e2e8f0;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+}
