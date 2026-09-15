@@ -102,28 +102,32 @@
                     <h1 style="font-size: 1.3rem; margin-top: 0px; margin-bottom: 15px;">練習カテゴリを選択</h1>
                     
                     <div id="category-selector" class="btn-group-container">
-                        <div class="category-group">
+                        <!-- 1. 基礎グループ -->
+                        <div class="category-group group-basic">
                             <span class="group-label">基礎</span>
                             <button class="btn-category active" data-cat="roman_pure">ローマ字（基本）</button>
                             <button class="btn-category" data-cat="roman_complex">ローマ字（変則）</button>
-                            <button class="btn-category" data-cat="windows">Windows操作</button>
                             <button class="btn-category" data-cat="daily">日常会話</button>
+                            <button class="btn-category" data-cat="windows">Windows</button>
                         </div>
-                        <div class="category-group">
-                            <span class="group-label">Office</span>
-                            <button class="btn-category" data-cat="word_basic">Word基礎</button>
-                            <button class="btn-category" data-cat="word_mos">Word活用</button>
-                            <button class="btn-category" data-cat="excel_basic">Excel基礎</button>
-                            <button class="btn-category" data-cat="excel_mos">Excel活用</button>
+
+                        <!-- 2. チャレンジグループ -->
+                        <div class="category-group group-challenge">
+                            <span class="group-label">チャレンジ</span>
+                            <button class="btn-category" data-cat="speed">スピード</button>
                         </div>
-                        <div class="category-group">
+
+                        <!-- 3. 実務グループ -->
+                        <div class="category-group group-practical">
                             <span class="group-label">実務</span>
-                            <button class="btn-category" data-cat="it_terms">IT用語</button>
-                            <button class="btn-category" data-cat="ai_terms">AI用語</button>
-                            <button class="btn-category" data-cat="business">ビジネス</button>
+                            <button class="btn-category" data-cat="word">Word</button>
+                            <button class="btn-category" data-cat="excel">Excel</button>
+                            <button class="btn-category" data-cat="business_ai">ビジネスAI</button>
                             <button class="btn-category" data-cat="tenkey">テンキー</button>
                         </div>
-                        <div class="category-group special">
+
+                        <!-- 4. 実力判定グループ -->
+                        <div class="category-group special group-special">
                             <span class="group-label">実力判定</span>
                             <button class="btn-category btn-test" data-cat="test_5min">⏱ 5分間<br>タイピングテスト</button>
                             <button class="btn-category btn-total" data-cat="total_test">🔥 ぱそトレ！<br>総合力</button>
@@ -146,7 +150,12 @@
                 </div> <!-- .card 終了 -->
             </section>
 
-            <section id="game-screen" class="screen hidden">
+            <section id="game-screen" class="screen hidden" style="position: relative;">
+                <!-- 【汎用拡張】今後すべてのモードで共有するステータスバー枠 -->
+                <div id="play-status-bar" class="play-status-bar hidden">
+                    <div class="play-status-item play-status-timer">残り時間: <span id="play-timer-val">02:00</span></div>
+                </div>
+
                 <!-- テストモード専用の情報表示（右上に固定） -->
                 <div id="test-info-overlay" class="test-info-overlay hidden">
                     <div class="test-info-item">入力文字数: <span id="test-char-count">0</span></div>
@@ -192,37 +201,179 @@
                 </div>
             </section>
         </main>
+
+        <!-- 将来の広告バナー用スペース（高さ120pxを確保） -->
+        <div style="width: 100%; height: 120px; max-width: 920px; margin: 0 auto; display: flex; align-items: center; justify-content: center;"></div>
+
+        <!-- 【今回追加】現役講師のタイピング指導・柔軟性コンテンツ -->
+        <div class="instructor-flex-container" style="max-width: 920px; margin: 80px auto 40px auto; background-color: #ffffff; padding: 50px 60px; border-radius: 30px; box-shadow: 0px 20px 40px -20px rgba(0, 0, 0, 0.1);">
+            <div class="content-body" style="text-align: left;">
+                
+                <!-- 汎用アイコン付きタイトルボックス -->
+                <div class="icon-title-box">
+                    <img src="img/Typing/play-title01.png" alt="" class="icon-title-box__img">
+                    <h2 class="icon-title-box__text">指に刻まれる「タイピングの柔軟性」</h2>
+                </div>
+                
+                <p>パソコンの練習をしていると、</p>
+                <p>「もっと速く打てるようになりたい」</p>
+                <p>と思うことがあります。</p>
+                
+                <p>もちろん、速く打てることは大切です。でも、タイピングの上達は、指を速く動かすことだけではありません。</p>
+                
+                <p>キーボードの上で、どこまで指を伸ばすのか。どの方向へ動かすのか。次のキーを打つために、指をどう動かすのか。</p>
+                
+                <p>こうした感覚が、練習を重ねるうちに少しずつ身についてきます。</p>
+                
+                <p>私は、この感覚を<strong>「タイピングの柔軟性」</strong>と考えています。</p>
+                
+                <p>ここでは、実際にタイピングを教えていて感じる、速さだけでは分からない部分についてお話しします。</p>
+
+                <!-- 1つ目のボックス：指の移動距離を覚える -->
+                <div class="content-box">
+                    <h3 class="content-box__title">
+                        <img src="img/minibulb.png" alt="" class="content-box__title-icon">指の移動距離を覚える
+                    </h3>
+                    
+                    <p>タイピングを始めたばかりの人は、ホームポジションから離れたキーを打つときに、距離感がうまくつかめないことがあります。</p>
+                    
+                    <p>例えば「J」の位置から、少し離れたキーへ指を伸ばす。たったそれだけのことでも、最初は毎回同じようには動かせません。</p>
+                    
+                    <p>これは当たり前のことです。手の大きさも違えば、指の長さも人それぞれだからです。</p>
+                    
+                    <p>だから、「このキーからこのキーまでは、このくらい」という感覚は、説明を読んだだけでは身につきません。自分の指で何度も打って、覚えていくものです。</p>
+                    
+                    <p>例えば、キーボードの「ー」（伸ばし棒）です。日本語を入力していると、よく出てくるキーですね。</p>
+                    
+                    <p>「J」の位置を基準にして「ー」を打とうとすると、普段使っているキーよりも少し遠く感じる人もいるでしょう。ぱそトレ！では、「ー」は薬指で打つことを基本としておすすめしています。</p>
+                    
+                    <p>ただし、タイピング画面下部のキーボード表示にある色分けは、一般的なタッチタイピングの考え方に合わせています。そのため、画面の色と、ぱそトレ！でおすすめしている指使いが、すべて同じというわけではありません。</p>
+                    
+                    <p>大切なのは、「Jからーまで、何センチある」と数字で覚えることではありません。Jの位置を基準に、「このくらい指を伸ばせば届く」という自分なりの距離感を持つことです。</p>
+                    
+                    <p>これは、何度も打っているうちに分かってきます。最初は届かなかったり、違うキーを押してしまったりする。それでも繰り返していると、だんだん手が覚えてきます。タイピングでは、こういう自分の指だけが分かる距離感がとても大切です。</p>
+                </div>
+
+                <!-- 2つ目のボックス：指を開くときは、無理をしない -->
+                <div class="content-box">
+                    <h3 class="content-box__title">
+                    <img src="img/minibulb.png" alt="" class="content-box__title-icon">指を開くときは、無理をしない
+                    </h3>
+                    
+                    <p>もう一つ、初心者の方によくあるのが、「指をもっと柔らかくしないといけない」と考えてしまうことです。</p>
+                    
+                    <p>でも、無理に指を広げたり、関節をストレッチしたりする必要はありません。いろいろな言葉を打っていれば、指は自然といろいろな動きをするようになります。</p>
+                    
+                    <p>指を左右に開くときも、<strong>扇子を開くようなイメージ</strong>で考えてみてください。</p>
+                    
+                    <p>「指を思い切り広げる」のではありません。必要なところまで、自然に開く。</p>
+                    
+                    <p>人差し指を動かそうとすると、中指や薬指も少し動きます。人間の指は、それぞれが完全に独立して動くわけではありません。</p>
+                    
+                    <p>ですから、「この指以外は絶対に動かしてはいけない」と考えすぎなくて大丈夫です。むしろ、そう考えすぎると手に力が入ってしまいます。</p>
+                    
+                    <p>力を抜いて、必要な方向へ自然に指を動かす。いろいろな言葉を打つことで、「この言葉なら、こう指を開く」「次のキーは、この方向へ動かす」という感覚が少しずつ増えていきます。これも、タイピングの柔軟性です。</p>
+                </div>
+
+                <!-- 3つ目のボックス：指を高く持ち上げない -->
+                <div class="content-box">
+                    <h3 class="content-box__title">
+                    <img src="img/minibulb.png" alt="" class="content-box__title-icon">指を高く持ち上げない
+                    </h3>
+                    
+                    <p>実際のレッスンで初心者の手元を見ていると、キーを押すたびに指を大きく持ち上げる人がいます。</p>
+                    
+                    <p>上から指を振り下ろして、「トン、トン」とキーを叩くような動きです。</p>
+                    
+                    <p>一生懸命打っているので、本人は気づいていないこともあります。でも、これは少しもったいない動きです。</p>
+                    
+                    <p>指をキーボードから高く持ち上げるほど、次のキーへ移動する距離が長くなります。そして、指を持ち上げている時間も、タイピングの時間になります。</p>
+                    
+                    <p>もちろん、「指を絶対に浮かせてはいけない」ということではありません。キーを打つために指を動かすのは当然です。</p>
+                    
+                    <p>ただ、<strong>必要以上にキーボードから離さない。</strong>これを意識してみてください。</p>
+                    
+                    <p>指を高く振り上げるのではなく、キーボードのすぐ上から次のキーへ移動する。動きが小さくなってくると、余計な力も入りにくくなります。</p>
+                    
+                    <p>タイピングが速くなってくる人は、必ずしも指そのものを速く動かしているわけではありません。無駄な動きが少なくなっている。ここも、速さにつながる大きなポイントです。</p>
+                </div>
+
+                <!-- 4つ目のボックス：言葉のつながりを指に覚えさせる -->
+                <div class="content-box">
+                    <h3 class="content-box__title">
+                    <img src="img/minibulb.png" alt="" class="content-box__title-icon">言葉のつながりを指に覚えさせる
+                    </h3>
+                    
+                    <p>ここは、タイピングを教える中で、私が特に大切だと感じているところです。</p>
+                    
+                    <p>タイピングを始めたばかりの頃は、「お」「や」「ゆ」「び」というように、一文字ずつ確認しながら打ちます。</p>
+                    
+                    <p>でも、練習を続けていると、少しずつ変わってきます。</p>
+                    
+                    <p>例えば、「おや」まで打てたとします。</p>
+                    
+                    <p>ここから、どんな言葉が続くでしょうか。</p>
+                    
+                    <p>「おやゆび」、「おやかた」、「おやこ」、「おやすみ」、「おやつ」。いろいろあります。</p>
+                    
+                    <p>こうした言葉を何度も打っていると、文字と文字のつながりが少しずつ自分の中に残っていきます。</p>
+                    
+                    <p>最初は、「お」の次は「や」。その次は「ゆ」。その次は「び」。と、一文字ずつ考えていたものが、「おやゆび」という言葉のまとまりで捉えられるようになる。</p>
+                    
+                    <p>すると、次のキーを毎回探さなくても、指が自然についてくるようになります。これが、タイピングが楽になってくる一つの瞬間です。</p>
+                    
+                    <p>だから、タイピング練習では、キーの位置だけを覚えればいいわけではありません。いろいろな言葉のつながりを、実際に指で経験すること。これが大切です。</p>
+                </div>
+
+                <!-- 5つ目のボックス：最後は自分の言葉を打てるように -->
+                <div class="content-box">
+                    <h3 class="content-box__title">
+                    <img src="img/minibulb.png" alt="" class="content-box__title-icon">最後は「自分の言葉」を打てるように
+                    </h3>
+                    
+                    <p>タイピングが上達した先にあるのは、単に文字を速く入力できることだけではありません。</p>
+                    
+                    <p>私が最終的に目指してほしいのは、<strong>自分の頭の中にある言葉を、自分の指で自然に入力できること</strong>です。</p>
+                    
+                    <p>仕事でパソコンを使う場面を考えてみてください。</p>
+                    
+                    <p>メールを書く。検索する。Excelに数字やメモを入力する。文章を作る。生成AIに質問する。</p>
+                    
+                    <p>どれも、誰かが用意した文章をそのまま写しているわけではありません。自分で考えた言葉を、自分で入力しています。</p>
+                    
+                    <p>だからこそ、タイピング練習でも、いろいろな言葉に触れてほしいと思っています。</p>
+                    
+                    <p>「この言葉なら、こう指が動く」というパターンを、自分の中に少しずつ増やしていく。その積み重ねが、実際に仕事でパソコンを使うときの安心感につながります。</p>
+                    
+                    <p>「次のキーはどこだろう」と一文字ずつ探すのではなく、自分が考えた言葉を、そのまま指先から入力できる。これが、タイピングの一つの完成形だと私は考えています。</p>
+                </div>
+
+                <!-- まとめボックス -->
+                <div class="content-box" style="background-color: #f1f5f9; border-color: #cbd5e1;">
+                    <h3 class="content-box__title" style="text-align: center; border-bottom-color: #94a3b8;"><img src="img/minibulb.png" alt="" class="content-box__title-icon">まとめ</h3>
+                    <p style="text-align: center;">タイピングの上達は、慌てて指を速く動かすことではありません。</p>
+                    <p>練習を繰り返す中で、指の移動距離を覚える。自然に指を開く。必要以上に指を持ち上げない。言葉のつながりを覚える。そうした経験が、少しずつ自分の中に蓄積されていきます。</p>
+                    <p style="text-align: center; margin-top: 15px;"><strong>そして最後には、自分が考えた言葉を、自分の指で自然に打てる。そこを目指していきましょう。</strong></p>
+                </div>
+
+            </div>
+        </div>
+
 <div class="game-description-wrapper">
             <article class="static-page game-info-section"><nav class="breadcrumb" id="dynamic-breadcrumb"></nav>
                 <div class="content-body">
-                    <h1 class="page-title">仕事に繋がるタイピング練習の進め方</h1>
-                    <p class="page-subtitle">現役講師が教える、初心者から実務レベルへ進むための完全ガイド</p>
+                    <h1 class="page-title">タイピング練習の進め方</h1>
+                    <p class="page-subtitle">初心者から実務レベルへ　タイピング練習画面について</p>
 
                     <p>
-                        タイピングは、パソコンを「道具」として使いこなすための最も基本的なスキルです。
-                        単に文字を打つ速さを競うのではなく、**「実際の職場でパニックにならず、正確に業務をこなせる力」**を身につけることを目的としています。
+                        タイピングは、パソコンを使いこなすための最も基本的なポータブルスキルです。
+                        文字を打つ速さを競うのではなく、「実際の職場で正確に業務をこなせる力」を身につけることを目的としています。
                     </p>
 
                     <div class="instructor-advice">
                         <b>💡 大切なルール：Backspace（修正）について</b><br>
-                        この「練習画面」では、一打ずつの正確性を養うため、ミスをすると先に進めない設定になっています。**Backspaceキーによる文字の修正ができるのは「5分間タイピングテスト」のみ**です。<br>
+                        この「練習画面」では、一打ずつの正確性を養うため、ミスをすると先に進めない設定になっています。<strong>Backspaceキーによる文字の修正ができるのは「5分間タイピングテスト」のみ</strong>です。<br>
                         普段の練習では「間違えたらやり直す」という意識を持つことで、仕事での入力ミスそのものを減らす「正確な指の動き」が身につきます。
-                    </div>
-
-                    <hr class="section-divider">
-
-                    <h2>なぜ「いろんな項目」を練習する必要があるのか</h2>
-                    <p>
-                        ぱそトレ！に用意された多様なカテゴリを練習し、様々なタイピングワードの履歴を頭に残しておくと、**指の移動距離や角度に対する「柔軟性」**が出てきます。
-                    </p>
-                    
-                    <div class="info-note-box">
-                        <strong class="note-title">脳と指に刻まれる「タイピングの柔軟性」</strong>
-                        <ul>
-                            <li><strong>移動距離の把握：</strong> 上段から下段へ飛ぶ際の正確な距離感が養われます。</li>
-                            <li><strong>角度の適応：</strong> 指の関節に柔軟な動きのパターンが生まれ、どんな言葉にも対応できるようになります。</li>
-                            <li><strong>パターンの蓄積：</strong> 複雑なビジネス用語を打つ経験が、実務での余裕を生み出します。</li>
-                        </ul>
                     </div>
 
                     <hr class="section-divider">
@@ -240,44 +391,33 @@
                             <p>「がぎぐげご」などの濁音や、「しゃしゅしょ」といった拗音を練習します。効率的な運指をマスターするのに最適です。</p>
                         </div>
                         <div class="info-card">
-                            <h3>Windows操作</h3>
-                            <p>Windowsでよく使う基本操作や用語を覚えながらタイピングできます。パソコン操作への苦手意識をなくしましょう。</p>
-                        </div>
-                        <div class="info-card">
                             <h3>日常会話</h3>
                             <p>一般的な文章でタイピングの基礎練習を行います。初心者の方でも取り組みやすい内容です。</p>
                         </div>
                         <div class="info-card">
-                            <h3>Word基礎</h3>
-                            <p>Wordで使用する基本用語や操作を中心に練習します。Wordを初めて学習する方におすすめです。</p>
+                            <h3>Windows</h3>
+                            <p>Windowsでよく使う基本操作や用語を覚えながらタイピングできます。パソコン操作への苦手意識をなくしましょう。</p>
                         </div>
                         <div class="info-card">
-                            <h3>Word活用</h3>
-                            <p>MOS試験の公式範囲をベースに、実務で役立つWordの中級以上スキルを中心に練習します。資料作成に欠かせない用語を習得できます。</p>
+                            <h3>スピード</h3>
+                            <p>制限時間の中で、どれだけ多くの文字を正確に入力できるかに挑戦します。基礎練習で身につけた力を試すのに最適です。</p>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h3>Word</h3>
+                            <p>文書作成の基本から、実務で使われるビジネス文書の整え方を中心に練習します。Wordを初めて学習する方におすすめです。Wordの便利な機能名もあります。</p>
                         </div>
                         <div class="info-card">
-                            <h3>Excel基礎</h3>
-                            <p>Excelでよく使用する基本機能や用語を中心に練習します。これからExcelを学ぶ方に最適です。</p>
+                            <h3>Excel</h3>
+                            <p>表計算や自動計算の基本機能を中心に練習します。これからExcelを使って仕事を始める方に最適です。関数やExcelの機能やボタン名も。</p>
                         </div>
                         <div class="info-card">
-                            <h3>Excel活用</h3>
-                            <p>MOS試験の公式出題範囲の中から、実務で頻繁に使用する関数やテーブル操作などを厳選。現場でのデータ管理に直結する内容です。</p>
-                        </div>
-                        <div class="info-card">
-                            <h3>IT用語</h3>
-                            <p>仕事で見かけるIT用語をタイピングしながら覚えられます。事務職を目指すなら知っておきたい言葉が満載です。</p>
-                        </div>
-                        <div class="info-card">
-                            <h3>AI用語</h3>
-                            <p>ChatGPTなどの生成AIで使われる用語を学びながら練習。AI時代の新しい基礎知識を身につけます。</p>
-                        </div>
-                        <div class="info-card">
-                            <h3>ビジネス</h3>
-                            <p>社会人として知っておきたいビジネス用語や言い回しを練習。社内コミュニケーションにも役立つ知識です。</p>
+                            <h3>ビジネスAI</h3>
+                            <p>ビジネス文書の作成補助や、ChatGPTなどの生成AIで使われる用語を学びながら練習します。AI時代の新しい実務スキルを身につけます。</p>
                         </div>
                         <div class="info-card">
                             <h3>テンキー</h3>
-                            <p>事務や医療現場で必須となる数字入力を集中練習。データ入力の正確性を劇的に向上させます。</p>
+                            <p>事務や様々な職場で必要になる数字入力を集中練習。データ入力の正確性を向上させます。</p>
                         </div>
                         <div class="info-card">
                             <h3>5分間タイピングテスト</h3>
