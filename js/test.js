@@ -67,7 +67,24 @@ class TypingExam {
         });
 
         try {
-            const res = await fetch('./data/typing/test_5min.json');
+            // 【JST基準の3日周期インデックス算出】（0, 1, 2）
+            const now = new Date();
+            const jstTime = now.getTime() + (now.getTimezoneOffset() * 60000) + (9 * 3600000);
+            const jstDate = new Date(jstTime);
+            const baseDate = new Date('2026-01-01T00:00:00+09:00');
+            const diffTime = jstDate.getTime() - baseDate.getTime();
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const dayIdx = Math.max(0, diffDays) % 3; // 0, 1, 2
+
+            // ファイル名の動的組み立て（0番目は test_5min.json、1番目は _02、2番目は _03）
+            let targetFile = 'test_5min.json';
+            if (dayIdx === 1) {
+                targetFile = 'test_5min_02.json';
+            } else if (dayIdx === 2) {
+                targetFile = 'test_5min_03.json';
+            }
+
+            const res = await fetch(`./data/typing/${targetFile}`);
             const data = await res.json();
             this.questionPool = data.categories;
             
@@ -276,7 +293,9 @@ class TypingExam {
                 this.inputContent += char;
                 matchedAny = true;
             } else {
-                this.missCount++;
+                // 【ミス数の拡張】途中で不一致になった場合、その今回一括入力（コミット）された残りの文字数（または全体）をミスとして一網打尽に加算する
+                const errorLength = committedStr.length - i;
+                this.missCount += (errorLength > 0 ? errorLength : 1);
                 hasError = true;
                 break;
             }
@@ -359,7 +378,8 @@ class TypingExam {
             document.getElementById('res-cpm').innerText = "---";
             document.getElementById('res-comment').innerText = ""; 
         } else {
-            const accuracy = this.totalChars > 0 ? (100 - (this.missCount / this.totalChars * 100)).toFixed(1) : "0.0";
+            const totalAttempts = this.totalChars + this.missCount;
+            const accuracy = totalAttempts > 0 ? ((this.totalChars / totalAttempts) * 100).toFixed(1) : "100.0";
             const cpm = Math.floor(this.totalChars / 5);
             const rank = this.calculateRank(this.totalChars);
 
