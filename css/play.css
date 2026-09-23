@@ -55,7 +55,7 @@ body.focus-mode #app {
    ============================================================ */
 .card {
     background-color: #ffffff !important;
-    padding-top: 20px !important;
+    padding-top: 22px !important; /* タイトル分の上余白を詰める */
     padding-right: 30px !important;
     padding-bottom: 25px !important;
     padding-left: 30px !important;
@@ -81,7 +81,17 @@ body.focus-mode #app {
     pointer-events: auto !important;
 }
 
-/* --- 1. カテゴリ選択エリア：4カラム等幅統治 --- */
+/* --- 0. 「練習カテゴリを選択」タイトルの視認性強化 --- */
+.card > h1 {
+    font-size: 1.4rem !important;
+    font-weight: 900 !important;
+    color: #1e293b !important;
+    letter-spacing: 0.03em;
+    margin-top: 0px !important;
+    margin-bottom: 20px !important;
+}
+
+/* --- 1. カテゴリ選択エリア：4カラム等幅統治 ＆ 枠線強化 --- */
 .btn-group-container {
     display: flex !important;
     flex-direction: row !important;
@@ -100,48 +110,43 @@ body.focus-mode #app {
     display: flex !important;
     flex-direction: column !important;
     gap: 6px !important;
-    padding-top: 10px !important;
+    padding-top: 12px !important;
     padding-right: 10px !important;
-    padding-bottom: 10px !important;
+    padding-bottom: 12px !important;
     padding-left: 10px !important;
     background-color: #f8f9fa !important;
     border-top-left-radius: 15px !important;
     border-top-right-radius: 15px !important;
     border-bottom-right-radius: 15px !important;
     border-bottom-left-radius: 15px !important;
-    border-top-width: 1px !important;
-    border-top-style: solid !important;
-    border-top-color: #eeeeee !important;
-    border-right-width: 1px !important;
-    border-right-style: solid !important;
-    border-right-color: #eeeeee !important;
-    border-bottom-width: 1px !important;
-    border-bottom-style: solid !important;
-    border-bottom-color: #eeeeee !important;
-    border-left-width: 1px !important;
-    border-left-style: solid !important;
-    border-left-color: #eeeeee !important;
+    /* BOX自体の枠線を濃くして輪郭をはっきりさせる */
+    border: 2px solid #94a3b8 !important;
     position: relative !important;
     z-index: 5 !important;
 }
 
-/* --- 2. ボタン共通デザイン ＆ クリック保証 --- */
+/* 「基礎」「チャレンジ」「実務」「実力判定」のグループ見出しをハッキリさせる */
+.category-group .group-label,
+.group-label {
+    font-size: 0.9rem !important;
+    font-weight: 900 !important;
+    color: #334155 !important;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+    display: block;
+    text-align: center;
+}
+
+/* --- 2. ボタン共通デザイン ＆ 枠線の視認性強化 --- */
 .btn-category {
     width: 100% !important;
     background-color: #ffffff;
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-style: solid;
-    border-color: #dddddd;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
+    /* ボタンの枠線を濃くしてキリッとさせる */
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 10px;
     font-weight: 800;
     font-size: 0.85rem;
-    color: #2c3e50;
+    color: #1e293b !important; /* 文字色を濃くしてハッキリ見せる */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -219,38 +224,49 @@ body.focus-mode #app {
 }
 
 .compact-best {
-    flex: 0 0 200px !important;
+    flex: 0 0 auto !important; /* 固定幅を解除し、内容に美しくフィットさせる */
     text-align: left !important;
-    background-color: #f8f9fa !important;
-    padding-top: 10px;
-    padding-right: 20px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    border-bottom-right-radius: 30px;
-    border-bottom-left-radius: 30px;
-    border: 1px solid #eeeeee;
-    display: flex;
-    align-items: center;
+    /* 上質な光沢を感じさせる微かなグラデーションとプレミアムな薄いゴールド/ブルーの枠線 */
+    background: linear-gradient(135deg, #ffffff 0%, #fef3c7 100%) !important;
+    padding-top: 8px !important;
+    padding-right: 18px !important;
+    padding-bottom: 8px !important;
+    padding-left: 16px !important;
+    border-top-left-radius: 30px !important;
+    border-top-right-radius: 30px !important;
+    border-bottom-right-radius: 30px !important;
+    border-bottom-left-radius: 30px !important;
+    border: 1.5px solid #f59e0b !important; /* プレミアムなゴールド/オレンジ系の上品な枠線 */
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    box-shadow: 0px 3px 10px rgba(245, 158, 11, 0.1) !important;
 }
+
 .best-label {
-    font-size: 0.75rem;
-    color: #7f8c8d;
-    font-weight: 800;
-    margin-right: 8px;
+    font-size: 0.7rem !important;
+    color: #b45309 !important; /* ゴールドに馴染む深みのあるブラウン・オレンジ系 */
+    font-weight: 800 !important;
+    letter-spacing: 0.05em;
+    margin-right: 2px !important;
 }
+
 .best-value {
-    font-size: 1.2rem;
-    color: #3498db;
-    font-weight: 900;
+    font-family: 'Roboto Mono', monospace !important; /* スコア専用のシャープな数字フォント */
+    font-size: 1.35rem !important; /* 数字をより大きく主役に */
+    color: #d97706 !important;     /* プレミアム感のあるリッチなゴールド/オレンジ */
+    font-weight: 900 !important;
+    letter-spacing: -0.02em;
+    line-height: 1 !important;
 }
-/* 単位専用：数値より小さく、落ち着いたグレーに設定 */
+
+/* 単位専用：数値より小さく、落ち着いたトーンに設定 */
 .best-unit {
-    font-size: 0.85rem;
-    color: #94a3b8;
-    font-weight: 800;
-    margin-left: 4px;
+    font-size: 0.75rem !important;
+    color: #b45309 !important;
+    font-weight: 800 !important;
+    margin-left: 1px !important;
+    opacity: 0.8;
 }
 
 #start-btn {
@@ -258,45 +274,55 @@ body.focus-mode #app {
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
-    padding-top: 12px !important;
-    padding-right: 50px !important;
-    padding-bottom: 12px !important;
-    padding-left: 50px !important;
-    font-size: 1.2rem !important;
-    border-top-left-radius: 40px !important;
-    border-top-right-radius: 40px !important;
-    border-bottom-right-radius: 40px !important;
-    border-bottom-left-radius: 40px !important;
-    background-color: #2c3e50 !important;
-    color: #ffffff !important; /* 文字色を白に固定 */
-    text-decoration-line: none !important; /* 下線を強制排除 */
+    background-color: #1e293b !important; 
+    color: #ffffff !important; 
+    background-image: linear-gradient(180deg, #334155 0%, #1e293b 100%) !important;
+    border-top-style: solid !important;
+    border-right-style: solid !important;
+    border-bottom-style: solid !important;
+    border-left-style: solid !important;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 1px !important;
+    border-top-color: #475569 !important;   
+    border-right-color: #0f172a !important;
+    border-bottom-color: #0f172a !important;
+    border-left-color: #0f172a !important;
+    padding-top: 9px !important;   
+    padding-right: 45px !important; 
+    padding-bottom: 9px !important; 
+    padding-left: 45px !important; 
+    font-size: 1.1rem !important; /* フォントサイズを他と同じ 1.1rem に復元 */
+    border-top-left-radius: 30px !important;
+    border-top-right-radius: 30px !important;
+    border-bottom-right-radius: 30px !important;
+    border-bottom-left-radius: 30px !important;
+    text-decoration-line: none !important; 
     font-weight: 800 !important;
-    border-top-style: none !important;
-    border-right-style: none !important;
-    border-bottom-style: none !important;
-    border-left-style: none !important;
-    box-shadow: 0px 4px 0px #1a252f !important;
+    box-shadow: 0px 4px 0px #0f172a, 0px 6px 12px rgba(15, 23, 42, 0.12) !important; 
     cursor: pointer !important;
     z-index: 50 !important;
     white-space: nowrap !important;
-    display: inline-flex !important; /* aタグでもサイズを保てるように設定 */
+    display: inline-flex !important; 
     align-items: center !important;
     justify-content: center !important;
     transition-property: transform, box-shadow, background-color !important;
-    transition-duration: 0.1s !important;
+    transition-duration: 0.15s !important;
+    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1) !important;
 }
 
 #start-btn:hover {
-    background-color: #34495e !important;
-    transform: translate(-50%, calc(-50% - 2px)) !important;
-    box-shadow: 0px 6px 0px #1a252f !important;
+    background-color: #2563eb !important; 
+    background-image: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    border-top-color: #60a5fa !important;
+    transform: translate(-50%, calc(-50% - 2px)) !important; 
+    box-shadow: 0px 5px 0px #1e40af, 0px 10px 18px rgba(37, 99, 235, 0.2) !important;
 }
 
-/* ハブページのaタグ同様、指が触れた瞬間にストンと落ちる設定 */
 #start-btn:active {
-    transform: translate(-50%, calc(-50% + 3px)) !important;
-    box-shadow: 0px 1px 0px #1a252f !important;
-    transition-property: none !important;
+    transform: translate(-50%, calc(-50% + 2px)) !important;
+    box-shadow: 0px 2px 0px #1e40af, 0px 3px 6px rgba(37, 99, 235, 0.1) !important;
 }
 
 /* 無効化状態の擬似定義（ボタンが押されている最中などの連打防止用） */
@@ -781,7 +807,7 @@ body.game-body #keyboard-container {
 }
 
 /* 1024px以下での制限発動 */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
     body.game-body .mobile-restriction-overlay { display: flex; }
     body.game-body #app { display: none !important; }
 }
@@ -1076,18 +1102,18 @@ body.game-body .summary-btn:hover {
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
     border-bottom-left-radius: 12px;
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
+    border-top-width: 2px;
     border-top-style: solid;
+    border-top-color: #cbd5e1;
+    border-right-width: 2px;
     border-right-style: solid;
+    border-right-color: #cbd5e1;
+    border-bottom-width: 2px;
     border-bottom-style: solid;
+    border-bottom-color: #cbd5e1;
+    border-left-width: 2px;
     border-left-style: solid;
-    border-top-color: #eeeeee;
-    border-right-color: #eeeeee;
-    border-bottom-color: #eeeeee;
-    border-left-color: #eeeeee;
+    border-left-color: #cbd5e1;
 }
 
 /* ============================================================
@@ -1144,75 +1170,31 @@ body.game-body .summary-btn:hover {
 }
 
 /* ============================================================
-   カテゴリ選択グループ：アクティブ連動カラーチェンジ (v20.9.18)
+   カテゴリ選択グループ：アクティブ連動カラーチェンジ (枠線完全連動版)
    ============================================================ */
 
-/* 1. 基礎：薄い青 */
+/* 1. 基礎（選択中）：薄い青 ＆ クッキリした青枠線 */
 .category-group.group-basic:has(.btn-category.active) {
     background-color: #f0f7ff !important;
-    border-top-width: 1px !important;
-    border-right-width: 1px !important;
-    border-bottom-width: 1px !important;
-    border-left-width: 1px !important;
-    border-top-style: solid !important;
-    border-right-style: solid !important;
-    border-bottom-style: solid !important;
-    border-left-style: solid !important;
-    border-top-color: #b9e6fc !important;
-    border-right-color: #b9e6fc !important;
-    border-bottom-color: #b9e6fc !important;
-    border-left-color: #b9e6fc !important;
+    border: 2px solid #3498db !important; /* 鮮やかな青枠 */
 }
 
-/* 2. チャレンジ：薄い黄色（※将来用） */
+/* 2. チャレンジ（選択中）：薄い黄色 ＆ クッキリしたオレンジ枠線 */
 .category-group.group-challenge:has(.btn-category.active) {
     background-color: #fffde7 !important;
-    border-top-width: 1px !important;
-    border-right-width: 1px !important;
-    border-bottom-width: 1px !important;
-    border-left-width: 1px !important;
-    border-top-style: solid !important;
-    border-right-style: solid !important;
-    border-bottom-style: solid !important;
-    border-left-style: solid !important;
-    border-top-color: #ffe8cc !important;
-    border-right-color: #ffe8cc !important;
-    border-bottom-color: #ffe8cc !important;
-    border-left-color: #ffe8cc !important;
+    border: 2px solid #f39c12 !important; /* 鮮やかなオレンジ枠 */
 }
 
-/* 3. 実務：薄い緑 */
+/* 3. 実務（選択中）：薄い緑 ＆ クッキリした緑枠線 */
 .category-group.group-practical:has(.btn-category.active) {
     background-color: #f0fdf4 !important;
-    border-top-width: 1px !important;
-    border-right-width: 1px !important;
-    border-bottom-width: 1px !important;
-    border-left-width: 1px !important;
-    border-top-style: solid !important;
-    border-right-style: solid !important;
-    border-bottom-style: solid !important;
-    border-left-style: solid !important;
-    border-top-color: #bbf7d0 !important;
-    border-right-color: #bbf7d0 !important;
-    border-bottom-color: #bbf7d0 !important;
-    border-left-color: #bbf7d0 !important;
+    border: 2px solid #16a34a !important; /* 鮮やかな緑枠 */
 }
 
-/* 4. 実力判定：薄い赤（ピンク） */
+/* 4. 実力判定（選択中）：薄い赤（ピンク） ＆ クッキリした赤枠線 */
 .category-group.group-special:has(.btn-category.active) {
     background-color: #fff1f2 !important;
-    border-top-width: 1px !important;
-    border-right-width: 1px !important;
-    border-bottom-width: 1px !important;
-    border-left-width: 1px !important;
-    border-top-style: solid !important;
-    border-right-style: solid !important;
-    border-bottom-style: solid !important;
-    border-left-style: solid !important;
-    border-top-color: #fecdd3 !important;
-    border-right-color: #fecdd3 !important;
-    border-bottom-color: #fecdd3 !important;
-    border-left-color: #fecdd3 !important;
+    border: 2px solid #ef4444 !important; /* 鮮やかな赤枠 */
 }
 
 /* ============================================================
@@ -1346,4 +1328,56 @@ body.game-body .summary-btn:hover {
 @keyframes rank-shimmer {
     0% { background-position: 0% center; }
     100% { background-position: 200% center; }
+}
+
+/* ============================================================
+   カテゴリカード上部ヘッダー帯システム (v20.10.HeaderBand)
+   ============================================================ */
+.category-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    margin: -12px -10px 10px -10px; /* 親のパディングを相殺してBOXの端まで色を伸ばす */
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    box-sizing: border-box;
+}
+
+.group-main-title {
+    font-size: 1.15rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+}
+
+.group-sub-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: right;
+    opacity: 0.85;
+}
+
+/* 1. 基礎：ブルー系 */
+.group-basic .category-header {
+    background-color: #3b82f6;
+    color: #ffffff;
+}
+
+/* 2. チャレンジ：イエロー・オレンジ系 */
+.group-challenge .category-header {
+    background-color: #f59e0b;
+    color: #ffffff;
+}
+
+/* 3. 実務：グリーン系 */
+.group-practical .category-header {
+    background-color: #10b981;
+    color: #ffffff;
+}
+
+/* 4. 実力判定：目に優しく上品なソフト・レンガ赤系 */
+.group-special .category-header {
+    background-color: #be123c; /* ギラギラしない、深みと落ち着きのある上品なレッド */
+    color: #ffffff;
 }

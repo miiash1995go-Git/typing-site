@@ -9,6 +9,28 @@
 
 /* --- 1. 記事共通：基本コンテナ --- */
 
+/* --- 記事本文のベースフォント規格（全ページ共通統治・ニュースサイト標準仕様） --- */
+body.portal-page article.static-page .content-body p,
+body.portal-page article.static-page > p,
+body.portal-page article.static-page .hub-section p {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #111827;
+    letter-spacing: 0.03em; /* 文字間を少しだけ広げてスマートに */
+    line-height: 1.8;       /* ニュースサイト同様のゆったりした行間 */
+    /* Mac/iPhoneはヒラギノ、Windowsは游ゴシック・メイリオを最優先で適用する極上のフォント指定 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "BIZ UDPGothic", "Meiryo", "游ゴシック", YuGothic, sans-serif !important;
+}
+
+@media (max-width: 768px) {
+    body.portal-page article.static-page .content-body p,
+    body.portal-page article.static-page > p,
+    body.portal-page article.static-page .hub-section p {
+        font-size: 0.98rem !important;
+    }
+}
+
+
 body.portal-page article.static-page {
     max-width: 800px;
     margin-top: 30px; 
@@ -41,35 +63,76 @@ body.portal-page article.static-page.static-page--wide {
     max-width: 1000px;
 }
 
-/* ページタイトル(H1)とサブタイトルの階層設計 */
-body.portal-page article.static-page h1.page-title {
-    margin-top: 20px; 
-    margin-right: 0px;
-    margin-bottom: 15px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    font-size: 1.7rem; 
-    font-weight: 900;
-    line-height: 1.2;
+/* --- ページタイトル（ベスト書式をそのまま適用） --- */
+.page-title {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 900;
+  color: #1e293b;
+  text-align: left;
+  padding: 20px 24px;
+  background: linear-gradient(90deg, #e0f2fe 0%, #ffffff 100%);
+  border-radius: 0;
+  margin-top: 20px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  border-top-width: 4px;
+  border-top-style: solid;
+  border-top-color: #334155;
+  border-right-style: none;
+  border-bottom-width: 4px;
+  border-bottom-style: solid;
+  border-bottom-color: #334155;
+  border-left-style: none;
 }
 
-body.portal-page article.static-page .page-subtitle {
-    display: block;
-    font-size: 1.15rem;
-    font-weight: 500;
-    color: #64748b;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 45px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    line-height: 1.6;
+/* --- サブタイトル（ベスト書式をそのまま適用） --- */
+.page-subtitle {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-align: right;
+  padding-top: 10px;
+  padding-right: 24px;
+  padding-bottom: 10px;
+  padding-left: 24px;
+  background: linear-gradient(90deg, #ffffff 0%, #e0f2fe 100%);
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 40px;
+  margin-left: 0px;
+  border-top-style: none;
+  border-right-style: none;
+  border-bottom-style: none;
+  border-left-style: none;
+}
+
+/* --- ページタイトル装飾：上下ライン・均等余白モデル (v20.9.22.Fixed) --- */
+.page-title-gradient {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 900;
+  color: #1e293b;
+  text-align: left;
+  padding: 20px 24px; /* 上下を20pxに統一 */
+  background: linear-gradient(90deg, #e0f2fe 0%, #ffffff 100%);
+  border-radius: 0;
+  margin-bottom: 0px;
+  border-top: 4px solid #334155;
+  border-bottom: 4px solid #334155;
+}
+
+.page-subtitle-gradient {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-align: right;
+  /* 上下を同じ10pxに統一。これにより背景帯が綺麗に整う */
+  padding: 10px 24px ; 
+  background: linear-gradient(90deg, #ffffff 0%, #e0f2fe 100%);
+  margin-bottom: 40px;
+  border-bottom: none;
 }
 
 /* --- 2. 学習ロードマップ & 現場コラム共通カード仕様 --- */
@@ -315,45 +378,49 @@ body.portal-page .profile-card-horizontal h3 {
     line-height: 1.3;
 }
 
-body.portal-page .instructor-advice {
-    background-color: #f8fafc;
+body.portal-page .instructor-advice,
+body.game-body .instructor-advice {
+    background-color: #fffbeb !important; /* 温かみのあるイエロー系背景に復旧 */
     border-top-width: 1px;
     border-right-width: 1px;
     border-bottom-width: 1px;
-    border-left-width: 5px;
+    border-left-width: 6px;
     border-top-style: solid;
     border-right-style: solid;
     border-bottom-style: solid;
     border-left-style: solid;
-    border-top-color: #e2e8f0;
-    border-right-color: #e2e8f0;
-    border-bottom-color: #e2e8f0;
-    border-left-color: #94a3b8;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-    border-bottom-left-radius: 12px;
-    padding-top: 22px;
-    padding-right: 30px;
-    padding-bottom: 22px;
-    padding-left: 30px;
-    margin-top: 30px;
+    border-top-color: #fde68a;
+    border-right-color: #fde68a;
+    border-bottom-color: #fde68a;
+    border-left-color: #f59e0b; /* 鮮やかなオレンジ系の左線 */
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+    padding-top: 25px;
+    padding-right: 35px;
+    padding-bottom: 25px;
+    padding-left: 35px;
+    margin-top: 35px;
     margin-right: 0px;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
     margin-left: 0px;
-    font-size: 0.98rem;
+    font-size: 1.05rem !important; /* 文字サイズを大きくし読みやすく改善 */
     line-height: 1.8;
-    color: #333333;
+    color: #1e293b !important;
     box-sizing: border-box;
 }
 
-body.portal-page .instructor-advice b, 
-body.portal-page .instructor-advice strong {
+/* ボックス内のタイトル（bタグ・strongタグ） */
+body.portal-page .instructor-advice b,
+body.portal-page .instructor-advice strong,
+body.game-body .instructor-advice b {
     display: inline-block;
     font-weight: 900;
+    color: #d97706 !important; /* タイトルは落ち着いたオレンジに */
     margin-top: 0px;
     margin-right: 0px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     margin-left: 0px;
     padding-top: 0px;
     padding-right: 0px;
@@ -361,87 +428,99 @@ body.portal-page .instructor-advice strong {
     padding-left: 0px;
     border-top-width: 0px;
     border-right-width: 0px;
-    border-bottom-width: 1px;
+    border-bottom-width: 2px; /* タイトル下のみ線を表示 */
     border-left-width: 0px;
     border-top-style: none;
     border-right-style: none;
     border-bottom-style: solid;
+    border-bottom-color: rgba(245, 158, 11, 0.3); /* 謎の下線を排除し、タイトル下線のみにする */
     border-left-style: none;
+    font-size: 1.15rem;
+}
+
+
+/* 通常の太字（<strong>等）には下線をつけないための保護ルール */
+body.portal-page .instructor-advice p strong,
+body.portal-page .instructor-advice p b {
+    border-bottom: none !important;
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
+    color: #1e293b !important;
 }
 
 /* 各カテゴリ別：洗練された薄めパステル・アドバイスボックス */
 body.portal-page .instructor-advice--typing, 
 body.portal-page .instructor-advice--word {
-    background-color: #f0f7ff;
-    border-top-color: #e0f2fe;
-    border-right-color: #e0f2fe;
-    border-bottom-color: #e0f2fe;
-    border-left-color: #93c5fd;
+    background-color: #f0f7ff !important;
+    border-top-color: #e0f2fe !important;
+    border-right-color: #e0f2fe !important;
+    border-bottom-color: #e0f2fe !important;
+    border-left-color: #93c5fd !important;
 }
 body.portal-page .instructor-advice--typing b, 
 body.portal-page .instructor-advice--word b {
-    color: #1d4ed8;
-    border-bottom-color: #93c5fd;
+    color: #1d4ed8 !important;
+    border-bottom-color: #93c5fd !important;
 }
 
 body.portal-page .instructor-advice--windows {
-    background-color: #f0f9ff;
-    border-top-color: #e0f2fe;
-    border-right-color: #e0f2fe;
-    border-bottom-color: #e0f2fe;
-    border-left-color: #7dd3fc;
+    background-color: #f0f9ff !important;
+    border-top-color: #e0f2fe !important;
+    border-right-color: #e0f2fe !important;
+    border-bottom-color: #e0f2fe !important;
+    border-left-color: #7dd3fc !important;
 }
 body.portal-page .instructor-advice--windows b {
-    color: #0284c7;
-    border-bottom-color: #7dd3fc;
+    color: #0284c7 !important;
+    border-bottom-color: #7dd3fc !important;
 }
 
 body.portal-page .instructor-advice--excel {
-    background-color: #f0fdf4;
-    border-top-color: #dcfce7;
-    border-right-color: #dcfce7;
-    border-bottom-color: #dcfce7;
-    border-left-color: #86efac;
+    background-color: #f0fdf4 !important;
+    border-top-color: #dcfce7 !important;
+    border-right-color: #dcfce7 !important;
+    border-bottom-color: #dcfce7 !important;
+    border-left-color: #86efac !important;
 }
 body.portal-page .instructor-advice--excel b {
-    color: #15803d;
-    border-bottom-color: #86efac;
+    color: #15803d !important;
+    border-bottom-color: #86efac !important;
 }
 
 body.portal-page .instructor-advice--ai {
-    background-color: #ecfeff;
-    border-top-color: #ccfbf1;
-    border-right-color: #ccfbf1;
-    border-bottom-color: #ccfbf1;
-    border-left-color: #5eead4;
+    background-color: #ecfeff !important;
+    border-top-color: #ccfbf1 !important;
+    border-right-color: #ccfbf1 !important;
+    border-bottom-color: #ccfbf1 !important;
+    border-left-color: #5eead4 !important;
 }
 body.portal-page .instructor-advice--ai b {
-    color: #0f766e;
-    border-bottom-color: #5eead4;
+    color: #0f766e !important;
+    border-bottom-color: #5eead4 !important;
 }
 
 body.portal-page .instructor-advice--career {
-    background-color: #fff7ed;
-    border-top-color: #ffedd5;
-    border-right-color: #ffedd5;
-    border-bottom-color: #ffedd5;
-    border-left-color: #fdba74;
+    background-color: #fff7ed !important;
+    border-top-color: #ffedd5 !important;
+    border-right-color: #ffedd5 !important;
+    border-bottom-color: #ffedd5 !important;
+    border-left-color: #fdba74 !important;
 }
 body.portal-page .instructor-advice--career b {
-    color: #c2410c;
-    border-bottom-color: #fdba74;
+    color: #c2410c !important;
+    border-bottom-color: #fdba74 !important;
 }
 
 body.portal-page .instructor-advice--column {
-    background-color: #faf8ff;
-    border-top-color: #f3e8ff;
-    border-right-color: #f3e8ff;
-    border-bottom-color: #f3e8ff;
-    border-left-color: #c4b5fd;
+    background-color: #faf8ff !important;
+    border-top-color: #f3e8ff !important;
+    border-right-color: #f3e8ff !important;
+    border-bottom-color: #f3e8ff !important;
+    border-left-color: #c4b5fd !important;
 }
 body.portal-page .instructor-advice--column b {
-    color: #6d28d9;
-    border-bottom-color: #c4b5fd;
+    color: #6d28d9 !important;
+    border-bottom-color: #c4b5fd !important;
 }
 
 /* --- 4. 記事本文エリア装飾 --- */
@@ -1237,19 +1316,38 @@ body.portal-page .breadcrumb a {
     font-weight: 900;
 }
 
-/* --- 11. スマホ表示：余白の完全最適化 --- */
-
 @media (max-width: 768px) {
-    body.portal-page #app {
-        width: 100% !important;
-        margin-top: 0px !important;
-        margin-right: auto !important;
-        margin-bottom: 0px !important;
-        margin-left: auto !important;
-        padding-top: 0px !important;
-        padding-right: 0px !important;
-        padding-bottom: 0px !important;
-        padding-left: 0px !important;
+    /* --- 本家Newsリストのスマホ用コンパクト化統治 --- */
+    body.portal-page .news-list {
+        padding-top: 5px !important;
+        padding-right: 12px !important;
+        padding-bottom: 5px !important;
+        padding-left: 12px !important;
+    }
+
+    body.portal-page .news-item {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+        gap: 6px !important;
+    }
+
+    body.portal-page .news-meta {
+        gap: 6px !important;
+    }
+
+    .news-date {
+        font-size: 0.78rem !important;
+    }
+
+    body.portal-page .news-tag {
+        font-size: 0.65rem !important;
+        padding: 2px 6px !important;
+        min-width: 65px !important;
+        width: 65px !important;
+    }
+
+    .news-text {
+        font-size: 0.85rem !important;
     }
     
     body.portal-page article.static-page {
@@ -2498,4 +2596,138 @@ body.portal-page .news-sep { display: inline-block !important; margin-right: 12p
     .icon-title-box__text {
         font-size: 1.15rem;
     }
+}
+
+/* ============================================================
+   FAQ専用ボックスシステム (v20.10.FAQ)
+   ============================================================ */
+body.portal-page article.static-page .content-body .faq-box {
+    background-color: #ffffff !important;
+    margin-top: 35px;
+    margin-right: 0px;
+    margin-bottom: 35px;
+    margin-left: 0px;
+    padding-top: 35px;
+    padding-right: 40px;
+    padding-bottom: 35px;
+    padding-left: 40px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 6px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: #e2e8f0;
+    border-right-color: #e2e8f0;
+    border-bottom-color: #e2e8f0;
+    border-left-color: var(--accent);
+    box-sizing: border-box;
+    display: block;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.portal-page .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+body.portal-page .faq-list-item {
+    display: block;
+    text-align: left;
+    padding-bottom: 24px;
+    border-bottom: 1px dashed #cbd5e1;
+}
+
+body.portal-page .faq-list-item:last-child {
+    padding-bottom: 0px;
+    border-bottom: none;
+}
+
+/* 質問（Q）の行 */
+body.portal-page .faq-q {
+    position: relative;
+    padding-left: 40px;
+    font-weight: 900;
+    color: #1e293b;
+    font-size: 1.1rem;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 8px;
+    margin-left: 0px;
+    line-height: 1.5;
+}
+
+/* 質問の「Q」バッジ（絶対配置で左端に固定） */
+body.portal-page .faq-q::before {
+    content: "Q";
+    position: absolute;
+    left: 0px;
+    top: -2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background-color: var(--accent);
+    color: #ffffff;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    font-weight: 900;
+    box-shadow: 0px 2px 6px rgba(52, 152, 219, 0.3);
+}
+
+/* 回答（A）の行 */
+body.portal-page .faq-a {
+    position: relative;
+    padding-left: 40px;
+    font-size: 1rem;
+    color: #334155;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    line-height: 1.8;
+    border-left: none !important; /* 万が一の線を完全に封殺 */
+    background: transparent !important;
+}
+
+/* 回答の「A」バッジ（絶対配置で左端に固定） */
+body.portal-page .faq-a::before {
+    content: "A";
+    position: absolute;
+    left: 0px;
+    top: -2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background-color: #64748b;
+    color: #ffffff;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    font-weight: 900;
+}
+
+@media (max-width: 768px) {
+    body.portal-page article.static-page .content-body .faq-box {
+        padding-top: 25px !important;
+        padding-right: 15px !important;
+        padding-bottom: 25px !important;
+        padding-left: 15px !important;
+    }
+}
+
+body.portal-page .info-note-box {
+    margin-top: 35px;
+    margin-right: 0px;
+    margin-bottom: 35px;
+    margin-left: 0px;
 }

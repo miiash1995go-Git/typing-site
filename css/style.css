@@ -7,7 +7,7 @@
 
 /* --- 11行目付近：色の基準値を更新 --- */
 :root {
-    --primary: #2c3e50;
+    --primary: #111827; /* サイト全体の基本文字色をシャープな黒へ変更 */
     --primary-hover: #34495e;
     --accent: #3498db;
     --accent-hover: #2980b9;
@@ -21,14 +21,20 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
-/* --- 19行目付近：bodyの背景色を適用 --- */
+/* --- 19行目付近：bodyの背景色・フォント設定を完全統治 --- */
 body { 
-    margin: 0; padding: 0; font-family: 'Noto Sans JP', sans-serif; 
-    /* 変数(--bg)を使用し、全ページを落ち着いたトーンへ */
+    margin: 0; 
+    padding: 0; 
+    /* BIZ UDPGothicや游ゴシックを先頭にし、半角英数字も同じフォントファミリー内で綺麗に描画する仕様 */
+    font-family: "BIZ UDPGothic", "游ゴシック", YuGothic, "Meiryo", "Hiragino Kaku Gothic ProN", "Hiragino Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important; 
     background-color: var(--bg); 
     color: var(--primary); 
-    line-height: 1.6; min-height: 100vh; width: 100vw; 
-    display: flex; flex-direction: column; overflow-x: hidden; 
+    line-height: 1.6; 
+    min-height: 100vh; 
+    width: 100vw; 
+    display: flex; 
+    flex-direction: column; 
+    overflow-x: hidden; 
 }
 
 /* ポータルページ（読みもの）の背景は必ず白に */
@@ -131,6 +137,58 @@ body.portal-page #app {
 
 .hero-cta-btn:hover {
     background-color: #2563EB;
+}
+
+/* --- ヒーローボタン：シャイン・エフェクト（光の反射）追加 --- */
+.hero-cta-btn {
+    position: relative;
+    overflow: hidden; /* 光がボタンからはみ出さないようにマスク */
+}
+
+/* 光の反射（斜めの白い帯）を生成 */
+.hero-cta-btn::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -75%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.25) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(25deg);
+    animation: shine-effect 3s ease-in-out infinite;
+}
+
+/* 光が左から右へスーッと通り抜けるアニメーション */
+@keyframes shine-effect {
+    0% {
+        left: -75%;
+    }
+    20% {
+        left: 125%;
+    }
+    100% {
+        left: 125%; /* 20%で通り過ぎたあと、残りの時間は静止させて間隔を作る */
+    }
+}
+
+/* 中の矢印をピョコピョコ右に動かして「進めること」を強くアピール */
+.hero-cta-btn .hero-cta-btn__arrow {
+    display: inline-block;
+    animation: arrow-move 1.2s ease-in-out infinite;
+}
+
+@keyframes arrow-move {
+    0%, 100% {
+        transform: translateX(0px);
+    }
+    50% {
+        transform: translateX(6px); /* 右へ6pxスライド */
+    }
 }
 
 .hero-sub-guide {
@@ -258,33 +316,31 @@ body.portal-page #app {
         width: 100% !important;
         margin-top: 0px !important;
         margin-bottom: 20px !important;
-        padding-right: 0px !important; /* 内側スクロールのため0に */
-        padding-left: 0px !important;  /* 内側スクロールのため0に */
+        padding-right: 0px !important; 
+        padding-left: 0px !important;  
         border-top-left-radius: 0px !important;
         border-top-right-radius: 0px !important;
         border-bottom-right-radius: 0px !important;
         border-bottom-left-radius: 0px !important;
         border-right-style: none !important;
         border-left-style: none !important;
-        /* カード全体で横スクロールを受け止める */
         overflow-x: auto !important;
         overflow-y: hidden !important;
         -webkit-overflow-scrolling: touch;
     }
 
-    /* スクロールバーを非表示 */
     .new-article-announce::-webkit-scrollbar {
         display: none !important;
     }
 
+    /* 【追加・変更】行のパディングを狭め、スマホで縦にデカく見える現象を根絶 */
     .announce-row {
-        /* 個別のスクロール設定を廃止し、親に従う */
         overflow: visible !important;
-        padding-top: 15px !important;
-        padding-bottom: 15px !important;
-        padding-right: 15px !important;
-        padding-left: 15px !important;
-        width: max-content !important; /* テキストの長さに合わせて幅を広げる */
+        padding-top: 8px !important;    /* 15pxから8pxへ大幅に圧縮 */
+        padding-bottom: 8px !important; /* 15pxから8pxへ大幅に圧縮 */
+        padding-right: 12px !important;
+        padding-left: 12px !important;
+        width: max-content !important; 
         min-width: 100% !important;
     }
 
@@ -292,18 +348,21 @@ body.portal-page #app {
         white-space: nowrap !important;
         display: flex !important;
         align-items: center !important;
-        /* スマホでリンクが青くならないよう強制上書き */
         color: #2c3e50 !important;
         text-decoration: none !important;
+        font-size: 0.85rem !important; /* 文字も少しコンパクトにして収まりを良くする */
     }
 
     .new-badge-label, .new-badge-spacer {
-        width: 48px !important;
-        margin-right: 10px !important;
+        width: 42px !important;        /* バッジの幅も少し縮小 */
+        height: 20px !important;       /* 高さを抑える */
+        font-size: 0.65rem !important;
+        margin-right: 8px !important;
     }
 
     .announce-date {
-        margin-right: 10px !important;
+        margin-right: 8px !important;
+        font-size: 0.78rem !important; /* 日付のサイズを調整 */
     }
 }
 
@@ -488,31 +547,55 @@ main {
     min-height: 0;
 }
 
-/* --- 全ページ共通のボタンデザイン --- */
+/* --- 全ページ共通のボタンデザイン（シャープ・スリム版） --- */
 .btn-main { 
-    background: var(--primary); 
-    color: white; 
-    border: none; 
-    padding: 12px 50px !important; 
-    font-size: 1.1rem !important; 
-    border-radius: 40px; 
+    background-color: #1e293b !important; 
+    color: #ffffff !important; 
+    background-image: linear-gradient(180deg, #334155 0%, #1e293b 100%) !important;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: #475569;   
+    border-right-color: #0f172a;
+    border-bottom-color: #0f172a;
+    border-left-color: #0f172a;
+    padding-top: 9px !important;   /* 上下の余白を削って平べったくスリムに */
+    padding-right: 45px !important; 
+    padding-bottom: 9px !important; 
+    padding-left: 45px !important; 
+    font-size: 1.05rem !important; /* フォントも少しだけスリムに合わせる */
+    border-top-left-radius: 30px;  /* 角丸も少し浅くしてスマートに */
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
     cursor: pointer; 
-    font-weight: bold; 
-    box-shadow: 0 4px 0 #1a252f !important; 
-    transition: all 0.1s; 
-    text-decoration: none; 
+    font-weight: 800; 
+    box-shadow: 0px 4px 0px #0f172a, 0px 6px 12px rgba(15, 23, 42, 0.12) !important; /* シャドウもスリム化 */
+    transition-property: transform, box-shadow, background-color;
+    transition-duration: 0.15s;
+    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-decoration-line: none; 
     display: inline-block; 
 }
 
+/* ホバー時（マウスを乗せたとき） */
 .btn-main:hover:not(:disabled) { 
-    background: var(--primary-hover); 
-    transform: translateY(-2px); 
-    box-shadow: 0 6px 0 #1a252f; 
+    background-color: #2563eb !important; 
+    background-image: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    border-top-color: #60a5fa;
+    transform: translateY(-2px) !important; 
+    box-shadow: 0px 5px 0px #1e40af, 0px 10px 18px rgba(37, 99, 235, 0.2) !important; 
 }
 
+/* アクティブ時（クリックした瞬間） */
 .btn-main:active:not(:disabled) { 
-    transform: translateY(3px); 
-    box-shadow: 0 2px 0 #1a252f; 
+    transform: translateY(2px) !important; 
+    box-shadow: 0px 2px 0px #1e40af, 0px 3px 6px rgba(37, 99, 235, 0.1) !important; 
 }
 
 
