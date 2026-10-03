@@ -28,6 +28,11 @@ body.game-body main {
     padding-bottom: 25px !important;
 }
 
+/* PC版：タイピングエリア（カード等）と下部解説記事の間にたっぷりとした余白を確保する */
+body.game-body article.static-page {
+    margin-top: 180px !important;
+}
+
 /* 練習開始時の背景沈み込み・スライド演出 */
 body.focus-mode {
     background-color: #4e5d6c !important;
@@ -807,10 +812,183 @@ body.game-body #keyboard-container {
     box-shadow: 0 10px 40px rgba(0,0,0,0.1); max-width: 450px; width: 90%; text-align: center;
 }
 
-/* 1024px以下での制限発動 */
+/* スマホ・小画面での表示切替（灰色背景・ゲーム用の空間・高さの残骸を完全に根絶する） */
 @media (max-width: 768px) {
-    body.game-body .mobile-restriction-overlay { display: flex; }
-    body.game-body #app { display: none !important; }
+    body.game-body {
+        background-color: #f1f3f5 !important;
+    }
+    
+    body.game-body #app {
+        position: static !important;
+        transform: none !important;
+        margin-top: 0px !important;
+        margin-right: auto !important;
+        margin-bottom: 0px !important;
+        margin-left: auto !important;
+        width: 100% !important;
+        max-width: 1000px !important;
+        display: block !important;
+        min-height: auto !important;
+    }
+
+    body.game-body main {
+        display: block !important;
+        height: auto !important;
+        min-height: auto !important;
+    }
+
+    /* 案内ボックスをヘッダーの直下に自然なブロックとして配置する */
+    body.game-body .mobile-restriction-overlay {
+        display: block !important;
+        position: static !important;
+        height: auto !important;
+        margin-top: 15px !important;
+        margin-right: 15px !important;
+        margin-bottom: 0px !important;
+        margin-left: 15px !important;
+        padding-top: 0px !important;
+        padding-right: 0px !important;
+        padding-bottom: 0px !important;
+        padding-left: 0px !important;
+        background-color: transparent !important;
+    }
+    body.game-body .restriction-card {
+        max-width: none !important;
+        width: calc(100% - 30px) !important; /* 左右に15pxずつの余白を確保し、見切れを防止 */
+        margin-top: 0px !important;
+        margin-right: auto !important;
+        margin-bottom: 0px !important;
+        margin-left: auto !important;
+        padding-top: 18px !important;
+        padding-right: 20px !important;
+        padding-bottom: 18px !important;
+        padding-left: 20px !important;
+        border-top-left-radius: 16px !important;
+        border-top-right-radius: 16px !important;
+        border-bottom-right-radius: 16px !important;
+        border-bottom-left-radius: 16px !important;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.05) !important;
+        background-color: #fffbeb !important;
+        border-top-width: 1px !important;
+        border-right-width: 1px !important;
+        border-bottom-width: 1px !important;
+        border-left-width: 6px !important;
+        border-top-style: solid !important;
+        border-right-style: solid !important;
+        border-bottom-style: solid !important;
+        border-left-style: solid !important;
+        border-top-color: #fde68a !important;
+        border-right-color: #fde68a !important;
+        border-bottom-color: #fde68a !important;
+        border-left-color: #f59e0b !important;
+        box-sizing: border-box !important;
+        text-align: left !important;
+    }
+    body.game-body .restriction-card h2 { 
+        font-size: 1.05rem !important; 
+        font-weight: 900 !important;
+        color: #d97706 !important;
+        margin-top: 0px !important; 
+        margin-right: 0px !important; 
+        margin-bottom: 8px !important; 
+        margin-left: 0px !important; 
+    }
+    body.game-body .restriction-card p { 
+        font-size: 0.85rem !important; 
+        color: #475569 !important;
+        line-height: 1.6 !important;
+        margin-top: 0px !important; 
+        margin-right: 0px !important; 
+        margin-bottom: 10px !important; 
+        margin-left: 0px !important; 
+    }
+    
+    /* 戻るボタンエリアをスマホ用に綺麗に配置・整形する */
+    body.game-body .restriction-card > div {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 10px !important;
+        margin-top: 15px !important;
+        margin-right: 0px !important;
+        margin-bottom: 0px !important;
+        margin-left: 0px !important;
+    }
+    body.game-body .restriction-card a.btn-main {
+        width: 100% !important;
+        max-width: 240px !important;
+        padding-top: 10px !important;
+        padding-right: 0px !important;
+        padding-bottom: 10px !important;
+        padding-left: 0px !important;
+        font-size: 0.9rem !important;
+        box-shadow: none !important;
+        background-color: #2563EB !important;
+        text-decoration-line: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-top-left-radius: 30px !important;
+        border-top-right-radius: 30px !important;
+        border-bottom-right-radius: 30px !important;
+        border-bottom-left-radius: 30px !important;
+        color: #ffffff !important;
+        font-weight: 800 !important;
+    }
+    body.game-body .restriction-card a:not(.btn-main) {
+        color: #64748b !important;
+        font-size: 0.85rem !important;
+        text-decoration-line: underline !important;
+        font-weight: 700 !important;
+    }
+    
+    /* スタート画面、ゲーム画面、結果画面、カード、および広告用空スペースの残骸を完全に消去する */
+    body.game-body #start-screen,
+    body.game-body #game-screen,
+    body.game-body #result-screen,
+    body.game-body .card,
+    body.game-body main > div[style*="height: 120px"] { 
+        display: none !important; 
+        margin-top: 0px !important;
+        margin-right: 0px !important;
+        margin-bottom: 0px !important;
+        margin-left: 0px !important;
+        padding-top: 0px !important;
+        padding-right: 0px !important;
+        padding-bottom: 0px !important;
+        padding-left: 0px !important;
+        height: 0px !important;
+        overflow: hidden !important;
+    }
+    
+    /* 解説エリアの上余白をスマホ用に整え、ヘッダーや案内ボックスのすぐ下に綺麗に繋げる */
+    body.game-body .game-description-wrapper {
+        padding-top: 15px !important;
+        padding-right: 15px !important;
+        padding-bottom: 40px !important;
+        padding-left: 15px !important;
+        margin-top: 0px !important;
+    }
+
+    /* play.html 内の static-page（解説記事コンテナ）のスマホ用パディングを他のページと完全同期 */
+    body.game-body article.static-page {
+        padding-top: 25px !important;
+        padding-right: 15px !important;
+        padding-bottom: 45px !important;
+        padding-left: 15px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-top: 15px !important;
+        margin-right: 0px !important;
+        margin-bottom: 30px !important;
+        margin-left: 0px !important;
+        border-top-left-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-bottom-left-radius: 0px !important;
+        box-shadow: none !important;
+        box-sizing: border-box !important;
+    }
 }
 
 /* ============================================================
