@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCスキル基礎・実務ガイド｜Windows・Word・Excelを仕事で使えるようにする｜ぱそトレ！</title>
+    <meta name="description" content="パソコン初心者向けにWindows・Word・Excelの基本と実務での活用法を解説。機能を覚えるだけではなく、仕事でどう使うかという視点からPCスキルを身につけます。">
+    <link rel="canonical" href="https://miitype.com/hub-pcskills.html">
+    <link rel="icon" href="favicon.ico">
+    <!-- Google Fonts 読み込み -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;800&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- 1. アドセンス（全ページ共通規格） -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6634013670088700" crossorigin="anonymous"></script>
+
+    <!-- 2. 管理者除外スクリプト -->
+    <script>
+        if (localStorage.getItem('pasotore_admin') === 'true') {
+            window['ga-disable-G-KWS4RPPBVV'] = true;
+            console.log("【ぱそトレ！管理者モード】GA4計測は現在オフになっています。");
+        }
+    </script>
+     
+    <!-- 3. Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KWS4RPPBVV"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-KWS4RPPBVV');
+    </script>
+
+    <!-- 4. CSS資産（正典） -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-shared.css">
+    <link rel="stylesheet" href="css/hub-pages.css">
+</head>
+<body class="portal-page">
+    <div id="app">
+        <!-- 統合ヘッダー：固定8カテゴリ構成 -->
+        <header>
+            <div class="header-inner">
+                <!-- 左：ロゴ（バッジ込み） -->
+                <a href="./" class="header-logo-link">
+                    <img src="img/logo.png" alt="ぱそトレ！" class="header-logo-img">
+                </a>
+
+                <!-- 右：ナビ -->
+                <nav class="header-nav">
+                    <div class="nav-grid">
+                        <!-- 上段3つ -->
+                        <a href="./" class="nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                        <a href="hub-typing.html" class="nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                        <a href="hub-pcskills.html" class="nav-item active"><img src="img/icon-windows.png" class="nav-icon"><span>PCスキル</span></a>
+                        <!-- 下段3つ -->
+                        <a href="hub-ai.html" class="nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                        <a href="hub-career.html" class="nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                        <a href="hub-column.html" class="nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                    </div>
+
+                    <!-- スマホ用メニューボタン：ハンバーガー ＋ メニューラベル -->
+                    <button class="mobile-menu-trigger" id="mobile-menu-btn">
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="menu-label">メニュー</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- スマホ全画面メニュー本体：初期状態はCSSで非表示 -->
+            <div class="mobile-nav-overlay" id="mobile-menu-overlay">
+                <button class="menu-close-btn" id="menu-close-btn">×</button>
+                <div class="mobile-nav-grid">
+                    <a href="./" class="mobile-nav-item"><img src="img/icon-home.png" class="nav-icon"><span>ホーム</span></a>
+                    <a href="hub-typing.html" class="mobile-nav-item"><img src="img/icon-typing.png" class="nav-icon"><span>タイピング</span></a>
+                    <a href="hub-pcskills.html" class="mobile-nav-item active"><img src="img/icon-windows.png" class="nav-icon"><span>PCスキル</span></a>
+                    <a href="hub-ai.html" class="mobile-nav-item"><img src="img/icon-ai.png" class="nav-icon"><span>生成AI</span></a>
+                    <a href="hub-career.html" class="mobile-nav-item"><img src="img/icon-career.png" class="nav-icon"><span>就職・転職</span></a>
+                    <a href="hub-column.html" class="mobile-nav-item"><img src="img/icon-genba.png" class="nav-icon"><span>現場コラム</span></a>
+                </div>
+            </div>
+        </header>
+
+<main class="portal-main">
+            <article class="static-page static-page--wide"><nav class="breadcrumb" id="dynamic-breadcrumb"></nav>
+
+                <!-- ハブ・ヒーロー -->
+                <section class="hub-hero">
+                    <div class="hub-hero__icon">
+                        <img src="img/icon-windows.png" alt="PCスキルのアイコン" class="cat-icon-img">
+                    </div>
+                    <div class="hub-hero__body">
+                        <h1 class="hub-hero__title">PCスキル基礎・実務ガイド</h1>
+                        <p class="hub-hero__description">
+                            Windows・Word・Excelを仕事で使えるようにする。現役パソコン講師の視点から、操作の暗記ではなく「実務でどう使うか」の土台を解説します。
+                        </p>
+                    </div>
+                </section>
+
+                <div class="content-body">
+
+                <!-- 1. 冒頭 -->
+                <section class="hub-section">
+                    <div class="instructor-advice instructor-advice--word">
+                        <b style="color: #2c3e50; border-bottom-color: #3498db;">💡 パソコンを仕事で使うなら</b><br>
+                        <p style="margin-top: 10px;">パソコンを仕事で使うとき、最初に必要なのは機能の知識より、<mark>頼まれたことを最後までやりきれること</mark>です。</p>
+                    <p>Windows・Word・Excelは、そのための3つの道具です。</p>
+                        <p style="margin-top: 10px;">このページでは、仕事の場面に沿って、それぞれで何を知っておくと困りにくいかをまとめています。</p>
+                    <p>「パソコンは使ったことがあるけれど、仕事でとなると不安」という方は、気になるところから読んでください。</p>
+                    </div>
+                </section>
+
+                <!-- 2. PCスキルとは（通常の記事見出しと本文に変更） -->
+                <section class="hub-section">
+                    <h2 class="hub-article-h2">PCスキルとは？</h2>
+                    <p>ひとことで言うと、<mark>パソコンで頼まれた仕事を、最初から最後まで自分で終わらせられる力</mark>です。</p>
+                    <p>たとえば上司から「先月の売上をまとめて、資料にして、共有フォルダに入れておいてください」と頼まれたとします。</p>
+                    <p>売上を集計するのはExcel、資料にするのはWord、共有フォルダに入れるのはWindowsの操作です。</p>
+                    <p>3つのうちどれかで手が止まると、仕事はそこから先へ進みません。</p>
+                    <p>求人で見かける「Word・Excelができる方」という条件も、講師として見ていると、この流れを一人でこなせるかどうかを指していることが多いと感じます。</p>
+                    <p>今の時代、企業が求めている人材は、パソコンを使った仕事を、最初から最後までやりきれる人。<strong>それが本当に求められている人物像です。</strong></p>
+                    <p>最近は、PCスキルを会社が研修という形で教えてくれることが減ってきたなと思います。それだけ、<strong>そのスキルを持っていて当たり前とされるのが現状です。</strong></p>
+                    <p>だからPCスキルは、Wordの機能をいくつ知っているか、Excelの操作をどれだけ覚えているかでは測れません。</p>
+                    <p>ぱそトレ！が機能の暗記よりも、仕事の場面で何が必要になるかを先に書いているのは、そのためです。</p>
+                </section>
+
+                <!-- 3. 初心者がつまずくポイント -->
+                <section class="hub-section">
+                    <h2 class="hub-article-h2">初心者がつまずくのは、WordやExcelの前の「ファイル」</h2>
+                    <p>授業で初心者の手が止まるのは、ソフトの操作よりも、<mark>ファイルの保存と探し方のほうが多い</mark>です。</p>
+                    <p>Wordで文書は作れたのに、どこに保存したのか分からない。</p>
+                    <p>Excelに数字は入力できたのに、翌日そのファイルが見つからない。</p>
+                    <p>本人は「Wordができない」「Excelは難しい」と感じてしまいますが、原因はソフトではなく、<strong>ファイルとフォルダの扱い</strong>にあることがよくあります。</p>
+                    <p>仕事では「前回のファイルを開いてください」「このフォルダに入れておいてください」と、さらっと指示されます。</p>
+                    <p>そのときどこを見ればいいかが頭に浮かぶかどうか。</p>
+                    <p>差が出るのは、ボタンの場所を覚えているかよりも、こちらです。</p>
+                    <p>このページがWindowsから始まるのはそのためです。</p>
+                    <p>ファイルの居場所が分かっていると、WordもExcelもずっと学びやすくなります。</p>
+                </section>
+
+</div> <!-- .content-body 終了（ここで一度閉じる） -->
+
+                <!-- 5. Windows -->
+                <section class="hub-section">
+                    <div class="section-color-box section-color-box--windows">
+                        <h2 class="hub-section-title hub-section-title--windows">Windowsとは？</h2>
+                        <p>Windowsは、WordやExcelのように「これを覚えれば仕事ができる」というものではありません。</p>
+                        <p>しかし、パソコンを使って仕事をするなら、基本を知っているだけで困ったときの判断がしやすくなります。</p>
+                        <p>ファイルを保存する、複数の画面を使う、アプリを切り替える、パソコンの設定を変更する。</p>
+                        <p>普段何気なく行っている操作にもWindowsが関係しています。</p>
+                        <p>Windowsの操作をたくさん暗記することではなく、困ったときに<mark>「どこを確認すればいいか」を考えられるようになること</mark>を大切にします。</p>
+
+                        <h3>ファイルが「消えた」と思わなくなる</h3>
+                        <p>WordやExcelで書類を作って保存したあと、</p>
+                        <p>「さっき保存したファイルがない！」</p>
+                        <p>となって焦る初心者は少なくありません。</p>
+                        <p>実際には、</p>
+                        <ul style="padding-left: 20px; margin-top: 10px; margin-bottom: 10px; line-height: 1.8;">
+                            <li>保存するフォルダを間違えた</li>
+                            <li>ファイル名を違う名前にした</li>
+                            <li>別の場所に保存した</li>
+                            <li>本当に削除してしまった</li>
+                        </ul>
+                        <p>など、いくつかの可能性があります。</p>
+                        <p>初心者の方は、この違いがまだわからないため、すぐに「ファイルが消えた」と思ってしまいます。</p>
+                        <p>Windowsのファイルやフォルダの仕組みが少しずつわかってくると、</p>
+                        <p><strong>「消えたのではなく、別の場所にあるのかもしれない」</strong></p>
+                        <p>と考えられるようになります。</p>
+                        <p>保存場所を理解することは、単にファイルを整理するためだけではありません。</p>
+                        <p>ファイルが見つからないときに、どこを確認すればよいのかを考えるための、</p>
+                        <p><strong>「原因を切り分ける力」</strong></p>
+                        <p>にもつながります。</p>
+
+                        <h3>文字を打ち直さなくてよくなる</h3>
+                        <p>Windowsを使ううえで、コピー＆ペーストは非常に基本的な操作です。</p>
+                        <p>文章や文字列を一から打ち直すのではなく、</p>
+                        <p>「コピー」して「貼り付け」</p>
+                        <p>という操作を使うことで、入力の手間を減らせます。</p>
+                        <p>仕事では、</p>
+                        <ul style="padding-left: 20px; margin-top: 10px; margin-bottom: 10px; line-height: 1.8;">
+                            <li>メールの文章</li>
+                            <li>Webページの情報</li>
+                            <li>Wordの文章</li>
+                            <li>Excelのデータ</li>
+                        </ul>
+                        <p>など、さまざまな場面で使います。</p>
+                        <p>コピー＆ペーストは単なる便利なショートカットキーではありません。</p>
+                        <p><strong>「同じ情報を何度も入力しない」</strong></p>
+                        <p><strong>「必要な情報を別の場所へ移す」</strong></p>
+                        <p>という考え方は、日常のパソコン作業を楽にするための大切な基本操作です。</p>
+
+                        <h3>どんなパソコンを選べばいい？</h3>
+                        <p>パソコンを使う前の段階として、</p>
+                        <p>「どんなパソコンを選ぶか」</p>
+                        <p>も重要です。</p>
+                        <p>実際には、</p>
+                        <ul style="padding-left: 20px; margin-top: 10px; margin-bottom: 10px; line-height: 1.8;">
+                            <li>家電量販店でパソコンを見る</li>
+                            <li>ネットショップで価格を比較する</li>
+                            <li>同じように見えるパソコンなのに価格が違う</li>
+                            <li>スペック表を見ても何が重要なのかわからない</li>
+                            <li>今だけでなく将来の用途も考えたい</li>
+                        </ul>
+                        <p>といった場面があります。</p>
+                        <p>高価なパソコンを選べば安心というわけではありません。</p>
+                        <p>CPU、メモリ、ストレージなど、最低限どこを確認すればよいのかを知り、</p>
+                        <p><strong>自分の用途に合ったパソコンを納得して選べるようになること</strong></p>
+                        <p>が大切です。</p>
+
+                        <!-- Windows関連記事（カリキュラム風カード仕様） -->
+                        <div class="curriculum-section-wrapper" style="margin-top: 30px; margin-bottom: 0px;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                                <h3 style="margin: 0px; border-bottom: none; font-size: 1.15rem; font-weight: 900; color: #2c3e50;">Windowsの関連記事を読む</h3>
+                                <span style="font-size: 0.85rem; color: #64748b; font-weight: 700;">基本操作からファイル管理・PC選びまでまとめています。</span>
+                            </div>
+                            <div class="curriculum-grid" style="margin-top: 15px;">
+                                <!-- 01 -->
+                                <a href="guide-windows-basics.html" class="curriculum-card curriculum-card--windows">
+                                    <span class="curriculum-card__num">01</span>
+                                    <div class="curriculum-card__header">
+                                        <div class="curriculum-card__icon-wrap">
+                                            <img src="img/icon-windows.png" alt="" class="curriculum-card__icon">
+                                        </div>
+                                        <div class="curriculum-card__meta">
+                                            <h4 class="curriculum-card__title">Windows11の基本操作</h4>
+                                        </div>
+                                    </div>
+                                    <div class="curriculum-card__desc">
+                                        初心者が最初に覚えたい基本操作を解説します。
+                                    </div>
+                                    <div class="curriculum-card__footer">
+                                        <span class="curriculum-card__link">この記事から始める →</span>
+                                    </div>
+                                </a>
+                                <!-- 02 -->
+                                <a href="guide-windows-folder.html" class="curriculum-card curriculum-card--windows">
+                                    <span class="curriculum-card__num">02</span>
+                                    <div class="curriculum-card__header">
+                                        <div class="curriculum-card__icon-wrap">
+                                            <img src="img/icon-windows.png" alt="" class="curriculum-card__icon">
+                                        </div>
+                                        <div class="curriculum-card__meta">
+                                            <h4 class="curriculum-card__title">ファイルとフォルダの整理</h4>
+                                        </div>
+                                    </div>
+                                    <div class="curriculum-card__desc">
+                                        作成した書類を迷わず見つけるための基本です。
+                                    </div>
+                                    <div class="curriculum-card__footer">
+                                        <span class="curriculum-card__link">この記事から始める →</span>
+                                    </div>
+                                </a>
+                                <!-- 03 -->
+                                <a href="guide-windows-multi.html" class="curriculum-card curriculum-card--windows">
+                                    <span class="curriculum-card__num">03</span>
+                                    <div class="curriculum-card__header">
+                                        <div class="curriculum-card__icon-wrap">
+                                            <img src="img/icon-windows.png" alt="" class="curriculum-card__icon">
+                                        </div>
+                                        <div class="curriculum-card__meta">
+                                            <h4 class="curriculum-card__title">2画面での並べ替え作業</h4>
+                                        </div>
+                                    </div>
+                                    <div class="curriculum-card__desc">
+                                        Windowsで画面を左右に並べて効率よく作業します。
+                                    </div>
+                                    <div class="curriculum-card__footer">
+                                        <span class="curriculum-card__link">この記事から始める →</span>
+                                    </div>
+                                </a>
+                                <!-- 04 -->
+                                <a href="guide-pc-selection.html" class="curriculum-card curriculum-card--windows">
+                                    <span class="curriculum-card__num">04</span>
+                                    <div class="curriculum-card__header">
+                                        <div class="curriculum-card__icon-wrap">
+                                            <img src="img/icon-windows.png" alt="" class="curriculum-card__icon">
+                                        </div>
+                                        <div class="curriculum-card__meta">
+                                            <h4 class="curriculum-card__title">失敗しないPCの選び方</h4>
+                                        </div>
+                                    </div>
+                                    <div class="curriculum-card__desc">
+                                        事務・学習用に講師が勧めるスペックを解説。
+                                    </div>
+                                    <div class="curriculum-card__footer">
+                                        <span class="curriculum-card__link">この記事から始める →</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. Word -->
+                <section class="hub-section">
+                    <div class="section-color-box section-color-box--word">
+                        <h2 class="hub-section-title hub-section-title--word">Wordとは？</h2>
+                        <p>Wordは、文字を入力するだけではなく、相手に伝わりやすい文書を作るためのソフトです。</p>
+                        <p>仕事では、履歴書や職務経歴書、社内文書、マニュアルなど、読みやすさや整ったレイアウトが求められる文書を作る場面があります。</p>
+                        <p>すべての機能を最初から覚える必要はありません。</p>
+                        <p><mark>「こんなことができる」と知っておくこと</mark>で、必要になったときに調べることができます。</p>
+
+                        <h3>Wordを使うと、こんな場面で役に立つ</h3>
+                        <p><strong>Wordは、必要になったときに使えばいい。</strong></p>
+                        <p>そう思っている人は、けっこう多いと思います。</p>
+                        <p>普段はWordを使ってなくても、必要になったら、そのとき調べればいい。</p>
+                        <p>それでも何とかなることはあります。</p>
+                        <p>でも、実際に「作らなければならない」となったとき、思っていた以上に時間がかかることがあります。</p>
+
+                        <h3>就職・転職で文書を作る</h3>
+                        <p><strong>履歴書や職務経歴書。</strong></p>
+                        <p>文字を入力するだけなら、それほど難しくありません。</p>
+                        <p>ところが、</p>
+                        <ul style="padding-left: 20px; margin-top: 10px; margin-bottom: 10px; line-height: 1.8;">
+                            <li>罫線がきれいにそろわない</li>
+                            <li>表の幅を調整したら、ほかの部分までずれる</li>
+                            <li>文章を追加したことで、全体のレイアウトが崩れる</li>
+                        </ul>
+                        <p>ということがあります。</p>
+                        <p>そして、</p>
+                        <p>「ここを少し動かしたいだけなのに、なぜか全部ずれる……」</p>
+                        <p>となります。</p>
+
+                        <h3>仕事で長い文書を作る</h3>
+                        <p>たとえば、</p>
+                        <p><strong>50ページほどあるマニュアル</strong></p>
+                        <p>を作ることになったらどうでしょう。</p>
+                        <p>最初の数ページなら、</p>
+                        <ul style="padding-left: 20px; margin-top: 10px; margin-bottom: 10px; line-height: 1.8;">
+                            <li>見出しを大きくする</li>
+                            <li>ページ番号を入れる</li>
+                        </ul>
+                        <p>だけでも何とかなります。</p>
+                        <p>しかしページが増えてくると、</p>
+                        <p><strong>目次・見出し・ページ番号</strong></p>
+                        <p>などの関係が出てきます。</p>
+                        <p>途中で文章を追加したらページ番号が変わる。</p>
+                        <p>見出しを修正したら目次も直したくなる。</p>
+                        <p>ひとつの修正が文書全体に影響することもあります。</p>
+
+                        <h3>ひとつの文書を、みんなで作る</h3>
+                        <p>さらに、その文書を<strong>4人で作る</strong>ことになったらどうでしょう。</p>
+                        <p>誰かが文章を修正する。</p>
+                        <p>別の人が表を直す。</p>
+                        <p>さらに別の人が全体のレイアウトを変更する。</p>
+                        <p>あとから見ると、</p>
+                        <p>「ここ、誰が修正したんだろう？」</p>
+                        <p>「前の文章とどっちが正しいんだろう？」</p>
+                        <p>となることがあります。</p>
+
+                        <h3>「困ってから調べる」だけではない</h3>
+                        <p>Wordには、</p>
+                        <ul style="padding-left: 20px; margin-top: 10px; margin-bottom: 10px; line-height: 1.8;">
+                            <li>誰かに読んでもらう文書を作る</li>
+                            <li>情報を整理して、分かりやすくまとめる</li>
+                            <li>長い文書を、あとから変更しやすい形で作る</li>
+                            <li>複数の人で、ひとつの文書を作る</li>
+                        </ul>
+                        <p>という使い方があります。</p>
+                        <p>そして、</p>
+                        <p><strong>「Wordで何ができるのかを知らないこと自体が、困る原因になることがある」</strong></p>
+                        <p>という背景があります。</p>
+                        <p>すべての機能を最初から覚える必要はありません。</p>
+                        <p>「こんなことができるんだ」と知っていれば、必要になったときに調べることができます。</p>
+                        <p>そして、</p>
+                        <p><strong>「これはWordで作ったほうがいいかもしれない」</strong></p>
+                        <p>という選択肢を持つことができます。</p>
+
+                        <!-- Word関連記事（カリキュラム風カード仕様） -->
+                        <div class="curriculum-section-wrapper" style="margin-top: 30px; margin-bottom: 0px;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                                <h3 style="margin: 0px; border-bottom: none; font-size: 1.15rem; font-weight: 900; color: #2c3e50;">Wordの関連記事を読む</h3>
+                                <span style="font-size: 0.85rem; color: #64748b; font-weight: 700;">基本操作から社内文書・レイアウト調整までまとめています。</span>
+                            </div>
+                            <div class="curriculum-grid" style="margin-top: 15px;">
+                                <!-- 01 -->
+                                <a href="guide-word-basics.html" class="curriculum-card curriculum-card--word">
+                                    <span class="curriculum-card__num">01</span>
+                                    <div class="curriculum-card__header">
+                                        <div class="curriculum-card__icon-wrap">
+                                            <img src="img/icon-word.png" alt="" class="curriculum-card__icon">
+                                        </div>
+                                        <div class="curriculum-card__meta">
+                                            <h4 class="curriculum-card__title">Wordの基本操作・使い方</h4>
+                                        </div>
+                                    </div>
+                                    <div class="curriculum-card__desc">
+                                        仕事で困らない文書作成の土台を学びます。
+                                    </div>
+                                    <div class="curriculum-card__footer">
+                                        <span class="curriculum-card__link">この記事から始める →</span>
+                                    </div>
+                                </a>
+                                <!-- 02 -->
+                                <a href="guide-word-practice-01.html" class="curriculum-card curriculum-card--word">
+                                    <span class="curriculum-card__num">02</span>
+                                    <div class="curriculum-card__header">
+                                        <div class="curriculum-card__icon-wrap">
+                                            <img src="img/icon-word.png" alt="" class="curriculum-card__icon">
+                                        </div>
+                                        <div class="curriculum-card__meta">
+                                            <h4 class="curriculum-card__title">社内文書の整え方</h4>
+                                        </div>
+                                    </div>
+                                    <div class="curriculum-card__desc">
+                                        見やすい案内状や社内文書を実際に作る手順です。
+                                    </div>
+                                    <div class="curriculum-card__footer">
+                                        <span class="curriculum-card__link">この記事から始める →</span>
+                                    </div>
+                                </a>
+                                
+                                <!-- 03 -->
+                                <a href="guide-word-line-spacing.html" class="curriculum-card curriculum-card--word">
+                                    <span class="curriculum-card__num">03</span>
+                                    <div class="curriculum-card__header">
+                                        <div class="curriculum-card__icon-wrap">
+                                            <img src="img/icon-word.png" alt="" class="curriculum-card__icon">
+                                        </div>
+                                        <div class="curriculum-card__meta">
+                                            <h4 class="curriculum-card__title">行間が広がる原因と直し方</h4>
+                                        </div>
+                                    </div>
+                                    <div class="curriculum-card__desc">
+                                        11ptで急に広くなる謎と、その正しい直し方を解説。
+                                    </div>
+                                    <div class="curriculum-card__footer">
+                                        <span class="curriculum-card__link">この記事から始める →</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. Excel -->
+                <section class="hub-section">
+                    <div class="section-color-box section-color-box--excel">
+                        <h2 class="hub-section-title hub-section-title--excel">Excelとは？</h2>
+                        <p>Excelは、数字やデータを整理し、計算し、扱いやすくするための表計算ソフトです。</p>
+                        <p>仕事では、売上の集計、顧客や商品の一覧、データの整理など、数字や情報を扱う場面で活用されています。</p>
+                        <p>最初から難しい機能を覚える必要はありません。</p>
+                        <p>セルへの入力から始めて、計算、表の作成、データの整理へと、一つずつできることを増やしていきます。</p>
+
+                        <h3>Excelを使うと、こんな場面で役に立つ</h3>
+                        <p>Excelは、数字やデータが増えたときに力を発揮します。</p>
+                        <p>たとえば、仕事で売上を集計するとします。</p>
+                        <p>10件くらいなら、電卓で計算してもそれほど困りません。</p>
+                        <p>でも、毎月同じ作業をするとなると話は変わります。</p>
+                        <p>数字を入力して、</p>
+                        <p>合計を計算して、</p>
+                        <p>先月と比べて……。</p>
+                        <p>これを毎回手作業で繰り返していたら、時間もかかりますし、計算ミスも心配になります。</p>
+                        <p>Excelなら、一度計算の仕組みを作っておけば、数字を入れ替えるだけで結果を出せます。</p>
+
+                        <h3>「探す」「並べる」もExcelに任せられる</h3>
+                        <p>Excelが便利なのは、計算だけではありません。</p>
+                        <p>たとえば、</p>
+                        <ul style="padding-left: 20px; margin-top: 10px; margin-bottom: 10px; line-height: 1.8;">
+                            <li>顧客名簿</li>
+                            <li>商品一覧</li>
+                        </ul>
+                        <p>など、たくさんのデータを扱う場面。</p>
+                        <p>100件、500件とデータが増えてくると、目で探すだけでは大変です。</p>
+                        <p><strong>「この会社だけ表示したい」</strong></p>
+                        <p><strong>「売上の多い順に並べたい」</strong></p>
+                        <p>というときに、</p>
+                        <p>フィルターや並べ替えを使えば、必要な情報を取り出しやすくなります。</p>
+                        <p>人が一つずつ探すのではなく、</p>
+                        <p><strong>「Excelに整理してもらう」</strong></p>
+                        <p>という考え方ができます。</p>
+
+                        <h3>数字を「見る」だけで終わらせない</h3>
+                        <p>集めた数字を、そのまま表に並べておくだけでは、分かりにくいこともあります。</p>
+                        <p>たとえば月ごとの売上。</p>
+                        <p>数字を見れば正確な金額は分かります。</p>
+                        <p>でも、</p>
+                        <p><strong>「売上が増えているのか」</strong></p>
+                        <p><strong>「どの月が多いのか」</strong></p>
+                        <p>を伝えるなら、グラフにしたほうが分かりやすいことがあります。</p>
+                        <p>Excelでは、表にまとめたデータからグラフを作り、</p>
+                        <p><strong>数字の変化や傾向を目で確認する</strong></p>
+                        <p>ことができます。</p>
+
+                        <h3>「Excelを使ったことがある」とは</h3>
+                        <p>Excelをはじめて使う人は、</p>
+                        <p><strong>「セル」という言葉すら知らない。</strong></p>
+                        <p>そもそも、Excelが何のためにあるのかも、まだよく分からない。</p>
+                        <p>一方で、</p>
+                        <p><strong>「Excelは使ったことがあります」</strong></p>
+                        <p>という人はかなり多い。</p>
+                        <p>しかし、講師として見ていると注意が必要です。</p>
+                        <p>会社ですでに用意されているExcelに、</p>
+                        <p>商品名を入力する。</p>
+                        <p>決められた場所に数字を入力する。</p>
+                        <p>それだけなら経験したことがある。</p>
+                        <p>でも、</p>
+                        <ul style="padding-left: 20px; margin-top: 10px; margin-bottom: 10px; line-height: 1.8;">
+                            <li>自分で表を作ったことはない</li>
+                            <li>計算式を入れたこともない</li>
+                            <li>データを並べ替えたこともない</li>
+                            <li>必要なものだけ表示したこともない</li>
+                        </ul>
+                        <p>というケースがあります。</p>
+                        <p>その場合、</p>
+                        <p><strong>「Excelを使ったことがある」けれど、</strong></p>
+                        <p><strong>「Excelを使える」とはまだ言いにくい。</strong></p>
+                        <p>という話につながります。</p>
+
+                        <h3>「使ったことがある」から「使える」へ</h3>
+                        <p>Excelをはじめて使う人も、</p>
+                        <p>Excelに入力した経験がある人も、</p>
+                        <p>まずは、</p>
+                        <p><strong>「Excelで何ができるのか」</strong></p>
+                        <p>を知ってほしい。</p>
+                        <p>毎回同じ計算をしている。</p>
+                        <p>大量のデータから必要なものを探している。</p>
+                        <p>数字を並べているけれど、いまひとつ状況が伝わらない。</p>
+                        <p>そんなときに、</p>
+                        <p style="font-size: 1.15rem; font-weight: 900; color: #15803d; margin-top: 20px; margin-right: 0px; margin-bottom: 20px; margin-left: 0px;">「Excelに任せられることはないかな？」</p>
+                        <p>と考えられる。</p>
+                        <p>そして、</p>
+                        <p>自分で表を作り、</p>
+                        <p>計算し、</p>
+                        <p>データを整理し、</p>
+                        <p>必要ならグラフにする。</p>
+                        <p>そこまでできるようになって、</p>
+                        <p><strong>「Excelを使えます」</strong></p>
+                        <p>と言えるようになります。</p>
+                        <p>最初から難しい機能を覚える必要はありません。</p>
+                        <p>まずはセルに入力するところから。</p>
+                        <p>そこから、</p>
+                        <ul style="padding-left: 20px; margin-top: 10px; margin-bottom: 10px; line-height: 1.8;">
+                            <li>計算</li>
+                            <li>表作成</li>
+                            <li>データ整理</li>
+                            <li>グラフ</li>
+                        </ul>
+                        <p>へと、一つずつできることを増やしていく。</p>
+                        <p>「使ったことがある」から「使える」へ。</p>
+                        <p><strong>それが、ぱそトレ！で目指してほしいExcelの力です。</strong></p>
+
+                        <!-- Excel関連記事（カリキュラム風カード仕様） -->
+                        <div class="curriculum-section-wrapper" style="margin-top: 30px; margin-bottom: 0px;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                                <h3 style="margin: 0px; border-bottom: none; font-size: 1.15rem; font-weight: 900; color: #2c3e50;">Excelの関連記事を読む</h3>
+                                <span style="font-size: 0.85rem; color: #64748b; font-weight: 700;">基本操作から売上管理・データ整理までまとめています。</span>
+                            </div>
+                            <div class="curriculum-grid" style="margin-top: 15px;">
+                                <!-- 01 -->
+                                <a href="guide-excel-basics.html" class="curriculum-card curriculum-card--excel">
+                                    <span class="curriculum-card__num">01</span>
+                                    <div class="curriculum-card__header">
+                                        <div class="curriculum-card__icon-wrap">
+                                            <img src="img/icon-excel.png" alt="" class="curriculum-card__icon">
+                                        </div>
+                                        <div class="curriculum-card__meta">
+                                            <h4 class="curriculum-card__title">Excelの基本操作・使い方</h4>
+                                        </div>
+                                    </div>
+                                    <div class="curriculum-card__desc">
+                                        仕事で使える表作成と計算の土台を学びます。
+                                    </div>
+                                    <div class="curriculum-card__footer">
+                                        <span class="curriculum-card__link">この記事から始める →</span>
+                                    </div>
+                                </a>
+                                <!-- 02 -->
+                                <a href="guide-excel-practice-01.html" class="curriculum-card curriculum-card--excel">
+                                    <span class="curriculum-card__num">02</span>
+                                    <div class="curriculum-card__header">
+                                        <div class="curriculum-card__icon-wrap">
+                                            <img src="img/icon-excel.png" alt="" class="curriculum-card__icon">
+                                        </div>
+                                        <div class="curriculum-card__meta">
+                                            <h4 class="curriculum-card__title">売上管理表の整え方</h4>
+                                        </div>
+                                    </div>
+                                    <div class="curriculum-card__desc">
+                                        実務で役立つ計算・集計・達成率の計算方法です。
+                                    </div>
+                                    <div class="curriculum-card__footer">
+                                        <span class="curriculum-card__link">この記事から始める →</span>
+                                    </div>
+                                </a>
+                                <!-- 03 -->
+                                <a href="guide-excel-csv-data.html" class="curriculum-card curriculum-card--excel">
+                                    <span class="curriculum-card__num">03</span>
+                                    <div class="curriculum-card__header">
+                                        <div class="curriculum-card__icon-wrap">
+                                            <img src="img/icon-excel.png" alt="" class="curriculum-card__icon">
+                                        </div>
+                                        <div class="curriculum-card__meta">
+                                            <h4 class="curriculum-card__title">ExcelでCSV・データを整理する方法</h4>
+                                        </div>
+                                    </div>
+                                    <div class="curriculum-card__desc">
+                                        区切り位置・並べ替え・フィルター・テーブルについて
+                                    </div>
+                                    <div class="curriculum-card__footer">
+                                        <span class="curriculum-card__link">この記事から始める →</span>
+                                    </div>
+                                </a>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+<div class="content-body">
+
+                <!-- 1. 仕事の中では、3つを行き来します -->
+                <section class="hub-section">
+                    <h2 class="hub-article-h2">仕事の中では、3つを行き来します</h2>
+                    <p>冒頭の「売上をまとめて、資料にして、共有フォルダに入れる」を思い出してください。Excelで集計し、Wordで資料にし、Windowsのフォルダに保存する。<mark>作業は1つなのに、3つを行ったり来たりしています。</mark></p>
+                    <p>現場では「Excel担当」「Word担当」のように分かれていないことが多いので、ぱそトレ！ではこの3つを「PCスキル」という1つのテーマにまとめました。<strong>1つを完璧にしてから次へ、と考えなくて大丈夫です。</strong>必要な作業に合わせて、行き来しながら増やしてください。</p>
+                </section>
+
+                <!-- 2. 覚えるより、調べられること -->
+                <section class="hub-section">
+                    <h2 class="hub-article-h2">覚えるより、調べられること</h2>
+                    <p>仕事で頼りにされるのは、全部知っている人より、<mark>分からないときに自分で解決できる人</mark>です。</p>
+                    <p>WordにもExcelにも機能は山ほどあり、全部知っている人はまず現場にいません。困ったときは誰でも検索します。差が出るのは、<strong>何と検索するか</strong>です。</p>
+                    <p>たとえば、Wordで氏名と電話番号の位置を縦にそろえたいとき。「Word きれいにしたい」では、探したい情報にたどり着けません。「Word 文字 位置 そろえる」と言葉にできれば、スペースを何個も入れる方法ではなく、Tabキーの使い方が見つかります。この方法は「<a href="guide-word-tab-basics.html">WordのTabキーとは？</a>」で詳しく解説しています。</p>
+                    <p>機能の名前を知らなくても、何をしたいのかを言葉にできれば調べられます。これは暗記した機能の数より、あとで長く役に立つ力です。</p>
+                </section>
+
+                <!-- 3. どこから読む？ -->
+                <section class="hub-section">
+                    <h2 class="hub-article-h2">どこから読む？</h2>
+                    <p>ファイルが見つからない、保存で迷うなら、Windowsから。<br>
+                    履歴書や社内文書を整えたいなら、Wordから。<br>
+                    数字の集計や、データの整理をしたいなら、Excelから。</p>
+                    <p><mark>全部を読む必要はありません。</mark>今の仕事や就職活動で必要なところから始めてください。</p>
+                </section>
+
+                </div> <!-- .content-body 終了 -->
+
+                <!-- 11. 記事一覧（動的索引リスト：6カテゴリ対応版） -->
+                <div class="hub-accent-area">
+                    <section class="hub-section" id="dynamic-sitemap-index" data-initial="pcskills" style="margin-bottom: 0px;">
+                        <div class="hub-archive-header">
+                            <h2 class="section-title">記事一覧</h2>
+                        </div>
+                        <div class="hub-index-nav">
+                            <button class="hub-index-tab" data-filter="all">すべて</button>
+                            <button class="hub-index-tab" data-filter="typing">タイピング</button>
+                            <button class="hub-index-tab active" data-filter="pcskills">PCスキル</button>
+                            <button class="hub-index-tab" data-filter="ai">生成AI</button>
+                            <button class="hub-index-tab" data-filter="career">就職・転職</button>
+                            <button class="hub-index-tab" data-filter="column">現場コラム</button>
+                        </div>
+                        <div class="hub-index-list" id="column-article-grid"></div>
+                    </section>
+                </div>
+
+                <!-- 接続導線 -->
+                <div class="hub-footer-nav">
+                    <p class="hub-footer-nav__text">PCスキルの基本がわかったら、次は生成AIを活用して業務をさらに効率化しましょう</p>
+                    <div class="summary-nav">
+                        <a href="hub-ai.html" class="btn-main">生成AI活用へ</a>
+                        <a href="hub-typing.html" class="summary-btn">タイピング練習へ</a>
+                        <a href="./" class="summary-btn">ホームに戻る</a>
+                    </div>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            <div class="footer-links">
+                <a href="privacy.html">プライバシーポリシー</a>
+                <a href="contact.html">お問い合わせ</a>
+                <a href="about.html">運営者情報</a>
+            </div>
+            <p>&copy; 2026 ぱそトレ！ Produced by miitype - All Rights Reserved.</p>
+        </footer>
+    </div>
+    <!-- ページトップへ戻るボタン -->
+    <a href="#" id="back-to-top" class="back-to-top">↑</a>
+    <script src="js/main.js"></script>
+</body>
+</html>
