@@ -1354,23 +1354,19 @@ if (typeof gtag === 'function') {
         // 2. カテゴリ判定マッピング
         // 現場コラム(column)のキーワードに 'glossary' を追加し、用語集もコラム配下として統治する。
         var mapping = {
-            'career':  ['mos', 'reskill', 'typing-speed', 'career', 'interview', 'cv'],
-            'ai':      ['chatgpt', 'ai', 'tools'],
-            'column':  ['column', 'glossary'],
-            'windows': ['windows', 'pc-selection', 'folder'],
-            'word':    ['word'],
-            'excel':   ['excel'],
-            'typing':  ['typing', 'play', 'basics']
+            'career':   ['mos', 'reskill', 'typing-speed', 'career', 'interview', 'cv'],
+            'ai':       ['chatgpt', 'ai', 'tools'],
+            'column':   ['column', 'glossary'],
+            'pcskills': ['pcskills', 'hub-pcskills', 'windows', 'word', 'excel', 'pc-selection', 'folder', 'multi', 'practice', 'tab', 'line-spacing'],
+            'typing':   ['typing', 'play', 'basics']
         };
 
         var names = {
-            'windows': 'Windows',
-            'word':    'Word',
-            'excel':   'Excel',
-            'ai':      '生成AI',
-            'typing':  'タイピング',
-            'career':  '就職・転職',
-            'column':  '現場コラム'
+            'pcskills': 'PCスキル',
+            'ai':       '生成AI',
+            'typing':   'タイピング',
+            'career':   '就職・転職',
+            'column':   '現場コラム'
         };
 
         // 3. 現在のカテゴリキーを特定（Sitemap.xmlからの抽出を優先）
@@ -1418,6 +1414,12 @@ if (typeof gtag === 'function') {
 
         // UI更新処理を分離
         function applyCategoryUI() {
+            // 現在のカテゴリが windows, word, excel の場合は親ハブである pcskills にマッピング
+            var navCat = currentCat;
+            if (currentCat === 'windows' || currentCat === 'word' || currentCat === 'excel') {
+                navCat = 'pcskills';
+            }
+
             // 4. ヘッダーナビの現在地を点灯（Active化）
             var links = document.querySelectorAll('.nav-item, .mobile-nav-item');
             for (var l = 0; l < links.length; l = l + 1) {
@@ -1427,27 +1429,25 @@ if (typeof gtag === 'function') {
                 item.classList.remove('active');
                 
                 // 1. 指定カテゴリがある場合はそのナビを点灯
-                if (currentCat !== "" && currentCat !== "none" && href.indexOf(currentCat) !== -1) {
+                if (navCat !== "" && navCat !== "none" && href.indexOf(navCat) !== -1) {
                     item.classList.add('active');
                 } 
                 // 2. カテゴリが "none" の場合、またはトップページの場合は「ホーム」を点灯
-                else if ((currentCat === "none" || page === 'index.html') && isHomeLink) {
+                else if ((navCat === "none" || page === 'index.html') && isHomeLink) {
                     item.classList.add('active');
                 }
             }
 
-            // 5. 動的パンくずの生成
+            // 5. 動的パンくずの生成（ハブ名までで停止）
             var bBox = document.getElementById('dynamic-breadcrumb');
             if (bBox && page !== 'index.html') {
                 var bHtml = '<a href="index.html">ホーム</a>';
-                if (currentCat !== "" && names[currentCat]) {
+                if (navCat !== "" && names[navCat]) {
                     bHtml += '<span class="breadcrumb-separator">＞</span>';
-                    // 修正：ハブページ自体にいる場合はリンクにしない
-                    if (page === 'hub-' + currentCat + '.html') {
-                        bHtml += '<span>' + names[currentCat] + '</span>';
+                    if (page === 'hub-' + navCat + '.html') {
+                        bHtml += '<span>' + names[navCat] + '</span>';
                     } else {
-                        bHtml += '<a href="hub-' + currentCat + '.html">' + names[currentCat] + '</a>';
-                        bHtml += '<span class="breadcrumb-separator">＞</span>';
+                        bHtml += '<a href="hub-' + navCat + '.html">' + names[navCat] + '</a>';
                     }
                 }
                 bBox.innerHTML = bHtml;
@@ -1582,7 +1582,7 @@ if (typeof gtag === 'function') {
 
         const listBody = document.getElementById('column-article-grid');
         const initialCat = section.dataset.initial || 'all';
-        const categoryMap = {'typing':'タイピング','windows':'Windows','word':'Word','excel':'Excel','ai':'生成AI','career':'就職・転職','column':'現場コラム'};
+        const categoryMap = {'typing':'タイピング','pcskills':'PCスキル','ai':'生成AI','career':'就職・転職','column':'現場コラム'};
 
         try {
             // Sitemapを単なるテキストファイルとして読み込む
@@ -1628,7 +1628,14 @@ if (typeof gtag === 'function') {
                 listBody.innerHTML = "";
                 listBody.scrollTop = 0;
 
-                const filtered = articleData.filter(a => filter === 'all' || a.category === filter);
+                let filtered = [];
+                if (filter === 'all') {
+                    filtered = articleData;
+                } else if (filter === 'pcskills') {
+                    filtered = articleData.filter(a => a.category === 'windows' || a.category === 'word' || a.category === 'excel');
+                } else {
+                    filtered = articleData.filter(a => a.category === filter);
+                }
                 
                 if (filtered.length === 0) {
                     listBody.innerHTML = '<div style="padding:40px; color:#94a3b8; text-align:center; font-weight:800;">該当する記事がありません</div>';

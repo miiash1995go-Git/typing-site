@@ -412,30 +412,46 @@ body.game-body .instructor-advice {
 }
 
 /* ボックス内のタイトル（bタグ・strongタグ） */
-body.portal-page .instructor-advice b,
-body.portal-page .instructor-advice strong,
-body.game-body .instructor-advice b {
-    display: inline-block;
-    font-weight: 900;
-    color: #d97706 !important; /* タイトルは落ち着いたオレンジに */
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 12px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 4px;
-    padding-left: 0px;
-    border-top-width: 0px;
-    border-right-width: 0px;
-    border-bottom-width: 2px; /* タイトル下のみ線を表示 */
-    border-left-width: 0px;
-    border-top-style: none;
-    border-right-style: none;
-    border-bottom-style: solid;
-    border-bottom-color: rgba(245, 158, 11, 0.3); /* 謎の下線を排除し、タイトル下線のみにする */
-    border-left-style: none;
-    font-size: 1.15rem;
+/* インストラクターアドバイスBOXの「タイトル（先頭のb/strong）」のスタイル */
+body.portal-page .instructor-advice > b:first-child,
+body.portal-page .instructor-advice > strong:first-child,
+body.portal-page .instructor-advice b:first-of-type,
+body.game-body .instructor-advice > b:first-child {
+    display: inline-block !important;
+    font-weight: 900 !important;
+    color: #d97706 !important;
+    margin-top: 0px !important;
+    margin-right: 0px !important;
+    margin-bottom: 12px !important;
+    margin-left: 0px !important;
+    padding-top: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 4px !important;
+    padding-left: 0px !important;
+    border-top-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 2px !important;
+    border-left-width: 0px !important;
+    border-top-style: none !important;
+    border-right-style: none !important;
+    border-bottom-style: solid !important;
+    border-bottom-color: rgba(245, 158, 11, 0.3) !important;
+    border-left-style: none !important;
+    font-size: 1.15rem !important;
+}
+
+/* インストラクターアドバイスBOX内の「本文（2番目以降やpの中のb/strong）」には下線を一切つけず、スッキリさせる */
+body.portal-page .instructor-advice p b,
+body.portal-page .instructor-advice p strong,
+body.portal-page .instructor-advice li b,
+body.portal-page .instructor-advice li strong {
+    border-bottom: none !important;
+    background-image: none !important;
+    text-decoration: none !important;
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
+    color: #1e293b !important;
+    font-weight: 800 !important;
 }
 
 
@@ -486,6 +502,65 @@ body.portal-page .instructor-advice--excel b {
     color: #15803d !important;
     border-bottom-color: #86efac !important;
 }
+
+/* --- PCスキルハブ専用アドバイスボックス --- */
+body.portal-page .instructor-advice--pcskills {
+    background-color: #f0fdf4 !important;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 6px !important;
+    border-top-style: solid !important;
+    border-right-style: solid !important;
+    border-bottom-style: solid !important;
+    border-left-style: solid !important;
+    border-top-color: #dcfce7 !important;
+    border-right-color: #dcfce7 !important;
+    border-bottom-color: #dcfce7 !important;
+    border-left-color: #16a34a !important;
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+    border-bottom-right-radius: 16px !important;
+    border-bottom-left-radius: 16px !important;
+    padding-top: 25px !important;
+    padding-right: 35px !important;
+    padding-bottom: 25px !important;
+    padding-left: 35px !important;
+    margin-top: 35px !important;
+    margin-right: 0px !important;
+    margin-bottom: 35px !important;
+    margin-left: 0px !important;
+    font-size: 1.05rem !important;
+    line-height: 1.8 !important;
+    color: #1e293b !important;
+    box-sizing: border-box !important;
+}
+
+body.portal-page .instructor-advice--pcskills b,
+body.portal-page .instructor-advice--pcskills strong {
+    display: inline-block !important;
+    font-weight: 900 !important;
+    color: #15803d !important;
+    margin-top: 0px !important;
+    margin-right: 0px !important;
+    margin-bottom: 12px !important;
+    margin-left: 0px !important;
+    padding-top: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 4px !important;
+    padding-left: 0px !important;
+    border-top-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 2px !important;
+    border-left-width: 0px !important;
+    border-top-style: none !important;
+    border-right-style: none !important;
+    border-bottom-style: solid !important;
+    border-bottom-color: rgba(22, 163, 74, 0.3) !important;
+    border-left-style: none !important;
+    font-size: 1.15rem !important;
+}
+
 
 body.portal-page .instructor-advice--ai {
     background-color: #ecfeff !important;
@@ -581,11 +656,55 @@ body.portal-page .content-body h2::after {
     background-image: linear-gradient(90deg, #3498db 0%, #d9ecff 100%);
 }
 
-body.portal-page .content-body h3 {
-    display: block; position: relative;
-    padding-top: 0; padding-right: 0; padding-bottom: 12px; padding-left: 0;
-    margin-top: 50px; margin-bottom: 22px;
-    color: #2c3e50; font-size: 1.3rem; font-weight: 800; border-bottom: 2px solid #f1f2f6;
+body.portal-page .content-body h3,
+body.portal-page article.static-page .hub-section h3 {
+    display: block;
+    position: relative;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 10px;
+    padding-left: 0px;
+    margin-top: 35px;
+    margin-right: 0px;
+    margin-bottom: 20px;
+    margin-left: 0px;
+    color: #1e293b;
+    font-size: 1.25rem;
+    font-weight: 900;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 2.5px;
+    border-left-width: 0px;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: solid;
+    border-left-style: none;
+    border-bottom-color: #94a3b8;
+}
+
+body.portal-page article.static-page .section-color-box h3 {
+    display: block;
+    position: relative;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 10px;
+    padding-left: 0px;
+    margin-top: 55px;
+    margin-right: 0px;
+    margin-bottom: 20px;
+    margin-left: 0px;
+    color: #1e293b;
+    font-size: 1.25rem;
+    font-weight: 900;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 2.5px;
+    border-left-width: 0px;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: solid;
+    border-left-style: none;
+    border-bottom-color: #94a3b8;
 }
 /* --- 5. 特殊枠内見出しのリセットロジック --- */
 
@@ -917,6 +1036,32 @@ body.portal-page .content-body table th {
     text-align: left;
 }
 
+/* ============================================================
+   Excel風 格子状セルテーブル（独立専用クラス） (v20.11.ExcelGrid)
+   ============================================================ */
+body.portal-page .content-body table.excel-table {
+    border-collapse: collapse !important;
+    border: 2px solid #94a3b8 !important; /* 表の外枠をしっかりめのグレーに */
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+    border-radius: 0px !important;
+}
+
+body.portal-page .content-body table.excel-table th,
+body.portal-page .content-body table.excel-table td {
+    border: 1px solid #cbd5e1 !important; /* セルごとの格子線（Excelのグリッド線風） */
+    padding-top: 10px !important;
+    padding-right: 14px !important;
+    padding-bottom: 10px !important;
+    padding-left: 14px !important;
+}
+
+body.portal-page .content-body table.excel-table th {
+    background-color: #f1f5f9 !important;
+    color: #1e293b !important;
+    font-weight: 900 !important;
+}
+
 body.portal-page .content-body table td {
     padding-top: 16px;
     padding-right: 20px;
@@ -1041,23 +1186,21 @@ body.portal-page article.static-page .content-body .article-image img:hover {
 }
 
 /* ============================================================
-   フォルダ階層マップ：左右分割 ＆ コネクタ (v20.7.24.Map)
-   ------------------------------------------------------------
-   略記禁止・物理配置統治
+   メモリとメモリー比較カード (v20.12.MemoryCompare)
    ============================================================ */
-.folder-map-container {
+.memory-compare-grid {
     display: flex;
     flex-direction: row;
     align-items: stretch;
     justify-content: space-between;
+    gap: 20px;
     margin-top: 30px;
     margin-right: 0px;
     margin-bottom: 30px;
     margin-left: 0px;
-    gap: 0px; /* 線でつなぐためgapは0 */
 }
 
-.folder-map-box {
+.memory-compare-card {
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 0%;
@@ -1065,7 +1208,7 @@ body.portal-page article.static-page .content-body .article-image img:hover {
     border-top-width: 2px;
     border-right-width: 2px;
     border-bottom-width: 2px;
-    border-left-width: 2px;
+    border-left-width: 6px;
     border-top-style: solid;
     border-right-style: solid;
     border-bottom-style: solid;
@@ -1073,107 +1216,59 @@ body.portal-page article.static-page .content-body .article-image img:hover {
     border-top-color: #e2e8f0;
     border-right-color: #e2e8f0;
     border-bottom-color: #e2e8f0;
-    border-left-color: #e2e8f0;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 16px;
     padding-top: 25px;
     padding-right: 25px;
     padding-bottom: 25px;
     padding-left: 25px;
-    position: relative;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.04);
 }
 
-/* つなぎ目（矢印・コネクタ） */
-.folder-map-connector {
-    flex-grow: 0;
-    flex-shrink: 0;
-    width: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+.memory-compare-card--pc {
+    border-left-color: #3b82f6;
+    background-color: #f0f7ff;
 }
 
-.folder-map-connector::before {
-    content: "";
-    width: 100%;
-    height: 2px;
-    background-color: #3498db;
-    position: absolute;
+.memory-compare-card--ai {
+    border-left-color: #14b8a6;
+    background-color: #ecfeff;
 }
 
-.folder-map-connector::after {
-    content: "▶";
-    color: #3498db;
-    font-size: 1.2rem;
-    background-color: #ffffff;
-    z-index: 2;
-    padding-top: 0px;
-    padding-right: 5px;
-    padding-bottom: 0px;
-    padding-left: 5px;
-}
-
-.folder-map-title {
+.memory-compare-title {
     display: block;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     font-weight: 900;
-    color: #64748b;
+    color: #1e293b;
     margin-top: 0px;
     margin-right: 0px;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     margin-left: 0px;
-    text-align: center;
 }
 
-.folder-map-list {
-    list-style-type: none !important;
-    padding-top: 0px !important;
-    padding-right: 0px !important;
-    padding-bottom: 0px !important;
-    padding-left: 0px !important;
-    margin-top: 0px !important;
-}
-
-.folder-map-item {
-    padding-top: 8px;
-    padding-right: 12px;
-    padding-bottom: 8px;
-    padding-left: 12px;
-    margin-bottom: 5px;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-    border-bottom-left-radius: 6px;
+.memory-compare-desc {
     font-size: 0.95rem;
-    color: #4b5563;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    color: #475569;
+    line-height: 1.7;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
 }
 
-.folder-map-item--active {
-    background-color: #eff6ff;
-    color: #2563eb;
-    font-weight: 800;
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-top-style: solid;
-    border-right-style: solid;
-    border-bottom-style: solid;
-    border-left-style: solid;
-    border-top-color: #bfdbfe;
-    border-right-color: #bfdbfe;
-    border-bottom-color: #bfdbfe;
-    border-left-color: #bfdbfe;
+@media (max-width: 768px) {
+    .memory-compare-grid {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
 }
 
 /* ============================================================
-   ファイル名比較カード (v20.7.24.FileName)
+   フォルダ階層マップ：左右分割 ＆ コネクタ (v20.7.24.Map)
+   ------------------------------------------------------------
+   略記禁止・物理配置統治
    ============================================================ */
 .naming-comparison {
     display: flex;
@@ -1317,6 +1412,30 @@ body.portal-page .breadcrumb a {
 }
 
 @media (max-width: 768px) {
+    /* --- フォルダ階層マップ・メモリー比較のスマホ用縦並び統治 --- */
+    .folder-map-container {
+        flex-direction: column !important;
+        gap: 0px !important;
+    }
+    .folder-map-connector {
+        width: 100% !important;
+        height: 40px !important;
+    }
+    .folder-map-connector::before {
+        width: 2px !important;
+        height: 100% !important;
+        top: 0px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+    }
+    .folder-map-connector::after {
+        content: "▼" !important;
+        padding-top: 5px !important;
+        padding-right: 0px !important;
+        padding-bottom: 5px !important;
+        padding-left: 0px !important;
+    }
+
     /* --- 本家Newsリストのスマホ用コンパクト化統治 --- */
     body.portal-page .news-list {
         padding-top: 5px !important;
@@ -1372,10 +1491,16 @@ body.portal-page .breadcrumb a {
     }
 
     body.portal-page .content-body table {
-        display: block !important;
-        overflow-x: auto !important;
-        white-space: nowrap !important;
-        -webkit-overflow-scrolling: touch !important;
+        display: table !important;
+        width: 100% !important;
+        overflow-x: visible !important;
+        white-space: normal !important;
+        word-break: break-all !important;
+    }
+    body.portal-page .content-body table th,
+    body.portal-page .content-body table td {
+        padding: 10px 8px !important;
+        font-size: 0.85rem !important;
     }
 
     /* ロードマップ：スマホ横並び維持版 */
@@ -1926,10 +2051,11 @@ body.portal-page .news-tag {
 /* ============================================================
    カテゴリ別カラー（v20.7.19 新配色パレット同期版）
    ============================================================ */
-.tag-typing  { background-color: #EFF6FF !important; color: #2563EB !important; }
-.tag-windows { background-color: #F0F9FF !important; color: #38BDF8 !important; }
-.tag-word    { background-color: #EEF2FF !important; color: #1D4ED8 !important; }
-.tag-excel   { background-color: #ECFDF5 !important; color: #16A34A !important; }
+.tag-typing   { background-color: #EFF6FF !important; color: #2563EB !important; }
+.tag-pcskills { background-color: #ECFDF5 !important; color: #16A34A !important; }
+.tag-windows  { background-color: #F0F9FF !important; color: #38BDF8 !important; }
+.tag-word     { background-color: #EEF2FF !important; color: #1D4ED8 !important; }
+.tag-excel    { background-color: #ECFDF5 !important; color: #16A34A !important; }
 .tag-ai      { background-color: #ECFEFF !important; color: #14B8A6 !important; }
 .tag-career  { background-color: #FFF7ED !important; color: #F97316 !important; }
 .tag-column  { background-color: #F5F3FF !important; color: #8B5CF6 !important; }
@@ -2812,4 +2938,385 @@ body.portal-page .info-note-box {
 
 .flex-table-header .flex-table-col--primary {
     border-right-color: #e2e8f0;
+}
+
+/* --- PCスキルハブ専用：テーマカラーセクションボックス ＆ カッコいい見出し --- */
+.section-color-box {
+    margin-top: 40px !important;
+    margin-right: 0px !important;
+    margin-bottom: 45px !important;
+    margin-left: 0px !important;
+    padding-top: 35px !important;
+    padding-right: 40px !important;
+    padding-bottom: 35px !important;
+    padding-left: 40px !important;
+    border-top-left-radius: 20px !important;
+    border-top-right-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+    border-bottom-left-radius: 20px !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.03) !important;
+}
+
+.section-color-box--windows { background-color: #f0f9ff !important; }
+.section-color-box--word    { background-color: #f0f7ff !important; }
+.section-color-box--excel   { background-color: #f0fdf4 !important; }
+
+@media (max-width: 768px) {
+    .section-color-box {
+        padding-top: 25px !important;
+        padding-right: 15px !important;
+        padding-bottom: 25px !important;
+        padding-left: 15px !important;
+    }
+    .section-color-box ul {
+        padding-top: 0px !important;
+        padding-right: 0px !important;
+        padding-bottom: 0px !important;
+        padding-left: 15px !important;
+        margin-top: 10px !important;
+        margin-right: 0px !important;
+        margin-bottom: 10px !important;
+        margin-left: 0px !important;
+    }
+    .section-color-box li {
+        font-size: 0.92rem !important;
+        line-height: 1.6 !important;
+        margin-bottom: 8px !important;
+    }
+}
+
+.hub-section-title {
+    font-size: 1.45rem !important;
+    font-weight: 900 !important;
+    color: #1e293b !important;
+    padding-top: 14px !important;
+    padding-right: 20px !important;
+    padding-bottom: 14px !important;
+    padding-left: 20px !important;
+    background-image: linear-gradient(90deg, #f1f5f9 0%, #ffffff 100%) !important;
+    border-top-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 0px !important;
+    border-left-width: 6px !important;
+    border-top-style: none !important;
+    border-right-style: none !important;
+    border-bottom-style: none !important;
+    border-left-style: solid !important;
+    border-left-color: #334155 !important;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+    border-bottom-left-radius: 0px !important;
+    margin-top: 0px !important;
+    margin-right: 0px !important;
+    margin-bottom: 25px !important;
+    margin-left: 0px !important;
+}
+
+.hub-section-title--windows { border-left-color: #38BDF8 !important; background-image: linear-gradient(90deg, #e0f2fe 0%, #ffffff 100%) !important; }
+.hub-section-title--word    { border-left-color: #1D4ED8 !important; background-image: linear-gradient(90deg, #dbeafe 0%, #ffffff 100%) !important; }
+.hub-section-title--excel   { border-left-color: #16A34A !important; background-image: linear-gradient(90deg, #dcfce7 0%, #ffffff 100%) !important; }
+
+/* --- ハブページ内記事風見出し (v20.11.HubArticleH2) --- */
+body.portal-page article.static-page .hub-article-h2 {
+    display: block;
+    position: relative;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    line-height: 1.2;
+    color: #2c3e50;
+    margin-top: 60px;
+    margin-right: 0px;
+    margin-bottom: 35px;
+    margin-left: 0px;
+    padding-top: 20px;
+    padding-right: 0px;
+    padding-bottom: 8px;
+    padding-left: 20px;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: #f1f3f5;
+    white-space: normal;
+    overflow: visible;
+}
+
+body.portal-page article.static-page .hub-article-h2::before {
+    content: "";
+    position: absolute;
+    display: block;
+    top: 20px;
+    bottom: 0px;
+    left: 0px;
+    width: 8px;
+    height: auto;
+    background-color: #2c6fd8;
+    background-image: linear-gradient(180deg, #2c6fd8 0%, #5cbcff 100%);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+body.portal-page article.static-page .hub-article-h2::after {
+    content: "";
+    position: absolute;
+    display: block;
+    bottom: 0px;
+    left: 14px;
+    right: 0px;
+    height: 2px;
+    background-color: #3498db;
+    background-image: linear-gradient(90deg, #3498db 0%, #d9ecff 100%);
+}
+
+/* --- なぜ、ぱそトレ！を作ったのかセクション専用デザイン (v20.11.StoryRedesign) --- */
+.story-section-box {
+    background-color: #f4f8fb !important;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 1px !important;
+    border-top-style: solid !important;
+    border-right-style: solid !important;
+    border-bottom-style: solid !important;
+    border-left-style: solid !important;
+    border-top-color: #e2e8f0 !important;
+    border-right-color: #e2e8f0 !important;
+    border-bottom-color: #e2e8f0 !important;
+    border-left-color: #e2e8f0 !important;
+    border-top-left-radius: 30px !important;
+    border-top-right-radius: 30px !important;
+    border-bottom-right-radius: 30px !important;
+    border-bottom-left-radius: 30px !important;
+    padding-top: 50px !important;
+    padding-right: 60px !important;
+    padding-bottom: 50px !important;
+    padding-left: 60px !important;
+    box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.03) !important;
+    max-width: 960px !important;
+    margin-top: 0px !important;
+    margin-right: auto !important;
+    margin-bottom: 120px !important; /* 0pxから60pxへ広げてゆとりを確保 */
+    margin-left: auto !important;
+    text-align: left !important;
+}
+
+.story-header {
+    margin-top: 0px !important;
+    margin-right: 0px !important;
+    margin-bottom: 35px !important;
+    margin-left: 0px !important;
+    text-align: center !important;
+    padding-top: 18px !important;
+    padding-right: 0px !important;
+    padding-bottom: 18px !important;
+    padding-left: 0px !important;
+    background-image: linear-gradient(90deg, rgba(209, 227, 248, 0) 0%, rgba(209, 227, 248, 0.65) 50%, rgba(209, 227, 248, 0) 100%) !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+    border-bottom-left-radius: 12px !important;
+}
+
+.story-section-box h2 {
+    font-size: 1.8rem !important;
+    font-weight: 900 !important;
+    color: #1e293b !important;
+    margin-top: 0px !important;
+    margin-right: 0px !important;
+    margin-bottom: 0px !important;
+    margin-left: 0px !important;
+    border-top-width: 0px !important;
+    border-right-width: 0px !important;
+    border-bottom-width: 0px !important;
+    border-left-width: 0px !important;
+    border-top-style: none !important;
+    border-right-style: none !important;
+    border-bottom-style: none !important;
+    border-left-style: none !important;
+    padding-top: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 0px !important;
+}
+
+.story-body {
+    font-size: 1.05rem !important;
+    line-height: 1.85 !important;
+    color: #1e293b !important;
+}
+
+.story-body p {
+    margin-top: 0px !important;
+    margin-right: 0px !important;
+    margin-bottom: 24px !important;
+    margin-left: 0px !important;
+}
+
+.story-body p:last-child {
+    margin-bottom: 0px !important;
+}
+
+/* 1つ目の強調：問いかけの引用ブロック */
+.story-quote {
+    background-color: #ffffff !important;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 5px !important;
+    border-top-style: solid !important;
+    border-right-style: solid !important;
+    border-bottom-style: solid !important;
+    border-left-style: solid !important;
+    border-top-color: #e2e8f0 !important;
+    border-right-color: #e2e8f0 !important;
+    border-bottom-color: #e2e8f0 !important;
+    border-left-color: #3498db !important;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    padding-top: 18px !important;
+    padding-right: 25px !important;
+    padding-bottom: 18px !important;
+    padding-left: 25px !important;
+    margin-top: 25px !important;
+    margin-right: 0px !important;
+    margin-bottom: 25px !important;
+    margin-left: 0px !important;
+    font-weight: 800 !important;
+    color: #1e293b !important;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.02) !important;
+}
+
+/* 2つ目の強調：ファイル管理の重要ポイントコールアウト */
+.story-callout {
+    background-color: #fffbeb !important;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 6px !important;
+    border-top-style: solid !important;
+    border-right-style: solid !important;
+    border-bottom-style: solid !important;
+    border-left-style: solid !important;
+    border-top-color: #fde68a !important;
+    border-right-color: #fde68a !important;
+    border-bottom-color: #fde68a !important;
+    border-left-color: #f59e0b !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+    border-bottom-left-radius: 12px !important;
+    padding-top: 20px !important;
+    padding-right: 25px !important;
+    padding-bottom: 20px !important;
+    padding-left: 25px !important;
+    margin-top: 25px !important;
+    margin-right: 0px !important;
+    margin-bottom: 25px !important;
+    margin-left: 0px !important;
+    font-weight: 900 !important;
+    color: #92400e !important;
+    box-shadow: 0px 4px 12px rgba(245, 158, 11, 0.05) !important;
+}
+
+/* 3行の整理されたリスト（ファイル管理の項目） */
+.story-checklist {
+    list-style-type: none !important;
+    background-color: #ffffff !important;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 1px !important;
+    border-top-style: solid !important;
+    border-right-style: solid !important;
+    border-bottom-style: solid !important;
+    border-left-style: solid !important;
+    border-top-color: #e2e8f0 !important;
+    border-right-color: #e2e8f0 !important;
+    border-bottom-color: #e2e8f0 !important;
+    border-left-color: #e2e8f0 !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+    border-bottom-left-radius: 12px !important;
+    padding-top: 15px !important;
+    padding-right: 25px !important;
+    padding-bottom: 15px !important;
+    padding-left: 25px !important;
+    margin-top: 15px !important;
+    margin-right: 0px !important;
+    margin-bottom: 25px !important;
+    margin-left: 0px !important;
+}
+
+.story-checklist li {
+    position: relative !important;
+    padding-top: 8px !important;
+    padding-right: 0px !important;
+    padding-bottom: 8px !important;
+    padding-left: 25px !important;
+    font-weight: 800 !important;
+    color: #334155 !important;
+    border-bottom-width: 1px !important;
+    border-bottom-style: dashed !important;
+    border-bottom-color: #f1f5f9 !important;
+}
+
+.story-checklist li:last-child {
+    border-bottom-style: none !important;
+}
+
+.story-checklist li::before {
+    content: "✓" !important;
+    position: absolute !important;
+    left: 0px !important;
+    top: 8px !important;
+    color: #3498db !important;
+    font-weight: 900 !important;
+}
+
+/* 3つ目の強調：自分で試す行動のアクセントボックス */
+.story-action-accent {
+    background-color: #f0fdf4 !important;
+    border-top-width: 1px !important;
+    border-right-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 6px !important;
+    border-top-style: solid !important;
+    border-right-style: solid !important;
+    border-bottom-style: solid !important;
+    border-left-style: solid !important;
+    border-top-color: #dcfce7 !important;
+    border-right-color: #dcfce7 !important;
+    border-bottom-color: #dcfce7 !important;
+    border-left-color: #16a34a !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+    border-bottom-left-radius: 12px !important;
+    padding-top: 18px !important;
+    padding-right: 25px !important;
+    padding-bottom: 18px !important;
+    padding-left: 25px !important;
+    margin-top: 25px !important;
+    margin-right: 0px !important;
+    margin-bottom: 25px !important;
+    margin-left: 0px !important;
+    font-weight: 900 !important;
+    color: #166534 !important;
+    box-shadow: 0px 4px 12px rgba(22, 163, 74, 0.05) !important;
+}
+
+@media (max-width: 768px) {
+    .story-section-box {
+        padding-top: 30px !important;
+        padding-right: 20px !important;
+        padding-bottom: 30px !important;
+        padding-left: 20px !important;
+    }
 }
