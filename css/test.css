@@ -88,7 +88,7 @@ body.test-body .nav-item {
 /* --- 3. ミニステータス（カード内右上に固定） --- */
 .test-mini-status {
     position: absolute;
-    top: 25px; /* ラベルの高さに合わせる */
+    top: 12px; /* カードのパディング縮小に伴い、位置を上方へ引き上げ */
     right: 40px; /* カードの右余白に合わせる */
     display: flex;
     flex-direction: row;
@@ -178,9 +178,9 @@ body.test-body .nav-item {
     margin-right: auto;
     margin-bottom: 180px;
     margin-left: auto;
-    padding-top: 25px;
+    padding-top: 15px;
     padding-right: 40px;
-    padding-bottom: 30px;
+    padding-bottom: 20px;
     padding-left: 40px;
     border-top-left-radius: 25px;
     border-top-right-radius: 25px;
@@ -221,15 +221,15 @@ body.test-body .nav-item {
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
-    padding-top: 15px;
+    padding-top: 10px;
     padding-right: 25px;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
     padding-left: 25px;
     font-size: 1.55rem;
     line-height: 1.5;
     color: #1e293b;
-    /* 物理高を140pxに拡張し、2行収容 ＆ スライド窓として統治 */
-    height: 140px;
+    /* 高さを125pxに圧縮し、余白を詰めて入力エリアを上に押し上げる */
+    height: 125px;
     word-break: break-all;
     white-space: normal;
     box-sizing: border-box;
