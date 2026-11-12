@@ -264,16 +264,16 @@ handleResize() {
 
                 // カテゴリ別の制限設定
                 if (this.currentCategoryId === 'tenkey') {
-                    this.targetLimit = 200; // テンキーは200文字
-                    this.timeLimitMs = 180000;
+                    this.targetLimit = 230; // テンキーは230文字へ拡張
+                    this.timeLimitMs = 180000; // 180秒制限
                 } else if (this.currentCategoryId === 'roman_pure' || this.currentCategoryId === 'roman_complex') {
-                    this.targetLimit = 200;
+                    this.targetLimit = 230;
                     this.timeLimitMs = 180000;
                 } else if (this.currentCategoryId === 'speed') {
                     this.targetLimit = 99999; // 文字数制限なし（時間まで無制限に打てる）
                     this.timeLimitMs = 120000; // 120秒（2分）
                 } else {
-                    this.targetLimit = 320;
+                    this.targetLimit = 350;
                     this.timeLimitMs = 240000;
                 }
 
@@ -883,11 +883,12 @@ if (success) {
             const cpm = Math.floor(this.totalTypedCount / (sec / 60)) || 0;
             const accNumRaw = (this.totalTypedCount > 0) ? ((this.totalTypedCount - this.totalMissedCount) / this.totalTypedCount) * 100 : 0;
             
-            // 【究極修正】採点アルゴリズム：3乗から2乗へ（マイルド化）
-            const score = Math.floor(cpm * (Math.max(0, accNumRaw)/100)**2);
+            // 【採点アルゴリズム】テンキーは正確性重視のため3乗、その他はマイルドな2乗
+            const accPower = (this.currentCategoryId === 'tenkey') ? 3 : 2;
+            const score = Math.floor(cpm * (Math.max(0, accNumRaw)/100)**accPower);
             
             // 【れんぞくモード判定】通常モードはスコア基準、れんぞくは最大連続成功数基準
-            const rank = (this.currentCategoryId === 'renzoku') 
+            const rank = (this.currentCategoryId === 'renzoku')
                 ? this.getRenzokuRank(this.maxConsecutiveSuccess) 
                 : this.getRank(score);
             
@@ -1705,18 +1706,39 @@ if (typeof gtag === 'function') {
                 });
             }
 
-            function render(filter) {
+            // カテゴリ定義マッピング（Windows/Word/Excelは個別バッジ・固有カラーを維持）
+            const categoryMap = {
+                'typing': 'タイピング',
+                'pcskills': 'PCスキル',
+                'windows': 'Windows',
+                'word': 'Word',
+                'excel': 'Excel',
+                'ai': '生成AI',
+                'career': '就職・転職',
+                'column': '現場コラム'
+            };
+
+            let currentFilter = initialCat;
+            let currentSearchQuery = '';
+            const searchInput = section.querySelector('#article-search-input');
+
+            function render() {
                 if (!listBody) return;
                 listBody.innerHTML = "";
                 listBody.scrollTop = 0;
 
-                let filtered = [];
-                if (filter === 'all') {
-                    filtered = articleData;
-                } else if (filter === 'pcskills') {
-                    filtered = articleData.filter(a => a.category === 'windows' || a.category === 'word' || a.category === 'excel');
-                } else {
-                    filtered = articleData.filter(a => a.category === filter);
+                let filtered = articleData;
+
+                // 1. カテゴリ絞り込み
+                if (currentFilter === 'pcskills') {
+                    filtered = filtered.filter(a => a.category === 'windows' || a.category === 'word' || a.category === 'excel' || a.category === 'pcskills');
+                } else if (currentFilter !== 'all') {
+                    filtered = filtered.filter(a => a.category === currentFilter);
+                }
+
+                // 2. タイトル検索絞り込み（大文字・小文字不問・前後空白除去）
+                if (currentSearchQuery) {
+                    filtered = filtered.filter(a => a.title.toLowerCase().indexOf(currentSearchQuery) !== -1);
                 }
                 
                 if (filtered.length === 0) {
@@ -1728,6 +1750,7 @@ if (typeof gtag === 'function') {
                     '<a href="' + a.url + '" class="hub-index-row">' +
                     '<div class="hub-index-meta"><span class="news-tag tag-' + a.category + '">' + (categoryMap[a.category] || a.category) + '</span></div>' +
                     '<div class="hub-index-info"><h4>' + a.title + '</h4></div>' +
+                    '<span class="hub-index-arrow">›</span>' +
                     '</a>'
                 ).join('');
             }
@@ -1738,10 +1761,19 @@ if (typeof gtag === 'function') {
                 e.preventDefault();
                 section.querySelectorAll('.hub-index-tab').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                render(btn.getAttribute('data-filter'));
+                currentFilter = btn.getAttribute('data-filter') || 'all';
+                render();
             };
 
-            render(initialCat);
+            // トップページ用：検索入力欄が存在する場合のみイベントリスナーを安全に接続
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    currentSearchQuery = this.value.trim().toLowerCase();
+                    render();
+                });
+            }
+
+            render();
 
         } catch (err) { console.error("Index System Error:", err); }
     }
