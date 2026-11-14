@@ -360,7 +360,7 @@ if (success) {
             if (this.currentCategoryId === 'test_5min') {
                 unitText = "文字";
             } else if (this.currentCategoryId === 'renzoku') {
-                unitText = "連続";
+                unitText = "問クリア";
             }
             
             // 数値と単位に個別のタグを割り当てて視認性を向上
@@ -636,15 +636,12 @@ if (success) {
                 if (streakEl) streakEl.innerText = `${this.memoryConsecutiveCorrect} / 5`;
             }
 
-            // 【れんぞくモード専用】1問クリア時の連続成功判定
+            // 【れんぞくモード専用】1問クリア時の成功判定（ミスしてもゼロリセットせず積み上げ）
             if (this.currentCategoryId === 'renzoku') {
                 if (!this.hasCurrentQuestionError) {
-                    // ノーミス成功！
+                    // ノーミスでクリアできた問題のみカウント加算
                     this.currentConsecutiveSuccess++;
-                    this.maxConsecutiveSuccess = Math.max(this.maxConsecutiveSuccess, this.currentConsecutiveSuccess);
-                } else {
-                    // 途中でミスがあったのでリセット
-                    this.currentConsecutiveSuccess = 0;
+                    this.maxConsecutiveSuccess = this.currentConsecutiveSuccess;
                 }
                 // 次の問題のためにエラーフラグをリセット
                 this.hasCurrentQuestionError = false;
@@ -977,12 +974,12 @@ if (typeof gtag === 'function') {
             document.getElementById('res-miss').innerText = this.totalMissedCount;
             document.getElementById('res-total').innerText = this.totalTypedCount + this.totalMissedCount;
 
-            // 【れんぞくモード専用】結果画面の「入力速度(CPM)」ラベルと数値を「最大連続回数」に差し替え
+            // 【れんぞくモード専用】結果画面の「入力速度(CPM)」ラベルと数値を「クリア問数」に差し替え
             if (this.currentCategoryId === 'renzoku') {
                 const wpmRow = document.getElementById('res-wpm')?.closest('.res-grid-row');
                 if (wpmRow) {
                     const labelEl = wpmRow.querySelector('.res-label');
-                    if (labelEl) labelEl.innerText = "最大連続回数";
+                    if (labelEl) labelEl.innerText = "クリア問数";
                 }
                 document.getElementById('res-wpm').innerText = this.maxConsecutiveSuccess + "問";
             } else {
