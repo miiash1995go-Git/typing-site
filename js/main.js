@@ -328,6 +328,10 @@ if (success) {
             });
         }
 
+        // 結果画面のボタン
+        document.getElementById('btn-retry')?.addEventListener('click', () => this.restartPractice());
+        document.getElementById('btn-to-select')?.addEventListener('click', () => location.reload());
+
         window.addEventListener('keydown', (e) => {
             const isSpace = (e.key === " " || e.key === "Spacebar");
             const isEsc = (e.key === "Escape" || e.key === "Esc");
@@ -376,6 +380,18 @@ if (success) {
         document.body.classList.add('focus-mode');
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('game-screen').classList.remove('hidden');
+
+        // 前回のステータス表示（ミス数・タイマー等）を確実に非表示＆「0」リセット
+        const statusBar = document.getElementById('play-status-bar');
+        if (statusBar) statusBar.classList.add('hidden');
+        const overlay = document.getElementById('test-info-overlay');
+        if (overlay) overlay.classList.add('hidden');
+
+        const missEl = document.getElementById('renzoku-ui-miss');
+        if (missEl) missEl.innerText = "0 / 5";
+        const streakEl = document.getElementById('renzoku-ui-streak');
+        if (streakEl) streakEl.innerText = "0問";
+
         const container = document.getElementById('typing-container');
         if (container) {
             container.innerHTML = `
@@ -856,10 +872,16 @@ if (success) {
         
         const resScore = document.getElementById('res-score');
         const resRank = document.getElementById('result-rank');
-        const resultTitle = document.getElementById('result-title');
-        
+
+        // 2行タイトルの自動セット
+        const groupMap = {'roman_pure':'基礎','roman_complex':'基礎','daily':'基礎','windows':'基礎','speed':'チャレンジ','renzoku':'チャレンジ','memory':'チャレンジ','quest':'チャレンジ','word':'実務','excel':'実務','business_ai':'実務','tenkey':'実務','test_5min':'実力判定','total_test':'実力判定'};
+        const resCatName = document.getElementById('result-cat-name');
+        const resContentName = document.getElementById('result-content-name');
+        if (resCatName) resCatName.innerText = groupMap[this.currentCategoryId] || 'タイピング練習';
+        if (resContentName) resContentName.innerText = this.manifest?.categories.find(c => c.id === this.currentCategoryId)?.name || this.currentCategoryId;
+
         if(reason === "abort") {
-            if(resultTitle) resultTitle.innerText = "練習中止";
+            if(resContentName) resContentName.innerText += "（中断）";
             if(resRank) {
                 resRank.innerText = "評価不可";
                 resRank.style.color = "#95a5a6";
@@ -874,8 +896,7 @@ if (success) {
             document.getElementById('res-miss').innerText = "0";
             document.getElementById('res-total').innerText = "0";
         } else {
-            if(resultTitle) resultTitle.innerText = "練習結果";
-            if(resRank) resRank.classList.remove('is-aborted'); // ★追加：中止クラスを消す
+            if(resRank) resRank.classList.remove('is-aborted');
             const sec = (performance.now() - this.startTime) / 1000;
             const cpm = Math.floor(this.totalTypedCount / (sec / 60)) || 0;
             const accNumRaw = (this.totalTypedCount > 0) ? ((this.totalTypedCount - this.totalMissedCount) / this.totalTypedCount) * 100 : 0;
@@ -889,7 +910,13 @@ if (success) {
                 ? this.getRenzokuRank(this.maxConsecutiveSuccess) 
                 : this.getRank(score);
             
-            if (resScore) resScore.innerText = score; 
+            // 【スコア計算の分岐】れんぞくモード時は1問＝20点ベース（10問で約200点）にスケール調整
+            let finalScore = score;
+            if (this.currentCategoryId === 'renzoku') {
+                finalScore = Math.floor(this.maxConsecutiveSuccess * 20 * (Math.max(0, accNumRaw) / 100));
+            }
+
+            if (resScore) resScore.innerText = finalScore;
 
             // テストモード時はリザルト画面の情報を書き換える
             if (this.isTestMode) {
@@ -928,7 +955,7 @@ if (typeof gtag === 'function') {
                 // [最終完全版] 全スタッツをGA4へ送信
                 gtag('event', 'typing_complete', {
                     'timestamp': new Date().getTime(),
-                    'score': score,                   /* スコア */
+                    'score': finalScore,              /* スコア（調整済みスコアを送信） */
                     'rank': rank,                     /* 判定ランク (A, S, Legend等) */
                     'category_name': categoryName,    /* カテゴリ名 */
                     'cpm': cpm,                       /* 打鍵速度 */
@@ -1341,6 +1368,27 @@ if (typeof gtag === 'function') {
             "E": "大丈夫、ここから始まります。まずはローマ字の基本から、ゆっくり一緒に歩みましょう！"
         };
         return comments[rank] || "お疲れ様でした！次回の挑戦も応援しています。";
+    }
+
+    /**
+     * 同じカテゴリで即座に再挑戦する処理（全数値を完全初期化）
+     */
+    async restartPractice() {
+        document.getElementById('result-screen')?.classList.add('hidden');
+        if (this.testTimerId) clearInterval(this.testTimerId);
+
+        // れんぞくモード等の内部カウントを確実に0クリア
+        this.renzokuMissCount = 0;
+        this.currentConsecutiveSuccess = 0;
+        this.maxConsecutiveSuccess = 0;
+        this.hasCurrentQuestionError = false;
+
+        this.state = "START";
+        this.isTransitioning = false;
+        const success = await this.loadQuestions(this.currentCategoryId);
+        if (success) {
+            this.prepareReady();
+        }
     }
 } // ← 【重要】消えていたこの「クラスを閉じるカッコ」が全ての不具合の原因でした
 
